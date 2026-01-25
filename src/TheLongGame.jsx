@@ -763,31 +763,15 @@ const GATE_SUCCESS = {
 };
 
 // Drug name generator - modality aware
-const generateDrugName = (modality) => {
-  if (modality === 'biologic') {
-    // Antibody naming: prefix + target stem + source stem + mab
-    const prefixes = ['Ada', 'Beva', 'Deno', 'Efa', 'Goli', 'Inflix', 'Nivo', 'Pembro', 'Ritu', 'Tras'];
-    const suffixes = ['mab', 'zumab', 'ximab', 'mumab', 'tumab'];
-    return prefixes[Math.floor(Math.random() * prefixes.length)] + suffixes[Math.floor(Math.random() * suffixes.length)];
-  } else if (modality === 'gene-therapy') {
-    // Gene therapy naming: prefix + gene + vec (vector indicator)
-    const prefixes = ['Zol', 'Lux', 'Ona', 'Eti', 'Val', 'Beri', 'Eli', 'Rox'];
-    const genes = ['gene', 'para', 'toga', 'sema', 'repta'];
-    const suffixes = ['vec', 'parvovec', 'reparvovec', 'adgene'];
-    return prefixes[Math.floor(Math.random() * prefixes.length)] +
-      genes[Math.floor(Math.random() * genes.length)] +
-      suffixes[Math.floor(Math.random() * suffixes.length)];
-  } else if (modality === 'cell-therapy') {
-    // Cell therapy naming: prefix + cel/leucel (cell indicator)
-    const prefixes = ['Ida', 'Axi', 'Brex', 'Lisa', 'Cil', 'Tisa', 'Liso'];
-    const suffixes = ['cabtagene', 'cel', 'leucel', 'ucel', 'cleucel'];
-    return prefixes[Math.floor(Math.random() * prefixes.length)] + suffixes[Math.floor(Math.random() * suffixes.length)];
-  } else {
-    // Small molecule naming
-    const prefixes = ['Ator', 'Celo', 'Dasa', 'Erlo', 'Flu', 'Gef', 'Ima', 'Lapa', 'Osi', 'Rux'];
-    const suffixes = ['tinib', 'ciclib', 'rafenib', 'zomib', 'parib', 'stat', 'pril', 'sartan', 'vir'];
-    return prefixes[Math.floor(Math.random() * prefixes.length)] + suffixes[Math.floor(Math.random() * suffixes.length)];
-  }
+const generateDrugName = () => {
+  // Generate simple alphanumeric code names that don't imply modality
+  // Format: XXX-NNN (e.g., ABX-001, GTX-042, CTX-307)
+  const letters = 'ABCDEFGHJKLMNPQRSTVWXYZ';
+  const prefix = letters[Math.floor(Math.random() * letters.length)] +
+    letters[Math.floor(Math.random() * letters.length)] +
+    letters[Math.floor(Math.random() * letters.length)];
+  const number = String(Math.floor(Math.random() * 900) + 100);
+  return `${prefix}-${number}`;
 };
 
 // Indications with therapeutic area and key challenges
@@ -991,7 +975,7 @@ export default function TheLongGame() {
 
   const selectModality = (mod) => {
     setModality(mod);
-    setDrugName(generateDrugName(mod));
+    setDrugName(generateDrugName());
 
     // Pick a random platform based on modality - investors fund platforms, not just single assets
     const modalityPlatforms = PLATFORMS[mod] || PLATFORMS['small-molecule'];
