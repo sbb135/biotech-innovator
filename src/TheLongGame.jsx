@@ -1441,7 +1441,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400">5-10 YRS • $200M-$800M</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Chemically synthesized compound. Oral dosing possible. Subject to IRA negotiation after 9 years.
+                  Chemically synthesized compound. Oral dosing possible.{programType !== 'orphan' && ' Subject to IRA negotiation after 9 years.'}
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
@@ -1464,7 +1464,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-400">7-12 YRS • $300M-$1B</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Large molecule (antibody) produced in living cells. High specificity. 13 years before IRA negotiation.
+                  Large molecule produced in living cells. High specificity.{programType !== 'orphan' && ' 13 years before IRA negotiation.'}
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
