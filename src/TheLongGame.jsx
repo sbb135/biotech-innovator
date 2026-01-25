@@ -28,7 +28,7 @@ const MODALITY_DATA = {
     capitalRange: '$200M-$800M'
   },
   'biologic': {
-    displayName: 'Biologic (mAb)',
+    displayName: 'Biologic',
     dominantFailure: 'Biology redundancy',
     failureModes: [
       'Poor tissue penetration (solid tumors, CNS)',
@@ -1068,12 +1068,6 @@ export default function TheLongGame() {
       return;
     }
 
-    // Check if financing is needed before advancing
-    if (checkFinancingNeeded() && !showFinancingScreen && currentRoundIndex < FINANCING_ROUNDS.length - 1) {
-      setShowFinancingScreen(true);
-      return;
-    }
-
     const phase = PHASES[currentPhaseIndex];
 
     if (phaseStep === 0) {
@@ -1115,10 +1109,19 @@ export default function TheLongGame() {
       setSeenIRA(true);
       setPhaseStep(3);
     } else if (phaseStep === 3) {
-      // Gate passed -> Next phase or Victory
+      // Gate passed -> Check financing BEFORE advancing to next phase
       if (currentPhaseIndex >= PHASES.length - 1) {
         setScreen('victory');
       } else {
+        // Check if we need financing before the next phase
+        const nextPhase = PHASES[currentPhaseIndex + 1];
+        const phaseCost = nextPhase?.baseCost || 20;
+
+        if (cash < phaseCost * 1.5 && currentRoundIndex < FINANCING_ROUNDS.length - 1 && !showFinancingScreen) {
+          setShowFinancingScreen(true);
+          return;
+        }
+
         setCurrentPhaseIndex(currentPhaseIndex + 1);
         setPhaseStep(0);
         setCurrentQuestion(null);
@@ -1457,7 +1460,7 @@ export default function TheLongGame() {
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-rose-400">Biologic (mAb)</h3>
+                  <h3 className="text-xl font-semibold text-rose-400">Biologic</h3>
                   <span className="text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-400">7-12 YRS • $300M-$1B</span>
                 </div>
                 <p className="text-slate-300 mb-3">
