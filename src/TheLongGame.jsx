@@ -1063,8 +1063,15 @@ export default function TheLongGame() {
   };
 
   const advanceStep = () => {
-    if (cash <= 0) {
+    // Only fail if truly bankrupt with no more financing options
+    if (cash <= 0 && currentRoundIndex >= FINANCING_ROUNDS.length - 1) {
       setScreen('failure');
+      return;
+    }
+
+    // If low on cash but financing available, trigger financing
+    if (cash <= 0 && currentRoundIndex < FINANCING_ROUNDS.length - 1) {
+      setShowFinancingScreen(true);
       return;
     }
 
@@ -1200,6 +1207,13 @@ export default function TheLongGame() {
 
   const handleGateRoll = () => {
     const phase = PHASES[currentPhaseIndex];
+
+    // Check if we can afford this phase - if not, trigger financing
+    if (cash < phase.baseCost && currentRoundIndex < FINANCING_ROUNDS.length - 1) {
+      setShowFinancingScreen(true);
+      return;
+    }
+
     const baseSuccess = GATE_SUCCESS[phase.id] || 0.5;
 
     // Apply modality modifier
