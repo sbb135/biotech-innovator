@@ -1229,16 +1229,35 @@ export default function TheLongGame() {
   };
 
   const advanceStep = () => {
-    // Only fail if truly bankrupt with no more financing options
-    if (cash <= 0 && currentRoundIndex >= FINANCING_ROUNDS.length - 1) {
-      setScreen('failure');
-      return;
-    }
-
-    // If low on cash but financing available, trigger financing
+    // If low on cash but traditional financing available, trigger financing
     if (cash <= 0 && currentRoundIndex < FINANCING_ROUNDS.length - 1) {
       setShowFinancingScreen(true);
       return;
+    }
+
+    // If bankrupt and traditional rounds exhausted, check for alternative financing
+    if (cash <= 0 && currentRoundIndex >= FINANCING_ROUNDS.length - 1) {
+      // Check if any alternative financing is available
+      const phase = PHASES[currentPhaseIndex];
+      const availableAlternatives = ALTERNATIVE_FINANCING.filter(alt => {
+        if (alternativeFinancingUsed.includes(alt.id)) return false;
+        const phaseOrder = ['basic_research', 'drug_discovery', 'lead_optimization', 'ind_enabling', 'phase1', 'phase2', 'phase3', 'fda_review'];
+        const currentPhaseOrder = phaseOrder.indexOf(phase?.id);
+        const minPhaseOrder = phaseOrder.indexOf(alt.minPhase);
+        if (currentPhaseOrder < minPhaseOrder) return false;
+        if (alt.requiresIPO && currentRoundIndex < FINANCING_ROUNDS.length - 1) return false;
+        return true;
+      });
+
+      if (availableAlternatives.length > 0) {
+        // Offer alternative financing
+        setShowAlternativeFinancing(true);
+        return;
+      } else {
+        // No options left - fail
+        setScreen('failure');
+        return;
+      }
     }
 
     const phase = PHASES[currentPhaseIndex];
