@@ -2281,7 +2281,12 @@ export default function TheLongGame() {
   // Failure Screen
   if (screen === 'failure') {
     const failedPhase = PHASES[currentPhaseIndex];
-    const failReason = cash <= 0 ? 'depleted capital' : `did not meet endpoints in ${failedPhase?.name}`;
+    const noFinancingLeft = currentRoundIndex >= FINANCING_ROUNDS.length - 1;
+    const failReason = cash <= 0
+      ? (noFinancingLeft
+        ? 'ran out of capital with no financing options remaining'
+        : 'depleted capital')
+      : `could not continue development in ${failedPhase?.name || 'this phase'}`;
 
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -2305,12 +2310,23 @@ export default function TheLongGame() {
               </div>
               <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
                 <div className="text-2xl font-bold text-red-400">${capitalInvested}M</div>
-                <div className="text-slate-500 text-sm">Capital lost</div>
+                <div className="text-slate-500 text-sm">Capital invested</div>
               </div>
               <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
-                <div className="text-xl font-bold" style={{ color: failedPhase?.color }}>{failedPhase?.id === 'phase1' ? 'Phase I' : failedPhase?.id === 'phase2' ? 'Phase II' : failedPhase?.id === 'phase3' ? 'Phase III' : failedPhase?.name}</div>
+                <div className="text-xl font-bold" style={{ color: failedPhase?.color }}>{failedPhase?.id === 'phase1' ? 'Phase I' : failedPhase?.id === 'phase2' ? 'Phase II' : failedPhase?.id === 'phase3' ? 'Phase III' : failedPhase?.name || 'Unknown Phase'}</div>
                 <div className="text-slate-500 text-sm">Failed at</div>
               </div>
+            </div>
+
+            {/* Show why they failed */}
+            <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4 mb-6">
+              <h4 className="text-amber-400 font-semibold mb-2">What Happened</h4>
+              <p className="text-slate-300 text-sm">
+                {cash <= 0
+                  ? `Your capital balance reached $${cash}M. ${noFinancingLeft ? 'You had already raised all available financing rounds (through ' + FINANCING_ROUNDS[currentRoundIndex]?.name + '), so no additional capital was available.' : 'Unable to continue without additional funding.'}`
+                  : `Development was discontinued during ${failedPhase?.name || 'this phase'}. Cash remaining: $${cash}M.`
+                }
+              </p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
