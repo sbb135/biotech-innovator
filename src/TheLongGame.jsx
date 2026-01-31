@@ -2625,7 +2625,7 @@ export default function TheLongGame() {
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-emerald-400 mb-4">📊 Your Development Journey</h3>
+              <h3 className="text-lg font-semibold text-emerald-400 mb-4">Your Development Journey</h3>
               <p className="text-slate-300 mb-4">
                 You navigated {phasesCompleted.length} development phases. Here's what the real-world odds looked like:
               </p>
@@ -2654,7 +2654,7 @@ export default function TheLongGame() {
                       </div>
                       <p className="text-slate-500 text-xs mt-2">
                         Only ~{cumulativeProb.toFixed(0)} out of 100 drugs that entered Phase I would have reached this point.
-                        You beat the odds! 🎉
+                        You beat the odds!
                       </p>
                     </div>
                   );
@@ -2720,7 +2720,7 @@ export default function TheLongGame() {
             {/* Alternative Financing Used */}
             {alternativeFinancingUsed.length > 0 && (
               <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-5 mb-6">
-                <h3 className="text-lg font-semibold text-blue-400 mb-3">💼 Alternative Financing Secured</h3>
+                <h3 className="text-lg font-semibold text-blue-400 mb-3">Alternative Financing Secured</h3>
                 <p className="text-slate-400 text-sm mb-3">Your program required non-traditional financing after exhausting VC rounds:</p>
                 <div className="space-y-2">
                   {alternativeFinancingUsed.map(fin => {
@@ -2810,7 +2810,7 @@ export default function TheLongGame() {
 
             {/* Post-Mortem Analysis */}
             <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-5 mb-6">
-              <h3 className="text-lg font-semibold text-red-400 mb-3">📋 Post-Mortem Analysis</h3>
+              <h3 className="text-lg font-semibold text-red-400 mb-3">Post-Mortem Analysis</h3>
 
               {/* Phase-specific failure reason */}
               <div className="mb-4">
@@ -2844,7 +2844,7 @@ export default function TheLongGame() {
             {/* Accumulated Events */}
             {programEvents.length > 0 && (
               <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-5 mb-6">
-                <h4 className="text-amber-400 font-semibold mb-3">⚠️ Contributing Factors</h4>
+                <h4 className="text-amber-400 font-semibold mb-3">Contributing Factors</h4>
                 <div className="space-y-2">
                   {programEvents.filter(e => !e.financing).slice(-4).map((event, idx) => (
                     <div key={idx} className="flex items-start gap-2 text-sm">
