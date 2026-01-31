@@ -136,6 +136,139 @@ const FINANCING_ROUNDS = [
   }
 ];
 
+// Alternative financing options - based on Fierce Biotech 2024 industry analysis
+// These become available when traditional VC rounds are exhausted
+const ALTERNATIVE_FINANCING = [
+  {
+    id: 'partnership',
+    name: 'Strategic Partnership',
+    description: 'Partner with large pharma for ex-US rights',
+    amount: 75,
+    tradeoff: 'Lose 50% of ex-US commercial rights',
+    revenueImpact: 0.75, // Keep 75% of revenue
+    minPhase: 'phase1', // Available after Phase I data
+    lesson: 'Strategic partnerships are common in biotech. Partners provide capital and commercial infrastructure in exchange for territorial rights. This is how many small biotechs fund late-stage development.'
+  },
+  {
+    id: 'royalty',
+    name: 'Royalty Financing',
+    description: 'Sell future revenue rights for upfront capital',
+    amount: 50,
+    tradeoff: '6% royalty on all future revenues',
+    revenueImpact: 0.94, // Keep 94% of revenue
+    minPhase: 'phase2', // Need Phase II data
+    lesson: 'Royalty financing is non-dilutive - you keep your equity. But you permanently give up a portion of future revenues. ~90% of biotech executives consider this option.'
+  },
+  {
+    id: 'licensing',
+    name: 'Territory Licensing Deal',
+    description: 'License rights to specific geography',
+    amount: 40,
+    tradeoff: 'Lose all rights to Asia-Pacific region',
+    revenueImpact: 0.70, // Lose 30% of global market
+    minPhase: 'phase1',
+    lesson: 'Territory licensing deals are common for biotechs lacking global commercial presence. You trade market access for capital to continue development.'
+  },
+  {
+    id: 'venture_debt',
+    name: 'Venture Debt',
+    description: 'Non-dilutive debt financing',
+    amount: 30,
+    tradeoff: '12% interest + warrants',
+    revenueImpact: 1.0, // No revenue impact, but debt service
+    minPhase: 'drug_discovery', // Available early
+    lesson: 'Venture debt extends runway without dilution, but requires repayment. Works best when you expect near-term value inflection.'
+  },
+  {
+    id: 'pipe',
+    name: 'PIPE Financing',
+    description: 'Private Investment in Public Equity',
+    amount: 80,
+    tradeoff: '15% additional dilution at discount',
+    revenueImpact: 1.0,
+    minPhase: 'phase3', // Post-IPO only
+    requiresIPO: true,
+    lesson: 'PIPE deals provide emergency capital for public companies at a discount to market price. Common when share prices have fallen.'
+  }
+];
+
+// Phase-specific failure reasons - based on clinical trial failure analysis
+// Sources: Citeline, FDA, Nature Reviews Drug Discovery
+const FAILURE_REASONS = {
+  basic_research: {
+    primary: 'Target not validated',
+    details: 'The biological hypothesis did not hold up under rigorous testing.',
+    endpoint: 'Target engagement not demonstrated'
+  },
+  drug_discovery: {
+    primary: 'No viable lead compound',
+    details: 'Despite screening thousands of compounds, none showed suitable drug-like properties.',
+    endpoint: 'Failed to identify compound with acceptable potency, selectivity, and ADMET profile'
+  },
+  lead_optimization: {
+    primary: 'Insurmountable medicinal chemistry challenges',
+    details: 'Could not optimize lead compound to meet required specifications.',
+    endpoint: 'Unable to achieve therapeutic window with acceptable safety margin'
+  },
+  ind_enabling: {
+    primary: 'Preclinical toxicity',
+    details: 'GLP toxicology studies revealed safety signals incompatible with human dosing.',
+    endpoint: 'No-observed-adverse-effect level (NOAEL) too low for therapeutic dose'
+  },
+  phase1: {
+    primary: 'Dose-limiting toxicity or poor pharmacokinetics',
+    details: 'Human PK/PD did not support therapeutic dosing, or maximum tolerated dose was below efficacious threshold.',
+    endpoint: 'MTD not established or AUC insufficient for target engagement',
+    successRate: '47%'
+  },
+  phase2: {
+    primary: 'Failed to demonstrate efficacy (52% of Phase II failures)',
+    details: 'The drug did not show meaningful clinical benefit compared to placebo in a controlled study. The biology that worked in preclinical models did not translate to human disease.',
+    endpoint: 'Primary efficacy endpoint not met - effect size statistically insignificant or clinically meaningless',
+    successRate: '28%'
+  },
+  phase3: {
+    primary: 'Efficacy not replicated at scale (55% of Phase III failures)',
+    details: 'Despite positive Phase II signals, the larger pivotal trial failed to confirm efficacy. This is often due to patient heterogeneity, site variability, or the Phase II effect being a statistical artifact.',
+    endpoint: 'Primary endpoint p-value > 0.05 or hazard ratio confidence interval crossed 1.0',
+    successRate: '55%'
+  },
+  fda_review: {
+    primary: 'Regulatory concerns',
+    details: 'FDA identified issues with trial design, data integrity, or benefit-risk profile.',
+    endpoint: 'Complete Response Letter issued citing deficiencies'
+  },
+  post_market: {
+    primary: 'Post-market safety signal',
+    details: 'Real-world evidence revealed safety issues not detected in clinical trials.',
+    endpoint: 'Black box warning or market withdrawal required'
+  }
+};
+
+// Modality-specific failure modes - why each type of drug fails
+const MODALITY_FAILURE_MODES = {
+  'small-molecule': {
+    earlyPhase: 'Off-target toxicity or CYP450 interactions',
+    latePhase: 'Insufficient therapeutic window - efficacious dose too close to toxic dose',
+    commonIssue: 'Target engagement confirmed but no downstream clinical benefit - target may not be causal in humans'
+  },
+  'biologic': {
+    earlyPhase: 'Immunogenicity - anti-drug antibodies reduce efficacy',
+    latePhase: 'Complete target neutralization with no clinical improvement - biology is redundant',
+    commonIssue: 'Poor tissue penetration limits efficacy in solid tumors or CNS indications'
+  },
+  'gene-therapy': {
+    earlyPhase: 'Pre-existing immunity to viral vector limits eligible patient population',
+    latePhase: 'Transgene expression wanes over time - durability is the key question',
+    commonIssue: 'Dose-limiting hepatotoxicity at therapeutic doses'
+  },
+  'cell-therapy': {
+    earlyPhase: 'Manufacturing complexity - vein-to-vein time exceeds clinical window',
+    latePhase: 'Limited T-cell persistence and antigen escape lead to relapse',
+    commonIssue: 'Cytokine release syndrome and neurotoxicity require intensive monitoring'
+  }
+};
+
 // Accurate drug development phases based on scientific process
 // Sources: PPD/Thermo Fisher, FDA.gov
 // Preclinical: 4 phases per PPD. Clinical: FDA success rates
@@ -924,6 +1057,9 @@ export default function TheLongGame() {
   const [totalDilution, setTotalDilution] = useState(0); // Cumulative dilution percentage
   const [showFinancingScreen, setShowFinancingScreen] = useState(false);
   const [financingResult, setFinancingResult] = useState(null);
+  const [alternativeFinancingUsed, setAlternativeFinancingUsed] = useState([]); // Track which alternatives were used
+  const [showAlternativeFinancing, setShowAlternativeFinancing] = useState(false); // Show alternative options
+  const [revenueMultiplier, setRevenueMultiplier] = useState(1.0); // Impact of financing deals on revenue
 
   // Program configuration
   const [programType, setProgramType] = useState(null); // 'first-in-class', 'orphan', 'blockbuster'
@@ -939,6 +1075,7 @@ export default function TheLongGame() {
   const [usedEvents, setUsedEvents] = useState([]);
   const [seenPolicy, setSeenPolicy] = useState(false);
   const [seenIRA, setSeenIRA] = useState(false);
+  const [programEvents, setProgramEvents] = useState([]); // Track all events that happened for failure report
 
   const currentPhase = PHASES[currentPhaseIndex];
 
@@ -1010,6 +1147,10 @@ export default function TheLongGame() {
     setRevenueShare(1.0);
     setShowFinancingScreen(false);
     setFinancingResult(null);
+    setAlternativeFinancingUsed([]);
+    setShowAlternativeFinancing(false);
+    setRevenueMultiplier(1.0);
+    setProgramEvents([]);
     setScreen('phase');
   };
 
@@ -1060,6 +1201,31 @@ export default function TheLongGame() {
   const acknowledgeFinancing = () => {
     setShowFinancingScreen(false);
     setFinancingResult(null);
+  };
+
+  // Handle alternative financing selection
+  const selectAlternativeFinancing = (altFinancing) => {
+    // Apply the financing
+    setCash(c => c + altFinancing.amount);
+    setCapitalInvested(ci => ci + altFinancing.amount);
+    setRevenueMultiplier(rm => rm * altFinancing.revenueImpact);
+    setAlternativeFinancingUsed(prev => [...prev, altFinancing.id]);
+
+    // Track for post-mortem
+    setProgramEvents(prev => [...prev, {
+      title: `${altFinancing.name} Secured`,
+      description: `Raised $${altFinancing.amount}M via ${altFinancing.name.toLowerCase()}. ${altFinancing.tradeoff}.`,
+      phase: PHASES[currentPhaseIndex]?.name,
+      financing: true
+    }]);
+
+    setShowAlternativeFinancing(false);
+  };
+
+  const declineAlternativeFinancing = () => {
+    // Player chose not to raise - fail the program
+    setShowAlternativeFinancing(false);
+    setScreen('failure');
   };
 
   const advanceStep = () => {
@@ -1187,6 +1353,16 @@ export default function TheLongGame() {
     if (event.marketBonus) setMarketMultiplier(mm => mm * event.marketBonus);
     if (event.revenueShare) setRevenueShare(event.revenueShare);
 
+    // Track this event for the failure post-mortem
+    if (event.positive === false || event.riskBonus < 0) {
+      setProgramEvents(prev => [...prev, {
+        title: event.title,
+        description: event.description,
+        phase: PHASES[currentPhaseIndex]?.name,
+        failureMode: event.failureMode || null
+      }]);
+    }
+
     setCurrentEvent(null);
     advanceStep();
   };
@@ -1211,14 +1387,35 @@ export default function TheLongGame() {
     // Check if we can afford this phase
     if (cash < phase.baseCost) {
       if (currentRoundIndex < FINANCING_ROUNDS.length - 1) {
-        // Financing available - trigger financing screen
+        // Traditional financing available - trigger financing screen
         setShowFinancingScreen(true);
         return;
       } else {
-        // Can't afford and no financing left - fail immediately
-        // This prevents the confusing UX of deducting money we don't have
-        setScreen('failure');
-        return;
+        // Traditional rounds exhausted - check for alternative financing options
+        const availableAlternatives = ALTERNATIVE_FINANCING.filter(alt => {
+          // Check if already used
+          if (alternativeFinancingUsed.includes(alt.id)) return false;
+          // Check phase requirement
+          const phaseOrder = ['basic_research', 'drug_discovery', 'lead_optimization', 'ind_enabling', 'phase1', 'phase2', 'phase3', 'fda_review'];
+          const currentPhaseOrder = phaseOrder.indexOf(phase.id);
+          const minPhaseOrder = phaseOrder.indexOf(alt.minPhase);
+          if (currentPhaseOrder < minPhaseOrder) return false;
+          // Check IPO requirement for PIPE
+          if (alt.requiresIPO && currentRoundIndex < FINANCING_ROUNDS.length - 1) return false;
+          // Check if amount is enough
+          if (alt.amount < phase.baseCost - cash) return false;
+          return true;
+        });
+
+        if (availableAlternatives.length > 0) {
+          // Offer alternative financing options
+          setShowAlternativeFinancing(true);
+          return;
+        } else {
+          // No options left - fail
+          setScreen('failure');
+          return;
+        }
       }
     }
 
@@ -1748,6 +1945,77 @@ export default function TheLongGame() {
                   </button>
                 </>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* Alternative Financing Modal */}
+        {showAlternativeFinancing && (
+          <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+            <div className="bg-slate-900 border border-slate-700 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
+              <div className="flex items-center gap-2 mb-4">
+                <svg className="w-6 h-6 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                </svg>
+                <h2 className="text-2xl font-bold text-amber-400">Traditional Financing Exhausted</h2>
+              </div>
+
+              <p className="text-slate-300 mb-4">
+                You've raised all traditional VC rounds through IPO. To continue, you'll need to pursue alternative financing strategies that are common in late-stage biotech.
+              </p>
+
+              <div className="bg-slate-800 rounded-lg p-4 mb-4">
+                <div className="flex justify-between mb-2">
+                  <span className="text-slate-400">Current Cash:</span>
+                  <span className="text-red-400 font-mono">${cash}M</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-slate-400">Phase Cost:</span>
+                  <span className="text-slate-300 font-mono">${PHASES[currentPhaseIndex]?.baseCost}M</span>
+                </div>
+              </div>
+
+              <div className="space-y-3 mb-6">
+                {ALTERNATIVE_FINANCING.filter(alt => {
+                  if (alternativeFinancingUsed.includes(alt.id)) return false;
+                  const phaseOrder = ['basic_research', 'drug_discovery', 'lead_optimization', 'ind_enabling', 'phase1', 'phase2', 'phase3', 'fda_review'];
+                  const currentPhaseOrder = phaseOrder.indexOf(PHASES[currentPhaseIndex]?.id);
+                  const minPhaseOrder = phaseOrder.indexOf(alt.minPhase);
+                  if (currentPhaseOrder < minPhaseOrder) return false;
+                  if (alt.requiresIPO && currentRoundIndex < FINANCING_ROUNDS.length - 1) return false;
+                  return true;
+                }).map(alt => (
+                  <button
+                    key={alt.id}
+                    onClick={() => selectAlternativeFinancing(alt)}
+                    className="w-full text-left bg-slate-800 hover:bg-slate-700 border border-slate-600 hover:border-emerald-500/50 rounded-lg p-4 transition-colors"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <h3 className="text-lg font-semibold text-emerald-400">{alt.name}</h3>
+                      <span className="text-emerald-400 font-mono text-lg">+${alt.amount}M</span>
+                    </div>
+                    <p className="text-slate-300 text-sm mb-2">{alt.description}</p>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400">
+                        ⚠️ {alt.tradeoff}
+                      </span>
+                    </div>
+                    <p className="text-slate-500 text-xs">{alt.lesson}</p>
+                  </button>
+                ))}
+              </div>
+
+              <div className="border-t border-slate-700 pt-4">
+                <button
+                  onClick={declineAlternativeFinancing}
+                  className="w-full bg-red-900/30 hover:bg-red-900/50 border border-red-700/50 text-red-400 font-semibold py-3 px-6 rounded-lg transition-colors"
+                >
+                  Discontinue Program (No Further Funding)
+                </button>
+                <p className="text-slate-600 text-xs mt-2 text-center">
+                  Without additional capital, development cannot continue.
+                </p>
+              </div>
             </div>
           </div>
         )}
@@ -2293,18 +2561,24 @@ export default function TheLongGame() {
     const phaseCost = failedPhase?.baseCost || 0;
     const couldntAffordPhase = cash >= 0 && cash < phaseCost && noFinancingLeft;
 
+    // Get phase-specific failure reason
+    const phaseFailure = FAILURE_REASONS[failedPhase?.id] || FAILURE_REASONS.phase2;
+    const modalityFailure = MODALITY_FAILURE_MODES[modality] || MODALITY_FAILURE_MODES['small-molecule'];
+
+    // Determine if this is early or late phase
+    const isClinicialPhase = ['phase1', 'phase2', 'phase3'].includes(failedPhase?.id);
+    const isLatePhase = ['phase2', 'phase3', 'fda_review'].includes(failedPhase?.id);
+
     const failReason = couldntAffordPhase
-      ? `could not afford ${failedPhase?.name || 'the next phase'} ($${phaseCost}M required, $${cash}M available)`
+      ? `could not secure funding to continue ${failedPhase?.name || 'the next phase'}`
       : cash <= 0
-        ? (noFinancingLeft
-          ? 'ran out of capital with no financing options remaining'
-          : 'depleted capital')
-        : `could not continue development in ${failedPhase?.name || 'this phase'}`;
+        ? 'ran out of capital'
+        : `did not meet endpoints in ${failedPhase?.name || 'this phase'}`;
 
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <main className="flex-1 flex items-center justify-center p-8">
-          <div className="max-w-2xl w-full">
+          <div className="max-w-3xl w-full">
             <div className="text-center mb-8">
               <div className="inline-block px-3 py-1 rounded text-xs font-medium mb-4 bg-red-500/20 text-red-400">
                 PROGRAM TERMINATED
@@ -2312,68 +2586,121 @@ export default function TheLongGame() {
               <h1 className="text-4xl font-bold mb-2">{drugName} Development Discontinued</h1>
               <p className="text-slate-400 text-lg">Your program {failReason}</p>
               <p className="text-slate-500 text-sm mt-2">
-                {programType === 'first-in-class' ? 'First-in-Class' : programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster'} • {modality === 'biologic' ? 'Biologic' : 'Small Molecule'}
+                {programType === 'first-in-class' ? 'First-in-Class' : programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster'} • {MODALITIES[modality]?.displayName || modality} • {indication}
               </p>
             </div>
 
-            <div className="grid grid-cols-3 gap-4 mb-6">
-              <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-blue-400">{years}y {monthsRemainder}m</div>
-                <div className="text-slate-500 text-sm">Time elapsed</div>
+            <div className="grid grid-cols-4 gap-3 mb-6">
+              <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-center">
+                <div className="text-xl font-bold text-blue-400">{years}y {monthsRemainder}m</div>
+                <div className="text-slate-500 text-xs">Time elapsed</div>
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold text-red-400">${capitalInvested}M</div>
-                <div className="text-slate-500 text-sm">Capital invested</div>
+              <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-center">
+                <div className="text-xl font-bold text-red-400">${capitalInvested}M</div>
+                <div className="text-slate-500 text-xs">Capital invested</div>
               </div>
-              <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
-                <div className="text-xl font-bold" style={{ color: failedPhase?.color }}>{failedPhase?.id === 'phase1' ? 'Phase I' : failedPhase?.id === 'phase2' ? 'Phase II' : failedPhase?.id === 'phase3' ? 'Phase III' : failedPhase?.name || 'Unknown Phase'}</div>
-                <div className="text-slate-500 text-sm">Failed at</div>
+              <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-center">
+                <div className="text-xl font-bold text-amber-400">${cash}M</div>
+                <div className="text-slate-500 text-xs">Cash remaining</div>
+              </div>
+              <div className="bg-slate-900 border border-slate-800 rounded-lg p-3 text-center">
+                <div className="text-lg font-bold" style={{ color: failedPhase?.color }}>
+                  {failedPhase?.id === 'phase1' ? 'Phase I' : failedPhase?.id === 'phase2' ? 'Phase II' : failedPhase?.id === 'phase3' ? 'Phase III' : failedPhase?.name || 'Unknown'}
+                </div>
+                <div className="text-slate-500 text-xs">Failed at</div>
               </div>
             </div>
 
-            {/* Show why they failed */}
-            <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4 mb-6">
-              <h4 className="text-amber-400 font-semibold mb-2">What Happened</h4>
-              <p className="text-slate-300 text-sm">
-                {couldntAffordPhase
-                  ? `${failedPhase?.name || 'The next phase'} requires $${phaseCost}M, but you only have $${cash}M remaining. You had already raised all available financing (through ${FINANCING_ROUNDS[currentRoundIndex]?.name}), so no additional capital was available.`
-                  : cash <= 0
-                    ? `Your capital balance reached $${cash}M. ${noFinancingLeft ? 'You had already raised all available financing rounds (through ' + FINANCING_ROUNDS[currentRoundIndex]?.name + '), so no additional capital was available.' : 'Unable to continue without additional funding.'}`
-                    : `Development was discontinued during ${failedPhase?.name || 'this phase'}. Cash remaining: $${cash}M.`
-                }
-              </p>
-            </div>
+            {/* Post-Mortem Analysis */}
+            <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-5 mb-6">
+              <h3 className="text-lg font-semibold text-red-400 mb-3">📋 Post-Mortem Analysis</h3>
 
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-red-400 mb-4">This Outcome Is Typical, Not Exceptional</h3>
-              <p className="text-slate-300 mb-4">
-                Only about 12% of drugs that enter clinical trials achieve FDA approval. You experienced the outcome that most drug development programs experience.
-              </p>
-              {failedPhase && failedPhase.realSuccessRate && (
-                <div className="bg-slate-800/50 rounded-lg p-4 mb-4">
-                  <div className="text-slate-500 text-sm mb-1">{failedPhase.name} FDA Success Rate</div>
-                  <div className="text-2xl font-bold" style={{ color: failedPhase.color }}>{failedPhase.realSuccessRate}%</div>
-                  <p className="text-slate-500 text-sm mt-2">{failedPhase.context?.split('.')[0]}.</p>
+              {/* Phase-specific failure reason */}
+              <div className="mb-4">
+                <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Primary Failure Mode</div>
+                <div className="text-slate-200 font-medium">{phaseFailure.primary}</div>
+              </div>
+
+              <div className="mb-4">
+                <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">What This Means</div>
+                <div className="text-slate-300 text-sm">{phaseFailure.details}</div>
+              </div>
+
+              {isClinicialPhase && (
+                <div className="mb-4">
+                  <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">Endpoint Result</div>
+                  <div className="text-red-400 text-sm font-mono bg-slate-800/50 p-2 rounded">{phaseFailure.endpoint}</div>
                 </div>
               )}
-              <p className="text-slate-400 text-sm">
-                This is not a failure of effort, intelligence, or commitment. It is the fundamental nature of drug development: most hypotheses about how to treat disease turn out to be wrong. The biology that worked in models does not translate to human disease.
+
+              {/* Modality-specific issues */}
+              <div className="border-t border-red-700/30 pt-4 mt-4">
+                <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">
+                  {MODALITIES[modality]?.displayName || modality} Failure Pattern
+                </div>
+                <div className="text-slate-300 text-sm">
+                  {isLatePhase ? modalityFailure.latePhase : modalityFailure.earlyPhase}
+                </div>
+              </div>
+            </div>
+
+            {/* Accumulated Events */}
+            {programEvents.length > 0 && (
+              <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-5 mb-6">
+                <h4 className="text-amber-400 font-semibold mb-3">⚠️ Contributing Factors</h4>
+                <div className="space-y-2">
+                  {programEvents.filter(e => !e.financing).slice(-4).map((event, idx) => (
+                    <div key={idx} className="flex items-start gap-2 text-sm">
+                      <span className="text-red-400">•</span>
+                      <div>
+                        <span className="text-slate-300 font-medium">{event.title}</span>
+                        {event.failureMode && (
+                          <span className="text-amber-400 text-xs ml-2">({event.failureMode})</span>
+                        )}
+                        <span className="text-slate-500 text-xs block">{event.phase}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Alternative financing used */}
+            {alternativeFinancingUsed.length > 0 && (
+              <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-4 mb-6">
+                <h4 className="text-purple-400 font-semibold mb-2">💰 Alternative Financing Pursued</h4>
+                <div className="text-slate-300 text-sm">
+                  {alternativeFinancingUsed.map(id => {
+                    const alt = ALTERNATIVE_FINANCING.find(a => a.id === id);
+                    return alt ? `${alt.name} (+$${alt.amount}M, ${alt.tradeoff})` : id;
+                  }).join(' • ')}
+                </div>
+              </div>
+            )}
+
+            {/* Industry context */}
+            <div className="bg-slate-900 border border-slate-800 rounded-lg p-5 mb-6">
+              <h3 className="text-sm font-semibold text-slate-400 mb-3">This Outcome Is Typical</h3>
+              {phaseFailure.successRate && (
+                <div className="flex items-center gap-4 mb-3">
+                  <div className="text-3xl font-bold" style={{ color: failedPhase?.color }}>{phaseFailure.successRate}</div>
+                  <div className="text-slate-400 text-sm">
+                    of programs successfully complete {failedPhase?.name}.<br />
+                    <span className="text-red-400 font-medium">{100 - parseInt(phaseFailure.successRate)}%</span> fail at this stage—you are not alone.
+                  </div>
+                </div>
+              )}
+              <p className="text-slate-500 text-sm">
+                {modalityFailure.commonIssue}
               </p>
             </div>
 
-            <div className="bg-red-900/20 border border-red-700/50 rounded-lg p-6 mb-8">
-              <h3 className="text-sm font-semibold text-red-400 mb-3">Why This Matters for Drug Economics</h3>
-              <div className="space-y-3 text-sm text-slate-300">
-                <p>
-                  You invested ${capitalInvested}M in this program before it failed. Your investors have lost that capital. This is the reality that underlies pharmaceutical economics.
-                </p>
-                <p>
-                  The drugs that succeed must generate returns sufficient to compensate for the drugs that fail. Because only ~7% of clinical programs reach approval, successful drugs must generate substantial returns to make the overall enterprise economically viable.
-                </p>
-                <p className="font-medium text-slate-200">
-                  Without the expectation of adequate returns on successful drugs, capital will not flow to drug development, and future patients will not have access to the innovations they need.
-                </p>
-              </div>
+            <div className="bg-slate-900/50 border border-slate-800 rounded-lg p-4 mb-6">
+              <p className="text-slate-400 text-sm">
+                <strong className="text-slate-300">Why This Matters:</strong> You invested ${capitalInvested}M before this failure.
+                The drugs that succeed must generate returns sufficient to compensate for programs like this one.
+                Because only ~7% reach approval, successful drugs must be priced to cover the cost of failure.
+              </p>
             </div>
 
             <button
