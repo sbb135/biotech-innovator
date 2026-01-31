@@ -1497,7 +1497,7 @@ export default function TheLongGame() {
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-cyan-400">Gene Therapy (AAV)</h3>
+                  <h3 className="text-xl font-semibold text-cyan-400">Gene Therapy</h3>
                   <span className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400">8-14 YRS • $400M-$1.5B+</span>
                 </div>
                 <p className="text-slate-300 mb-3">
@@ -1520,7 +1520,7 @@ export default function TheLongGame() {
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-pink-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-pink-400">Cell Therapy (CAR-T)</h3>
+                  <h3 className="text-xl font-semibold text-pink-400">Cell Therapy</h3>
                   <span className="text-xs px-2 py-1 rounded bg-pink-500/20 text-pink-400">8-15 YRS • $600M-$2B+</span>
                 </div>
                 <p className="text-slate-300 mb-3">
