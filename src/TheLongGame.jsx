@@ -785,7 +785,110 @@ const QUESTIONS = {
       ]
     }
   ],
-  post_market: []
+  post_market: [
+    {
+      phase: 'post_market',
+      question: 'PBM Formulary & Access Strategy',
+      context: 'Your drug is approved, but approval doesn\'t guarantee access. PBMs (Express Scripts, CVS Caremark, OptumRx) control 80% of prescriptions. They can exclude your drug, require prior authorization, or steer patients to competitors. Specialty drugs face even higher barriers.',
+      options: [
+        {
+          text: 'Pay heavy rebates for preferred formulary placement',
+          detail: 'High access but 40-60% of revenue goes to rebates',
+          cashEffect: 0,
+          marketBonus: 0.85,
+          revenueEffect: -0.35,
+          result: 'You secure broad access but net revenue per prescription is much lower than list price. PBMs capture a large share of your value.',
+          lesson: 'The gap between list price and net price reveals who captures value. For specialty drugs, PBM rebates and fees can exceed 40% of list price. FDA approval means you CAN sell; formulary placement determines if you WILL sell.'
+        },
+        {
+          text: 'Limited formulary with patient assistance programs',
+          detail: 'Lower access, copay cards offset patient costs',
+          cashEffect: -8,
+          marketBonus: 0.5,
+          revenueEffect: -0.15,
+          result: 'Lower formulary coverage means fewer patients, but your copay assistance programs help those who get prescriptions. You maintain higher net revenue per patient.',
+          lesson: 'Copay assistance programs help patients afford their out-of-pocket costs, but don\'t fix the underlying problem. Patients still pay twice—once through premiums, again at the pharmacy counter.'
+        },
+        {
+          text: 'Specialty pharmacy exclusive distribution',
+          detail: 'PBM-owned specialty pharmacy controls distribution',
+          cashEffect: 0,
+          marketBonus: 0.7,
+          revenueEffect: -0.25,
+          efficacyEffect: 10,
+          result: 'PBM-owned specialty pharmacy takes a large cut and can steer patients. Your drug access depends on PBM\'s vertically integrated interests, not patient needs.',
+          lesson: 'PBMs own specialty pharmacies and set the prices there. They\'re paid by drug companies to manage costs while profiting from those same drugs. This conflict of interest means your drug\'s fate is in the hands of entities with misaligned incentives.'
+        }
+      ]
+    },
+    {
+      phase: 'post_market',
+      question: 'Patient Out-of-Pocket Cost Crisis',
+      context: 'Despite FDA approval and insurance coverage, patients are abandoning prescriptions at the pharmacy due to high copays. For specialty drugs, patients may face $1,000+ copays per month. 30% of patient prescriptions are never picked up due to cost.',
+      options: [
+        {
+          text: 'Launch robust copay assistance program',
+          detail: 'Bridge copay gap for commercially insured',
+          cashEffect: -15,
+          marketBonus: 0.9,
+          revenueEffect: -0.1,
+          result: 'Your copay cards cover patient out-of-pocket costs. Adherence improves dramatically. But this only works for commercial insurance—Medicare patients cannot use copay cards.',
+          lesson: 'Patients shouldn\'t have to pay twice—through premiums AND at the pharmacy. Copay assistance addresses symptoms, not causes. The real fix is insurance redesign so that drugs covered by premiums are accessible without additional cost barriers.'
+        },
+        {
+          text: 'Work with patient advocacy groups',
+          detail: 'Build grassroots support for access',
+          cashEffect: -5,
+          marketBonus: 0.6,
+          designEffect: -5,
+          result: 'Patient advocates amplify stories of access barriers. This builds political pressure for reform but doesn\'t immediately solve access problems.',
+          lesson: 'Patient advocacy organizations give voice to those harmed by the system. Their stories make abstract policy debates concrete. But advocacy alone can\'t fix structural misalignments in drug pricing.'
+        },
+        {
+          text: 'Accept access limitations',
+          detail: 'Focus on patients who can afford it',
+          cashEffect: 0,
+          marketBonus: 0.3,
+          result: 'You accept that only patients who can afford high copays will get your drug. This is financially easier but ethically troubling.',
+          lesson: 'Inventing a medicine that patients can\'t access fails the social contract. The goal isn\'t just FDA approval—it\'s getting treatments to the patients who need them. Access is the last mile.'
+        }
+      ]
+    },
+    {
+      phase: 'post_market',
+      question: 'Real-World Evidence and Market Expansion',
+      context: 'Your drug is approved for the initial indication, but real-world data suggests benefits in broader populations. You can pursue additional indications, but each requires investment. Meanwhile, off-label use is growing.',
+      options: [
+        {
+          text: 'Invest in additional clinical trials for new indications',
+          detail: 'Expand label through rigorous evidence',
+          cashEffect: -50,
+          timeEffect: 36,
+          marketBonus: 1.4,
+          designEffect: -10,
+          result: 'You run pivotal trials for a second indication. Success expands your market significantly and builds evidence base. But it\'s expensive and takes years.',
+          lesson: 'Label expansion through clinical trials is the gold standard. Rigorous evidence protects patients and builds trust. Each approved indication represents patients who can be treated with confidence.'
+        },
+        {
+          text: 'Generate real-world evidence to support broader use',
+          detail: 'Observational studies, registry data',
+          cashEffect: -10,
+          timeEffect: 12,
+          marketBonus: 0.3,
+          result: 'You partner with academic centers to study real-world outcomes. This generates hypothesis-generating data but doesn\'t change the label.',
+          lesson: 'Real-world evidence complements but doesn\'t replace clinical trials. It reveals how drugs perform outside controlled settings, in diverse populations, with comorbidities.'
+        },
+        {
+          text: 'Focus on original approved indication only',
+          detail: 'Concentrate resources, avoid expansion risk',
+          cashEffect: 0,
+          marketBonus: 0.1,
+          result: 'You focus only on the approved indication. Lower risk, but competitors may expand into adjacent spaces.',
+          lesson: 'Not every drug needs to be a platform. Focused execution in one indication can be valuable, especially for rare diseases where the patient population is well-defined.'
+        }
+      ]
+    }
+  ]
 };
 
 // Random events by phase
@@ -995,6 +1098,75 @@ const GATE_SUCCESS = {
   phase3: 0.55,           // Citeline 2014-2023: 55%
   fda_review: 0.90,       // Most complete NDAs approved
   post_market: 0.95       // Most drugs remain on market
+};
+
+// Modality-Indication Compatibility Matrix
+// Applies risk penalties for poor modality-indication fit
+// Based on real-world delivery and biology constraints
+const MODALITY_INDICATION_COMPATIBILITY = {
+  // CNS diseases: which modalities can cross blood-brain barrier?
+  'CNS': {
+    'small-molecule': { penalty: 0, reason: 'Small molecules can cross BBB - good fit' },
+    'biologic': { penalty: 25, reason: 'Large molecules cannot cross BBB - poor CNS penetration', riskType: 'efficacy' },
+    'gene-therapy': { penalty: 10, reason: 'Requires intrathecal delivery - adds complexity', riskType: 'design' },
+    'cell-therapy': { penalty: 30, reason: 'Cell delivery to CNS extremely challenging', riskType: 'efficacy' },
+    'sirna': { penalty: 25, reason: 'siRNA delivery to CNS not validated - liver only', riskType: 'efficacy' },
+    'gene-editing': { penalty: 15, reason: 'In vivo CNS editing very difficult', riskType: 'design' }
+  },
+  // Rare/Genetic diseases: curative modalities shine
+  'Rare/Genetic': {
+    'small-molecule': { penalty: 10, reason: 'May need lifelong dosing for genetic disease', riskType: 'design' },
+    'biologic': { penalty: 5, reason: 'Protein replacement often effective', riskType: 'efficacy' },
+    'gene-therapy': { penalty: 0, reason: 'Ideal for monogenic diseases - curative potential' },
+    'cell-therapy': { penalty: 0, reason: 'Stem cell or gene-corrected cells excellent' },
+    'sirna': { penalty: 0, reason: 'Knockdown can address many genetic diseases' },
+    'gene-editing': { penalty: 0, reason: 'Curative editing for monogenic diseases - best fit' }
+  },
+  // Metabolic diseases: liver targets, chronic dosing
+  'Metabolic': {
+    'small-molecule': { penalty: 0, reason: 'Oral dosing, liver targets - excellent fit' },
+    'biologic': { penalty: 5, reason: 'Injectable but effective for metabolic targets', riskType: 'design' },
+    'gene-therapy': { penalty: 15, reason: 'Overkill for most metabolic diseases', riskType: 'design' },
+    'cell-therapy': { penalty: 25, reason: 'Manufacturing complexity not justified', riskType: 'design' },
+    'sirna': { penalty: 0, reason: 'GalNAc delivery to liver - ideal for metabolic' },
+    'gene-editing': { penalty: 10, reason: 'Permanent change risky for non-fatal conditions', riskType: 'safety' }
+  },
+  // Oncology (hematologic): cell therapy and biologics excel
+  'Oncology (Hematologic)': {
+    'small-molecule': { penalty: 10, reason: 'May face resistance mutations', riskType: 'efficacy' },
+    'biologic': { penalty: 0, reason: 'ADCs, bispecifics highly effective' },
+    'gene-therapy': { penalty: 15, reason: 'Not standard approach for cancer', riskType: 'design' },
+    'cell-therapy': { penalty: 0, reason: 'CAR-T revolutionary for heme malignancies - best fit' },
+    'sirna': { penalty: 20, reason: 'Limited oncology applications', riskType: 'efficacy' },
+    'gene-editing': { penalty: 5, reason: 'Gene-edited cells emerging', riskType: 'design' }
+  },
+  // Oncology (solid): harder than heme
+  'Oncology (Solid Tumor)': {
+    'small-molecule': { penalty: 0, reason: 'Oral TKIs, still backbone of therapy' },
+    'biologic': { penalty: 10, reason: 'Tumor penetration challenging', riskType: 'efficacy' },
+    'gene-therapy': { penalty: 20, reason: 'Delivery to solid tumors very hard', riskType: 'efficacy' },
+    'cell-therapy': { penalty: 15, reason: 'TME is immunosuppressive - less effective than heme', riskType: 'efficacy' },
+    'sirna': { penalty: 25, reason: 'Delivery to solid tumors not validated', riskType: 'efficacy' },
+    'gene-editing': { penalty: 20, reason: 'In vivo tumor editing not feasible', riskType: 'efficacy' }
+  },
+  // Autoimmune: biologics designed for this
+  'Autoimmune': {
+    'small-molecule': { penalty: 0, reason: 'JAK inhibitors, oral options' },
+    'biologic': { penalty: 0, reason: 'TNF, IL-17, IL-23 - biologics dominate' },
+    'gene-therapy': { penalty: 20, reason: 'Chronic management not curative approach', riskType: 'design' },
+    'cell-therapy': { penalty: 10, reason: 'CAR-T for autoimmune emerging but early', riskType: 'design' },
+    'sirna': { penalty: 15, reason: 'Few validated liver targets for autoimmune', riskType: 'efficacy' },
+    'gene-editing': { penalty: 15, reason: 'Not standard for non-genetic chronic disease', riskType: 'design' }
+  },
+  // Cardiovascular: small molecules and siRNA for liver-expressed targets
+  'Cardiovascular': {
+    'small-molecule': { penalty: 0, reason: 'Statins, ACE inhibitors - proven track record' },
+    'biologic': { penalty: 5, reason: 'PCSK9 antibodies work but injectable', riskType: 'design' },
+    'gene-therapy': { penalty: 20, reason: 'Chronic disease, not curative approach', riskType: 'design' },
+    'cell-therapy': { penalty: 30, reason: 'Manufacturing overkill for CV', riskType: 'design' },
+    'sirna': { penalty: 0, reason: 'GalNAc-siRNA for liver CV targets - excellent' },
+    'gene-editing': { penalty: 10, reason: 'Emerging for genetic dyslipidemias', riskType: 'safety' }
+  }
 };
 
 // Drug name generator - modality aware
@@ -1377,6 +1549,38 @@ export default function TheLongGame() {
       setDesignRisk(40);   // Regulatory scrutiny
     }
 
+    // Apply modality-indication compatibility penalties
+    // This enforces realistic drug development constraints
+    if (indicationData?.area) {
+      const compatibilityRules = MODALITY_INDICATION_COMPATIBILITY[indicationData.area];
+      if (compatibilityRules && compatibilityRules[mod]) {
+        const compat = compatibilityRules[mod];
+        if (compat.penalty > 0) {
+          // Apply the penalty to the appropriate risk type
+          if (compat.riskType === 'efficacy') {
+            setEfficacyRisk(prev => Math.min(100, prev + compat.penalty));
+          } else if (compat.riskType === 'safety') {
+            setSafetyRisk(prev => Math.min(100, prev + compat.penalty));
+          } else if (compat.riskType === 'design') {
+            setDesignRisk(prev => Math.min(100, prev + compat.penalty));
+          }
+          // Log this as a warning decision
+          setDecisionsLog([{
+            question: `Modality-Indication Compatibility`,
+            choice: `${MODALITY_DATA[mod]?.displayName || mod} for ${indicationData.area}`,
+            riskChange: `+${compat.penalty} ${compat.riskType || 'design'} risk`,
+            impact: compat.reason
+          }]);
+          setProgramEvents([{
+            phase: 'Modality Selection',
+            type: 'warning',
+            message: `⚠️ ${compat.reason}`,
+            detail: `+${compat.penalty}% ${compat.riskType || 'design'} risk applied`
+          }]);
+        }
+      }
+    }
+
     setScreen('phase');
   };
 
@@ -1580,6 +1784,7 @@ export default function TheLongGame() {
     if (option.timeEffect) setMonths(m => m + option.timeEffect);
     if (option.riskBonus) setRiskBonus(r => r + option.riskBonus);
     if (option.marketBonus) setMarketMultiplier(mm => mm * option.marketBonus);
+    if (option.revenueEffect) setRevenueMultiplier(rm => rm + option.revenueEffect);
 
     setUsedQuestions([...usedQuestions, currentQuestion.id]);
     setQuestionResult(option);
