@@ -836,6 +836,45 @@ Your therapy is approved for its initial indication. However, emerging evidence 
           lesson: 'Not every drug needs to be a platform. Focused execution in one indication can be valuable, especially for rare diseases where the patient population is well-defined.'
         }
       ]
+    },
+    {
+      phase: 'post_market',
+      question: 'Distribution and Delivery Strategy',
+      context: `SITUATION
+Your therapy is FDA-approved. For biologics requiring parenteral administration, delivery logistics significantly impact patient access and adherence. Your operations team presents three strategic options for your commercial launch.
+
+CONSIDERATIONS
+• Infusion therapies require healthcare facility administration
+• Patient convenience affects treatment adherence and outcomes
+• Distribution channel selection impacts margins and patient experience
+• Formulation changes require additional clinical development`,
+      options: [
+        {
+          text: 'Partner with infusion center networks',
+          detail: 'Improve site access and administration capacity',
+          cashEffect: -15,
+          marketBonus: 0.7,
+          result: 'You establish partnerships with national infusion center networks. This improves geographic access for patients requiring in-office or infusion center administration. Site capacity expands to meet demand.',
+          lesson: 'Infusion center partnerships address the "last mile" problem for IV therapies. Geographic coverage and appointment availability directly impact whether approved therapies reach patients.'
+        },
+        {
+          text: 'Develop subcutaneous formulation',
+          detail: 'Enable self-injection at home',
+          cashEffect: -30,
+          timeEffect: 24,
+          marketBonus: 1.2,
+          result: 'You invest in reformulating for subcutaneous delivery. After additional clinical studies, patients can self-administer at home. Adherence improves significantly, but development takes two years.',
+          lesson: 'Subcutaneous formulations transform the patient experience. Home administration reduces healthcare system burden and improves adherence. The investment in reformulation often yields significant competitive advantage.'
+        },
+        {
+          text: 'Focus on specialty pharmacy partnerships',
+          detail: 'Leverage existing distribution infrastructure',
+          cashEffect: 0,
+          marketBonus: 0.5,
+          result: 'You rely on specialty pharmacies for distribution. This minimizes upfront investment but limits your control over patient experience and may constrain access in underserved areas.',
+          lesson: 'Specialty pharmacies provide established infrastructure but introduce intermediaries between manufacturer and patient. Distribution strategy reflects trade-offs between capital efficiency and market control.'
+        }
+      ]
     }
   ],
   patient_access: [
