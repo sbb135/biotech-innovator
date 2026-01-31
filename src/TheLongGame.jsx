@@ -1152,6 +1152,8 @@ export default function TheLongGame() {
   const [seenPolicy, setSeenPolicy] = useState(false);
   const [seenIRA, setSeenIRA] = useState(false);
   const [programEvents, setProgramEvents] = useState([]); // Track all events that happened for failure report
+  const [phasesCompleted, setPhasesCompleted] = useState([]); // Track phases passed for educational display
+  const [decisionsLog, setDecisionsLog] = useState([]); // Track all strategic decisions for final report
 
   const currentPhase = PHASES[currentPhaseIndex];
 
@@ -1233,6 +1235,8 @@ export default function TheLongGame() {
     setShowAlternativeFinancing(false);
     setRevenueMultiplier(1.0);
     setProgramEvents([]);
+    setPhasesCompleted([]);
+    setDecisionsLog([]);
     setScreen('phase');
   };
 
@@ -1439,6 +1443,15 @@ export default function TheLongGame() {
 
     setUsedQuestions([...usedQuestions, currentQuestion.id]);
     setQuestionResult(option);
+
+    // Log this decision for the final report
+    setDecisionsLog(prev => [...prev, {
+      type: 'strategic',
+      phase: PHASES[currentPhaseIndex]?.name,
+      question: currentQuestion.title,
+      decision: option.text,
+      impact: option.riskBonus > 0 ? 'positive' : option.riskBonus < 0 ? 'negative' : 'neutral'
+    }]);
   };
 
   const handleEventAcknowledge = () => {
@@ -1544,6 +1557,14 @@ export default function TheLongGame() {
     // Game always advances - this is educational, not punitive
     // But we show what the real-world probability would have been
     setGateResult({ success: true, probability: realWorldProbability, realWorldRate: phase.realSuccessRate });
+
+    // Track this phase completion for educational display in final report
+    setPhasesCompleted(prev => [...prev, {
+      name: phase.name,
+      id: phase.id,
+      realSuccessRate: phase.realSuccessRate,
+      color: phase.color
+    }]);
   };
 
   const years = Math.floor(months / 12);
@@ -2604,16 +2625,42 @@ export default function TheLongGame() {
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-emerald-400 mb-4">You Beat the Odds</h3>
+              <h3 className="text-lg font-semibold text-emerald-400 mb-4">📊 Your Development Journey</h3>
               <p className="text-slate-300 mb-4">
-                Only approximately 12% of drugs that enter Phase I clinical trials achieve FDA approval. You navigated the full development pathway:
+                You navigated {phasesCompleted.length} development phases. Here's what the real-world odds looked like:
               </p>
-              <ul className="space-y-2 text-sm text-slate-400">
-                <li>Phase I: ~70% of programs advance (safety and pharmacology)</li>
-                <li>Phase II: ~33% of programs advance (the "Valley of Death" - proof of efficacy)</li>
-                <li>Phase III: ~25-30% of programs advance (confirmatory evidence at scale)</li>
-                <li>FDA Review: ~90% of complete NDAs receive approval</li>
-              </ul>
+
+              {/* Phase-by-phase journey */}
+              <div className="space-y-2 mb-4">
+                {phasesCompleted.filter(p => p.realSuccessRate).map((phase, idx) => (
+                  <div key={phase.id} className="flex items-center gap-3">
+                    <div className="w-2 h-2 rounded-full" style={{ backgroundColor: phase.color }}></div>
+                    <div className="flex-1 text-slate-400 text-sm">{phase.name}</div>
+                    <div className="text-emerald-400 font-medium text-sm">✓ {phase.realSuccessRate}%</div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Cumulative probability */}
+              {(() => {
+                const clinicalPhases = phasesCompleted.filter(p => p.realSuccessRate);
+                if (clinicalPhases.length > 0) {
+                  const cumulativeProb = clinicalPhases.reduce((acc, p) => acc * (p.realSuccessRate / 100), 1) * 100;
+                  return (
+                    <div className="bg-emerald-900/30 border border-emerald-700/50 rounded-lg p-4 mt-4">
+                      <div className="flex justify-between items-center">
+                        <span className="text-slate-300">Cumulative probability of success:</span>
+                        <span className="text-2xl font-bold text-emerald-400">{cumulativeProb.toFixed(1)}%</span>
+                      </div>
+                      <p className="text-slate-500 text-xs mt-2">
+                        Only ~{cumulativeProb.toFixed(0)} out of 100 drugs that entered Phase I would have reached this point.
+                        You beat the odds! 🎉
+                      </p>
+                    </div>
+                  );
+                }
+                return null;
+              })()}
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-8">
