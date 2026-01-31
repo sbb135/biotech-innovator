@@ -2622,26 +2622,75 @@ export default function TheLongGame() {
                 Your drug is now part of an implicit agreement between the pharmaceutical industry and society:
               </p>
               <div className="space-y-4 text-sm">
-                <div className="flex gap-4">
-                  <div className="w-24 text-slate-500 flex-shrink-0">Years 1-{modality === 'small-molecule' ? '9' : '13'}</div>
-                  <div className="text-slate-300">
-                    <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way. {modality === 'small-molecule' ? 'Under the IRA, small molecules face Medicare negotiation after 9 years.' : 'Biologics get 13 years before Medicare negotiation under the IRA.'}
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-24 text-slate-500 flex-shrink-0">Year {modality === 'small-molecule' ? '9' : '13'}+</div>
-                  <div className="text-slate-300">
-                    <span className="font-medium">IRA Negotiation / Generic Entry:</span> Medicare can negotiate prices. Eventually generic/biosimilar competition drives prices down 80-90%.
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
-                  <div className="text-slate-300">
-                    <span className="font-medium">Generic Drug Mountain:</span> Your innovation becomes permanently available at low cost, serving humanity for the rest of time. Once a drug is invented, mankind will never have a lesser standard of care.
-                  </div>
-                </div>
+                {programType === 'orphan' ? (
+                  // Orphan Drug - IRA EXEMPT
+                  <>
+                    <div className="flex gap-4">
+                      <div className="w-24 text-slate-500 flex-shrink-0">Years 1-7</div>
+                      <div className="text-slate-300">
+                        <span className="font-medium">Orphan Drug Exclusivity:</span> 7 years of market exclusivity prevents generic/biosimilar competition. This longer exclusivity period compensates for the smaller patient population.
+                      </div>
+                    </div>
+                    <div className="flex gap-4 bg-emerald-900/30 p-3 rounded-lg border border-emerald-700/50">
+                      <div className="w-24 text-emerald-400 flex-shrink-0 font-medium">IRA EXEMPT</div>
+                      <div className="text-emerald-300">
+                        <span className="font-medium">✓ Exempt from Medicare Price Negotiation:</span> Orphan drugs are specifically excluded from the IRA's Medicare negotiation provisions. Your drug maintains market-based pricing indefinitely, recognizing the higher per-patient economics of rare disease treatments.
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
+                      <div className="text-slate-300">
+                        <span className="font-medium">Generic Drug Mountain:</span> Eventually generic/biosimilar competition drives prices down. Your innovation becomes permanently available at low cost, serving rare disease patients forever.
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  // Non-orphan drugs - subject to IRA
+                  <>
+                    <div className="flex gap-4">
+                      <div className="w-24 text-slate-500 flex-shrink-0">Years 1-{modality === 'small-molecule' ? '9' : '13'}</div>
+                      <div className="text-slate-300">
+                        <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way.
+                      </div>
+                    </div>
+                    <div className="flex gap-4 bg-amber-900/30 p-3 rounded-lg border border-amber-700/50">
+                      <div className="w-24 text-amber-400 flex-shrink-0 font-medium">Year {modality === 'small-molecule' ? '9' : '13'}+</div>
+                      <div className="text-amber-300">
+                        <span className="font-medium">⚠ IRA Medicare Negotiation:</span> Under the Inflation Reduction Act, {modality === 'small-molecule' ? 'small molecules face Medicare negotiation after 9 years' : 'biologics face Medicare negotiation after 13 years'}. This shortens the effective exclusivity period compared to pre-IRA timelines.
+                      </div>
+                    </div>
+                    <div className="flex gap-4">
+                      <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
+                      <div className="text-slate-300">
+                        <span className="font-medium">Generic Drug Mountain:</span> Your innovation becomes permanently available at low cost, serving humanity for the rest of time.
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
+
+            {/* Alternative Financing Used */}
+            {alternativeFinancingUsed.length > 0 && (
+              <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-5 mb-6">
+                <h3 className="text-lg font-semibold text-blue-400 mb-3">💼 Alternative Financing Secured</h3>
+                <p className="text-slate-400 text-sm mb-3">Your program required non-traditional financing after exhausting VC rounds:</p>
+                <div className="space-y-2">
+                  {alternativeFinancingUsed.map(fin => {
+                    const finData = ALTERNATIVE_FINANCING.find(f => f.id === fin);
+                    return finData ? (
+                      <div key={fin} className="flex justify-between items-center bg-slate-800/50 p-2 rounded">
+                        <span className="text-slate-300">{finData.name}</span>
+                        <span className="text-blue-400">${finData.amount}M</span>
+                      </div>
+                    ) : null;
+                  })}
+                </div>
+                <p className="text-slate-500 text-xs mt-3">
+                  Revenue impact: {Math.round((1 - revenueMultiplier) * 100)}% of future revenues committed to financing partners
+                </p>
+              </div>
+            )}
 
             <button
               onClick={() => setScreen('title')}
