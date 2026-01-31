@@ -789,7 +789,8 @@ const QUESTIONS = {
     {
       phase: 'post_market',
       question: 'PBM Formulary & Access Strategy',
-      context: `Your drug is approved, but approval doesn't guarantee patient access.
+      context: `📋 THE SITUATION
+It's Monday morning after FDA approval. Your commercial team just finished a call with CVS Caremark's formulary committee. They want to know your rebate offer before their quarterly formulary review. Express Scripts and OptumRx are waiting to see what deal you offer their competitor. Your decision will determine whether millions of patients can actually get your drug.
 
 📌 WHAT IS A PBM?
 Pharmacy Benefit Managers (PBMs) are middlemen between drug manufacturers, insurers, and pharmacies. The Big 3 (CVS Caremark, Express Scripts, OptumRx) control ~80% of the market.
@@ -836,7 +837,8 @@ Research from 46brooklyn and 3 Axis Advisors shows PBMs can charge employers dif
     {
       phase: 'post_market',
       question: 'Patient Out-of-Pocket Cost Crisis',
-      context: `Despite FDA approval and insurance "coverage," patients are abandoning prescriptions at the pharmacy.
+      context: `📋 THE SITUATION
+Your patient services hotline is getting flooded with calls. A woman just called in tears—she has metastatic cancer, your drug could extend her life, but the pharmacy quoted her $1,200 for her first month's supply. She's retired on fixed income. "I thought my insurance covered this," she says. Your medical affairs team reports this patient's story is not unique: abandonment rates at the pharmacy counter are climbing.
 
 📌 WHY DO PATIENTS PAY SO MUCH?
 • Copays are often based on LIST PRICE, not the discounted NET price insurers actually pay
@@ -883,7 +885,11 @@ Innovation only matters if patients can access it. A drug that works but patient
     {
       phase: 'post_market',
       question: 'Real-World Evidence and Market Expansion',
-      context: 'Your drug is approved for the initial indication, but real-world data suggests benefits in broader populations. You can pursue additional indications, but each requires investment. Meanwhile, off-label use is growing.',
+      context: `📋 THE SITUATION
+You're at ASCO, the world's largest oncology conference. A prominent oncologist approaches your booth showing you case studies: she's been using your drug off-label in patients with a related mutation, and the responses are remarkable. "When are you going to run a trial for this?" she asks. Your medical affairs team confirms: off-label use is spreading. Physicians are sharing cases on social media. You have a decision to make.
+
+📌 THE OPPORTUNITY
+Your drug is approved for its initial indication, but real-world data suggests benefits in broader populations. Each new indication requires clinical trials, investment, and regulatory approval—but could help thousands more patients.`,
       options: [
         {
           text: 'Invest in additional clinical trials for new indications',
@@ -917,7 +923,13 @@ Innovation only matters if patients can access it. A drug that works but patient
     {
       phase: 'post_market',
       question: 'The System Reform Question',
-      context: 'After navigating FDA approval, PBM negotiations, and access barriers, you reflect on the journey. Your drug works—the science succeeded. But some patients who need it can\'t access it. The system largely works: innovation happens, drugs get approved, most patients get treated. But a few specific issues prevent it from working for everyone. Congress is debating reforms. What do you advocate for?',
+      context: `📋 THE SITUATION
+You've been invited to testify before the Senate Health Committee. Senator Martinez asks: "Your company spent 12 years and $2 billion developing this drug. It works. But I'm hearing from constituents who can't afford it, even with insurance. What's broken, and how do we fix it?"
+
+The cameras are rolling. Patient advocates, PBM lobbyists, and insurance executives are in the audience. Your answer will shape the national conversation about drug pricing. What do you tell Congress?
+
+📌 YOUR PERSPECTIVE
+You've lived the journey: 93% of clinical programs fail. Your success required years of risk-taking and investment. But you've also seen patients unable to access your drug because of cost-sharing. The system largely works—but specific issues prevent it from working for everyone.`,
       options: [
         {
           text: 'Cap drug prices at the source',
