@@ -486,7 +486,7 @@ const PHASES = [
     baseMonths: 12,
     cost: '$10-50M',
     baseCost: 20,
-    realSuccessRate: null,  // Not a clinical phase
+    realSuccessRate: 85,  // Access depends on payer/PBM decisions
     description: 'Formulary negotiations, payer coverage, and patient affordability',
     context: 'Regulatory approval establishes the right to market your therapy. However, patient access depends on coverage decisions by payers, formulary placement by pharmacy benefit managers (PBMs), and cost-sharing structures that determine out-of-pocket obligations. This phase determines whether patients who need your therapy can actually access it.',
     activities: ['PBM formulary negotiations', 'Payer coverage discussions', 'Copay assistance programs', 'Patient support services', 'Specialty pharmacy setup', 'Policy engagement']
@@ -1218,7 +1218,8 @@ const GATE_SUCCESS = {
   phase2: 0.28,           // Citeline 2014-2023: 28% - "Valley of Death"
   phase3: 0.55,           // Citeline 2014-2023: 55%
   fda_review: 0.90,       // Most complete NDAs approved
-  post_market: 0.95       // Most drugs remain on market
+  post_market: 0.95,      // Most drugs remain on market
+  patient_access: 0.85    // Access depends on payer/PBM decisions
 };
 
 // Modality-Indication Compatibility Matrix
@@ -3175,7 +3176,13 @@ export default function TheLongGame() {
                         ? 'Have you found hit compounds worth optimizing?'
                         : currentPhase.id === 'lead_optimization'
                           ? 'Is your lead compound ready for formal safety testing?'
-                          : 'Is your IND package ready for FDA submission?'}
+                          : currentPhase.id === 'ind_enabling'
+                            ? 'Is your IND package ready for FDA submission?'
+                            : currentPhase.id === 'post_market'
+                              ? 'Is your safety profile holding up in real-world use?'
+                              : currentPhase.id === 'patient_access'
+                                ? 'Will patients who need your therapy actually be able to access it?'
+                                : 'Has your program met the requirements for this stage?'}
                 </p>
 
                 <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
@@ -3204,7 +3211,13 @@ export default function TheLongGame() {
                     </>
                   ) : (
                     <div className="text-center py-2">
-                      <div className="text-slate-500 text-sm mb-2">Preclinical Phase</div>
+                      <div className="text-slate-500 text-sm mb-2">
+                        {currentPhase.id === 'post_market'
+                          ? 'Post-Approval Monitoring'
+                          : currentPhase.id === 'patient_access'
+                            ? 'Market Access Phase'
+                            : 'Preclinical Phase'}
+                      </div>
                       <p className="text-slate-400 text-sm">
                         {currentPhase.id === 'basic_research'
                           ? 'Most targets fail validation. Only those with strong biological evidence should advance.'
@@ -3212,7 +3225,13 @@ export default function TheLongGame() {
                             ? 'Most screening campaigns yield few viable hits. Quality matters more than quantity.'
                             : currentPhase.id === 'lead_optimization'
                               ? 'Many leads fail due to poor ADME, toxicity, or lack of efficacy in animal models.'
-                              : 'IND-enabling studies must demonstrate safety sufficient for human testing.'}
+                              : currentPhase.id === 'ind_enabling'
+                                ? 'IND-enabling studies must demonstrate safety sufficient for human testing.'
+                                : currentPhase.id === 'post_market'
+                                  ? 'Real-world safety signals can emerge. Ongoing surveillance protects patients.'
+                                  : currentPhase.id === 'patient_access'
+                                    ? 'FDA approval is step one. Now you must navigate payers, PBMs, and cost-sharing to reach patients.'
+                                    : 'Your program must meet requirements to advance.'}
                       </p>
                     </div>
                   )}
@@ -3386,7 +3405,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Genericization:</span> Eventually generic/biosimilar competition drives prices down. Your innovation becomes permanently available at low cost, serving rare disease patients forever.
+                        <span className="font-medium">The Social Contract Fulfilled:</span> When exclusivity ends, generics and biosimilars enter the market. Your breakthrough—once expensive—becomes permanently affordable. This is the deal: society grants temporary exclusivity to fund innovation, then innovation becomes humanity's shared inheritance, forever.
                       </div>
                     </div>
                   </>
@@ -3416,7 +3435,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Genericization:</span> Your innovation becomes permanently available at low cost, serving humanity for the rest of time.
+                        <span className="font-medium">The Social Contract Fulfilled:</span> After exclusivity ends, generics or biosimilars drive prices down. Your innovation—once premium-priced to fund R&D—becomes accessible to everyone, permanently. This is the biotech social contract in action.
                       </div>
                     </div>
                   </>
@@ -3427,12 +3446,12 @@ export default function TheLongGame() {
             {/* Patient Access & Affordability Reality */}
             {MODALITY_ACCESS_CHALLENGES[modality] && (
               <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-amber-400 mb-4">Market Access Reality</h3>
+                <h3 className="text-lg font-semibold text-amber-400 mb-4">The Access Gap</h3>
                 <p className="text-slate-300 text-sm mb-4">
-                  Regulatory approval establishes the right to market your therapy. However, patient access depends on coverage decisions by payers, formulary placement by pharmacy benefit managers, and cost-sharing structures that determine out-of-pocket obligations.
+                  Here's the uncomfortable truth: FDA approval means you <em>can</em> sell your drug. It doesn't mean patients can <em>access</em> it. Between your innovation and the patient stand payers, PBMs, and cost-sharing structures.
                 </p>
                 <div className="bg-slate-800/50 p-4 rounded mb-4">
-                  <div className="text-amber-400 font-medium text-sm mb-2">Primary Access Challenge: {MODALITY_DATA[modality]?.displayName || modality}</div>
+                  <div className="text-amber-400 font-medium text-sm mb-2">Your Modality's Challenge: {MODALITY_DATA[modality]?.displayName || modality}</div>
                   <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].accessChallenge}</div>
                 </div>
                 <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700 mb-4">
@@ -3442,7 +3461,7 @@ export default function TheLongGame() {
                 </div>
                 <div className="p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
                   <p className="text-emerald-300 text-sm">
-                    <strong>Policy Consideration:</strong> Patients contribute through insurance premiums. When covered therapies remain inaccessible due to cost-sharing requirements, the gap reflects insurance benefit design rather than therapeutic value. Targeted reforms to out-of-pocket structures can address this without disrupting innovation incentives.
+                    <strong>The Fix:</strong> Patients already pay through premiums. The problem is cost-sharing at the pharmacy counter—they're asked to pay again. Cap out-of-pocket costs. Ban copay accumulators. Let insurance actually work like insurance. Innovation incentives remain intact.
                   </p>
                 </div>
               </div>
