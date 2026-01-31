@@ -908,67 +908,143 @@ const generateDrugName = () => {
 };
 
 // Indications with therapeutic area and key challenges
+// Indications separated by program type
+// ORPHAN: <200,000 US patients (FDA threshold) - get 7 years exclusivity, tax credits, smaller trials
+// FIRST-IN-CLASS: Novel mechanism/target - any prevalence but requires target validation
+// BLOCKBUSTER: Large chronic disease markets >1M patients - high competition but huge revenue potential
+const INDICATIONS_BY_TYPE = {
+  orphan: [
+    {
+      name: 'Amyotrophic Lateral Sclerosis (ALS)',
+      area: 'CNS',
+      usPrevalence: '~30,000',
+      challenges: ['CNS penetration', 'No validated biomarkers', 'Irreversible neurodegeneration'],
+      note: 'Orphan drug incentives: 7 years exclusivity, 50% tax credit on trials, exempt from IRA negotiation.'
+    },
+    {
+      name: 'Duchenne Muscular Dystrophy',
+      area: 'Rare/Genetic',
+      usPrevalence: '~15,000',
+      challenges: ['Mutation-specific response', 'Muscle delivery', 'Functional endpoints'],
+      note: 'Orphan indication with accelerated approval pathway often used.'
+    },
+    {
+      name: 'Huntington\'s Disease',
+      area: 'CNS',
+      usPrevalence: '~30,000',
+      challenges: ['CNS penetration', 'Huntingtin lowering', 'Slow progression'],
+      note: 'Orphan disease - smaller trials (500-1000 patients) may be sufficient for approval.'
+    },
+    {
+      name: 'Cystic Fibrosis (Rare Mutations)',
+      area: 'Rare/Genetic',
+      usPrevalence: '~40,000 total, subpopulations much smaller',
+      challenges: ['Mutation-specific response', 'Chronic dosing', 'Lung function endpoints'],
+      note: 'Vertex pioneered mutation-specific therapies. Some mutations affect <1000 patients.'
+    },
+    {
+      name: 'Progressive Supranuclear Palsy',
+      area: 'CNS',
+      usPrevalence: '~30,000',
+      challenges: ['CNS penetration', 'Tau pathology', 'Small patient population'],
+      note: 'Rare tauopathy - smaller trials but enrollment is challenging.'
+    },
+    {
+      name: 'Spinal Muscular Atrophy',
+      area: 'Rare/Genetic',
+      usPrevalence: '~25,000',
+      challenges: ['Gene therapy delivery', 'Durability of effect', 'Timing of intervention'],
+      note: 'Orphan success story - Spinraza and Zolgensma transformed this space.'
+    }
+  ],
+  'first-in-class': [
+    {
+      name: 'Alzheimer\'s Disease (Novel Target)',
+      area: 'CNS',
+      usPrevalence: '~6.7 million',
+      challenges: ['Novel mechanism validation', 'CNS penetration', 'Long trials (18-24 months)', 'Biomarker development'],
+      note: 'First-in-class risk: novel targets have higher failure rates but command premium pricing.'
+    },
+    {
+      name: 'Treatment-Resistant Depression',
+      area: 'CNS',
+      usPrevalence: '~2.8 million',
+      challenges: ['Novel mechanism validation', 'Subjective endpoints', 'Placebo response'],
+      note: 'Non-monoamine targets are first-in-class (e.g., NMDA modulators, psychedelics).'
+    },
+    {
+      name: 'NASH/Metabolic Liver Disease',
+      area: 'Metabolic',
+      usPrevalence: '~16 million with NASH',
+      challenges: ['Novel biology', 'Liver biopsy endpoints', 'Long-term outcomes'],
+      note: 'Multiple novel mechanisms under development. No approved disease-modifying therapy.'
+    },
+    {
+      name: 'Heart Failure with Preserved Ejection Fraction',
+      area: 'Cardiovascular',
+      usPrevalence: '~3 million',
+      challenges: ['Heterogeneous syndrome', 'Novel pathways', 'Large trials needed'],
+      note: 'Novel mechanisms targeting cardiac metabolism, inflammation, or fibrosis.'
+    },
+    {
+      name: 'Recurrent Glioblastoma',
+      area: 'CNS/Oncology',
+      usPrevalence: '~13,000/year',
+      challenges: ['Blood-brain barrier', 'Tumor microenvironment', 'Novel approaches needed'],
+      note: 'Standard of care unchanged for decades - first-in-class desperately needed.'
+    }
+  ],
+  blockbuster: [
+    {
+      name: 'Type 2 Diabetes',
+      area: 'Metabolic',
+      usPrevalence: '~37 million',
+      challenges: ['Crowded market', 'CV outcomes required', 'Differentiation critical'],
+      note: 'Massive market but fierce competition. GLP-1s dominate. Must show CV benefit.'
+    },
+    {
+      name: 'Obesity',
+      area: 'Metabolic',
+      usPrevalence: '~100 million',
+      challenges: ['Weight loss durability', 'Side effect profile', 'Payer coverage'],
+      note: '$100B market by 2030. Semaglutide set new efficacy bar. Oral formulations race.'
+    },
+    {
+      name: 'Chronic Kidney Disease',
+      area: 'Nephrology',
+      usPrevalence: '~37 million',
+      challenges: ['Slow progression', 'Hard endpoints', 'Long trials'],
+      note: 'Huge unmet need despite SGLT2 advances. Trials require 3-4 years.'
+    },
+    {
+      name: 'Atopic Dermatitis',
+      area: 'Immunology',
+      usPrevalence: '~26 million',
+      challenges: ['Dupixent dominance', 'JAK safety signals', 'Differentiation'],
+      note: 'Blockbuster market but Dupixent sets high bar. Oral options in demand.'
+    },
+    {
+      name: 'Rheumatoid Arthritis',
+      area: 'Immunology',
+      usPrevalence: '~1.5 million',
+      challenges: ['Biologic competition', 'JAK safety concerns', 'Step therapy'],
+      note: 'Mature market with many options. Differentiation on safety or convenience.'
+    },
+    {
+      name: 'Non-Small Cell Lung Cancer',
+      area: 'Oncology',
+      usPrevalence: '~235,000 new cases/year',
+      challenges: ['PD-1 dominance', 'Combination complexity', 'Biomarker selection'],
+      note: 'Largest oncology market. Checkpoint combinations are current standard.'
+    }
+  ]
+};
+
+// Legacy array for backward compatibility - combine all indications
 const INDICATIONS = [
-  {
-    name: 'Alzheimer\'s Disease',
-    area: 'CNS',
-    challenges: ['CNS penetration', 'Blood-brain barrier', 'Long trials (18-24 months)', 'Biomarker validation'],
-    note: 'Blood-brain barrier penetration is critical. Most CNS drugs fail due to inadequate brain exposure.'
-  },
-  {
-    name: 'Metastatic Pancreatic Cancer',
-    area: 'Oncology',
-    challenges: ['Tumor heterogeneity', 'Rapid progression', 'Limited treatment window'],
-    note: 'One of the hardest cancers to treat. Patients often progress before response can be measured.'
-  },
-  {
-    name: 'Amyotrophic Lateral Sclerosis',
-    area: 'CNS',
-    challenges: ['CNS penetration', 'No validated biomarkers', 'Irreversible neurodegeneration'],
-    note: 'Requires CNS penetration and early intervention. The biology of motor neuron death remains poorly understood.'
-  },
-  {
-    name: 'Cystic Fibrosis',
-    area: 'Rare/Genetic',
-    challenges: ['Mutation-specific response', 'Chronic dosing', 'Lung function endpoints'],
-    note: 'Success depends on targeting specific CFTR mutations. Vertex has transformed this space.'
-  },
-  {
-    name: 'Duchenne Muscular Dystrophy',
-    area: 'Rare/Genetic',
-    challenges: ['Muscle delivery', 'Dystrophin expression', 'Functional endpoints'],
-    note: 'Delivering therapy to muscle tissue is challenging. Exon-skipping and gene therapy approaches compete.'
-  },
-  {
-    name: 'Huntington\'s Disease',
-    area: 'CNS',
-    challenges: ['CNS penetration', 'Huntingtin lowering', 'Slow progression'],
-    note: 'Blood-brain barrier penetration essential. Must lower mutant huntingtin without affecting normal allele.'
-  },
-  {
-    name: 'Recurrent Glioblastoma',
-    area: 'CNS/Oncology',
-    challenges: ['Blood-brain barrier', 'Tumor microenvironment', 'Immunosuppression'],
-    note: 'The blood-brain barrier limits drug access. Median survival remains under 18 months despite decades of research.'
-  },
-  {
-    name: 'Heart Failure (HFpEF)',
-    area: 'Cardiovascular',
-    challenges: ['Heterogeneous syndrome', 'Hard to enroll', 'Large trials needed'],
-    note: 'A syndrome with multiple underlying causes. Trials require thousands of patients and years of follow-up.'
-  },
-  {
-    name: 'Systemic Lupus Erythematosus',
-    area: 'Autoimmune',
-    challenges: ['Flare unpredictability', 'Heterogeneous disease', 'Steroid-sparing endpoints'],
-    note: 'Lupus flares are unpredictable. The disease affects multiple organ systems differently in each patient.'
-  },
-  {
-    name: 'Progressive Supranuclear Palsy',
-    area: 'CNS',
-    challenges: ['CNS penetration', 'Tau pathology', 'Rare patient population'],
-    note: 'A tauopathy requiring CNS penetration. Small patient population makes enrollment challenging.'
-  }
+  ...INDICATIONS_BY_TYPE.orphan,
+  ...INDICATIONS_BY_TYPE['first-in-class'],
+  ...INDICATIONS_BY_TYPE.blockbuster
 ];
 
 // Legacy array for backward compatibility
@@ -1080,15 +1156,21 @@ export default function TheLongGame() {
   const currentPhase = PHASES[currentPhaseIndex];
 
   const startGame = () => {
-    // Generate indication upfront - select full indication object with challenges
-    const selectedIndication = INDICATIONS[Math.floor(Math.random() * INDICATIONS.length)];
-    setIndicationData(selectedIndication);
-    setIndication(selectedIndication.name);
+    // Clear any previous indication - will be set when program type is selected
+    setIndicationData(null);
+    setIndication('');
     setScreen('setup_type');
   };
 
   const selectProgramType = (type) => {
     setProgramType(type);
+
+    // Select indication from the appropriate pool based on program type
+    const indicationPool = INDICATIONS_BY_TYPE[type] || INDICATIONS_BY_TYPE['first-in-class'];
+    const selectedIndication = indicationPool[Math.floor(Math.random() * indicationPool.length)];
+    setIndicationData(selectedIndication);
+    setIndication(selectedIndication.name);
+
     // Apply modifiers based on program type
     // VC investment amounts based on RA Capital framework:
     // - First-in-class: Higher capital needs, novel biology requires longer runway
