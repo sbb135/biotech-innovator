@@ -806,7 +806,7 @@ const QUESTIONS = {
   post_market: [
     {
       phase: 'post_market',
-      question: 'Real-World Evidence and Market Expansion',
+      title: 'Real-World Evidence and Market Expansion',
       scenario: `SITUATION
 At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
 
@@ -844,7 +844,7 @@ Your therapy is approved for its initial indication. However, emerging evidence 
     },
     {
       phase: 'post_market',
-      question: 'Distribution and Delivery Strategy',
+      title: 'Distribution and Delivery Strategy',
       scenario: `SITUATION
 Your therapy is FDA-approved. For biologics requiring parenteral administration, delivery logistics significantly impact patient access and adherence. Your operations team presents three strategic options for your commercial launch.
 
@@ -885,21 +885,8 @@ CONSIDERATIONS
   patient_access: [
     {
       phase: 'patient_access',
-      question: 'PBM Formulary & Access Strategy',
-      scenario: `SITUATION
-Following FDA approval, your commercial team has initiated negotiations with CVS Caremark's formulary committee. Their quarterly review is approaching. Express Scripts and OptumRx are awaiting the outcome of these discussions. Formulary placement will significantly impact patient access to your therapy.
-
-BACKGROUND: PHARMACY BENEFIT MANAGERS
-Pharmacy Benefit Managers (PBMs) serve as intermediaries between drug manufacturers, insurers, and pharmacies. The three largest PBMs—CVS Caremark, Express Scripts, and OptumRx—represent approximately 80% of the market.
-
-Their functions include:
-• Establishing formulary coverage (the list of covered medications)
-• Negotiating rebates from manufacturers in exchange for preferred placement
-• Managing pharmacy reimbursement rates
-• Operating specialty pharmacy subsidiaries
-
-MARKET DYNAMICS
-Industry analyses indicate that PBMs may collect different prices from different plan sponsors for identical medications. Patient cost-sharing is frequently calculated from list price rather than the net price negotiated by insurers.`,
+      title: 'PBM Formulary & Access Strategy',
+      scenario: `FDA approval gives you permission to sell your drug—but Pharmacy Benefit Managers (PBMs) decide whether patients can actually access it. These intermediaries control formulary placement, negotiate rebates from manufacturers, and manage pharmacy networks. Patient cost-sharing is often calculated from list price, not the net price after rebates. Your commercial team is negotiating for formulary placement that will determine real-world patient access.`,
       options: [
         {
           text: 'Pay heavy rebates for preferred formulary placement',
@@ -933,20 +920,8 @@ Industry analyses indicate that PBMs may collect different prices from different
     },
     {
       phase: 'patient_access',
-      question: 'Patient Out-of-Pocket Cost Crisis',
-      scenario: `SITUATION
-Your patient services team reports increasing call volume from patients experiencing prescription abandonment at the pharmacy. Medical affairs has documented cases where insured patients are declining therapy due to cost-sharing obligations that exceed their ability to pay.
-
-COST-SHARING MECHANICS
-• Patient copays may be calculated from list price rather than negotiated net price
-• Specialty tier placement often involves coinsurance (percentage of cost) rather than flat copays
-• Cost-sharing represents an additional financial obligation beyond premium contributions
-
-COPAY ACCUMULATOR PROGRAMS
-Some insurance benefit designs exclude manufacturer-provided copay assistance from counting toward deductible or out-of-pocket maximum requirements. When assistance programs expire, patients bear the full cost-sharing burden.
-
-ACCESS IMPLICATIONS
-Prescription abandonment at the pharmacy counter represents a gap between regulatory approval and actual patient access. Therapies that cannot be accessed by covered patients represent incomplete market access.`,
+      title: 'Patient Out-of-Pocket Cost Crisis',
+      scenario: `Patients are abandoning prescriptions at the pharmacy counter. Even with insurance, cost-sharing through copays and coinsurance creates barriers. Some benefit designs use "copay accumulators" that don't count manufacturer assistance toward deductibles. The result: insured patients who cannot afford their medication.`,
       options: [
         {
           text: 'Launch robust copay assistance program',
@@ -978,15 +953,8 @@ Prescription abandonment at the pharmacy counter represents a gap between regula
     },
     {
       phase: 'patient_access',
-      question: 'The System Reform Question',
-      scenario: `SITUATION
-You have been invited to provide testimony before the Senate Health Committee. A member asks: "Your company invested over a decade and substantial capital developing this therapy. It is effective. However, constituents report they cannot afford it despite having insurance coverage. What policy reforms would you recommend?"
-
-CONTEXT
-The hearing includes representatives from patient advocacy organizations, pharmacy benefit managers, and insurance carriers. Your testimony will inform ongoing policy discussions regarding pharmaceutical pricing and access.
-
-PERSPECTIVE
-Your experience encompasses the full development trajectory: the high clinical failure rate, the capital requirements, and the post-approval access barriers. The pharmaceutical innovation ecosystem largely functions effectively, though specific structural issues create access gaps for covered patients.`,
+      title: 'The System Reform Question',
+      scenario: `You're testifying before Congress. A Senator asks: "Your company spent over a decade and a billion dollars developing this therapy. It works. Yet my constituents can't afford it despite having insurance. What reforms would you recommend?" You've experienced the full journey—the 90%+ failure rate, the capital intensity, and now the access barriers.`,
       options: [
         {
           text: 'Recommend direct price controls on pharmaceuticals',
@@ -1948,8 +1916,8 @@ export default function TheLongGame() {
         const modalityQuestion = {
           id: `access_${modality}`,
           phase: 'post_market',
-          question: `${modalityAccess.accessChallenge}: ${MODALITY_DATA[modality]?.displayName || modality}`,
-          context: `${modalityAccess.insuranceReality}\n\n📊 Typical Price: ${modalityAccess.typicalPrice}\n💳 Coverage: ${modalityAccess.coverageTier}\n💰 Patient Copay: ${modalityAccess.patientCopay}\n\n${modalityAccess.question.context}`,
+          title: `${modalityAccess.accessChallenge}: ${MODALITY_DATA[modality]?.displayName || modality}`,
+          scenario: `${modalityAccess.insuranceReality}\n\n📊 Typical Price: ${modalityAccess.typicalPrice}\n💳 Coverage: ${modalityAccess.coverageTier}\n💰 Patient Copay: ${modalityAccess.patientCopay}\n\n${modalityAccess.question.context}`,
           options: modalityAccess.question.options
         };
         // Add modality-specific question if not already used
