@@ -802,7 +802,7 @@ const QUESTIONS = {
     {
       phase: 'post_market',
       question: 'Real-World Evidence and Market Expansion',
-      context: `SITUATION
+      scenario: `SITUATION
 At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
 
 STRATEGIC CONSIDERATION
@@ -840,7 +840,7 @@ Your therapy is approved for its initial indication. However, emerging evidence 
     {
       phase: 'post_market',
       question: 'Distribution and Delivery Strategy',
-      context: `SITUATION
+      scenario: `SITUATION
 Your therapy is FDA-approved. For biologics requiring parenteral administration, delivery logistics significantly impact patient access and adherence. Your operations team presents three strategic options for your commercial launch.
 
 CONSIDERATIONS
@@ -881,7 +881,7 @@ CONSIDERATIONS
     {
       phase: 'patient_access',
       question: 'PBM Formulary & Access Strategy',
-      context: `SITUATION
+      scenario: `SITUATION
 Following FDA approval, your commercial team has initiated negotiations with CVS Caremark's formulary committee. Their quarterly review is approaching. Express Scripts and OptumRx are awaiting the outcome of these discussions. Formulary placement will significantly impact patient access to your therapy.
 
 BACKGROUND: PHARMACY BENEFIT MANAGERS
@@ -929,7 +929,7 @@ Industry analyses indicate that PBMs may collect different prices from different
     {
       phase: 'patient_access',
       question: 'Patient Out-of-Pocket Cost Crisis',
-      context: `SITUATION
+      scenario: `SITUATION
 Your patient services team reports increasing call volume from patients experiencing prescription abandonment at the pharmacy. Medical affairs has documented cases where insured patients are declining therapy due to cost-sharing obligations that exceed their ability to pay.
 
 COST-SHARING MECHANICS
@@ -974,7 +974,7 @@ Prescription abandonment at the pharmacy counter represents a gap between regula
     {
       phase: 'patient_access',
       question: 'The System Reform Question',
-      context: `SITUATION
+      scenario: `SITUATION
 You have been invited to provide testimony before the Senate Health Committee. A member asks: "Your company invested over a decade and substantial capital developing this therapy. It is effective. However, constituents report they cannot afford it despite having insurance coverage. What policy reforms would you recommend?"
 
 CONTEXT
