@@ -1818,8 +1818,26 @@ export default function TheLongGame() {
 
   // Handle alternative financing selection
   const selectAlternativeFinancing = (altFinancing) => {
+    const phase = PHASES[currentPhaseIndex];
+    const phaseCost = phase?.baseCost || 20;
+    const newCash = cash + altFinancing.amount;
+
+    // Check if financing is sufficient for the current phase
+    if (newCash < phaseCost) {
+      // Insufficient financing - fail the program
+      setProgramEvents(prev => [...prev, {
+        title: 'Insufficient Financing',
+        description: `Raised $${altFinancing.amount}M but needed $${phaseCost}M for ${phase?.name}. Program failed due to undercapitalization.`,
+        phase: phase?.name,
+        financing: true
+      }]);
+      setShowAlternativeFinancing(false);
+      setScreen('failure');
+      return;
+    }
+
     // Apply the financing
-    setCash(c => c + altFinancing.amount);
+    setCash(newCash);
     setCapitalInvested(ci => ci + altFinancing.amount);
     setRevenueMultiplier(rm => rm * altFinancing.revenueImpact);
     setAlternativeFinancingUsed(prev => [...prev, altFinancing.id]);
