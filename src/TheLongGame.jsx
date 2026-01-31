@@ -406,6 +406,7 @@ const QUESTIONS = {
           cashEffect: -1,
           timeEffect: 0,
           riskBonus: 0.05,
+          efficacyEffect: -15, // Validated target = lower efficacy risk
           result: 'The established biology accelerates your program. However, you learn that three other companies are pursuing the same target.',
           lesson: 'Validated targets reduce biological risk - you know the target is relevant to disease. But validation attracts competition, requiring differentiation on efficacy, safety, or convenience.'
         },
@@ -416,6 +417,7 @@ const QUESTIONS = {
           timeEffect: 6,
           riskBonus: -0.08,
           marketBonus: 1.5,
+          efficacyEffect: 20, // Novel target = higher efficacy risk (biology may be wrong)
           result: 'You must build understanding of the target from scratch. Initial validation takes longer than expected, but you establish a proprietary position.',
           lesson: 'Novel targets offer breakthrough potential but carry substantial risk that the underlying biology is wrong - the most common cause of drug failure.'
         },
@@ -425,6 +427,7 @@ const QUESTIONS = {
           cashEffect: -3,
           timeEffect: 3,
           riskBonus: 0,
+          efficacyEffect: 5, // Divided focus = slightly higher risk
           result: 'Neither program receives optimal focus. You generate data on both targets but lack the resources to deeply validate either.',
           lesson: 'Early diversification sounds prudent but often leads to underfunding critical experiments. Focus typically outperforms hedging in resource-constrained discovery.'
         }
@@ -515,6 +518,7 @@ const QUESTIONS = {
           cashEffect: -8,
           timeEffect: 0,
           riskBonus: 0.02,
+          safetyEffect: -10, // Standard choice = lower safety risk
           result: 'The FDA accepts your standard tox package without questions. Dogs show a GI finding that requires monitoring in clinical trials but is manageable.',
           lesson: 'Standard species choices reduce regulatory risk. FDA is familiar with interpreting rat and dog data, which minimizes back-and-forth during IND review.'
         },
@@ -524,6 +528,7 @@ const QUESTIONS = {
           cashEffect: -5,
           timeEffect: 0,
           riskBonus: -0.03,
+          safetyEffect: 10, // Alternative species = higher safety risk (less data)
           result: 'FDA asks for justification of minipig selection. After providing scientific rationale, they accept the package, but the exchange adds time.',
           lesson: 'Non-standard species choices require strong scientific justification. Cost savings must be weighed against regulatory risk and potential delays.'
         },
@@ -533,6 +538,7 @@ const QUESTIONS = {
           cashEffect: -15,
           timeEffect: 6,
           riskBonus: 0.08,
+          safetyEffect: -20, // NHP = much lower safety risk (best predictor)
           result: 'NHP studies identify a cardiac signal not seen in dogs. You modify your Phase I protocol to include cardiac monitoring, avoiding a potential clinical hold.',
           lesson: 'NHP are often the most predictive non-rodent species for human safety but require ethical justification.'
         }
@@ -551,6 +557,7 @@ const QUESTIONS = {
           cashEffect: -5,
           timeEffect: 6,
           riskBonus: 0.06,
+          safetyEffect: -15, // Conservative = lower safety risk
           result: 'No serious adverse events occur. Your clean safety database builds regulatory confidence and supports aggressive dosing in Phase II.',
           lesson: 'Patient safety is paramount in first-in-human studies. A single serious adverse event can trigger clinical hold, destroying timelines and investor confidence.'
         },
@@ -560,6 +567,7 @@ const QUESTIONS = {
           cashEffect: -3,
           timeEffect: 0,
           riskBonus: -0.06,
+          safetyEffect: 20, // Aggressive = higher safety risk
           result: 'At the fourth dose level, a subject experiences Grade 2 liver enzyme elevation. You pause enrollment pending safety review.',
           lesson: 'Accelerated designs can work but require robust safety monitoring. Time saved can evaporate quickly if a safety signal emerges.'
         },
@@ -587,6 +595,7 @@ const QUESTIONS = {
           cashEffect: -15,
           timeEffect: 0,
           riskBonus: -0.10,
+          designEffect: 20, // Small trial = higher design risk in Phase III
           result: 'You see a positive trend (p=0.08) but the confidence interval crosses zero. Is this a real effect or noise? Your Phase III decision is difficult.',
           lesson: 'Underpowered trials save money but create uncertainty. You might advance a drug that doesn\'t work or kill a drug that does.'
         },
@@ -596,6 +605,7 @@ const QUESTIONS = {
           cashEffect: -35,
           timeEffect: 6,
           riskBonus: 0,
+          designEffect: -5, // Adequate = slightly lower risk
           result: 'Your trial demonstrates statistically significant efficacy (p=0.01). The effect size is clear enough to design efficient Phase III studies.',
           lesson: 'Adequate powering provides reliable go/no-go decisions and data to design efficient Phase III trials.'
         },
@@ -605,6 +615,8 @@ const QUESTIONS = {
           cashEffect: -60,
           timeEffect: 12,
           riskBonus: 0.12,
+          designEffect: -15, // Large trial = much lower design risk
+          efficacyEffect: -10, // Also reduces efficacy uncertainty
           result: 'Definitive efficacy data substantially de-risks Phase III. The FDA suggests your data might support accelerated approval.',
           lesson: 'Larger Phase II trials generate the most valuable data in drug development. Given Phase III costs, front-loading evidence can be capital-efficient.'
         }
@@ -623,6 +635,7 @@ const QUESTIONS = {
           cashEffect: -120,
           timeEffect: 0,
           riskBonus: -0.10,
+          designEffect: 25, // Single trial = high design risk
           result: 'Enrollment issues at several sites compromise data quality. With no backup trial, your entire program depends on salvaging the analysis.',
           lesson: 'Single pivotal trials concentrate risk catastrophically. Site issues or bad luck in patient selection can sink years of work with no recovery.'
         },
@@ -632,6 +645,7 @@ const QUESTIONS = {
           cashEffect: -160,
           timeEffect: 6,
           riskBonus: 0.08,
+          designEffect: -20, // Gold standard = much lower design risk
           result: 'Both trials demonstrate consistent efficacy. The replication provides bulletproof evidence. FDA reviewers note the robust data package.',
           lesson: 'Replication is the foundation of scientific confidence. Two positive trials provide robustness against random variation and site-specific effects.'
         },
@@ -1155,6 +1169,12 @@ export default function TheLongGame() {
   const [phasesCompleted, setPhasesCompleted] = useState([]); // Track phases passed for educational display
   const [decisionsLog, setDecisionsLog] = useState([]); // Track all strategic decisions for final report
 
+  // Decision-based risk tracking (0-100 scale, higher = more risk of failure)
+  // Based on real failure data: 40-50% efficacy, 30% safety, 15% trial design
+  const [efficacyRisk, setEfficacyRisk] = useState(50); // Target validation risk - affects Phase II
+  const [safetyRisk, setSafetyRisk] = useState(30); // Toxicity risk - affects Phase I
+  const [designRisk, setDesignRisk] = useState(20); // Trial design risk - affects Phase III
+
   const currentPhase = PHASES[currentPhaseIndex];
 
   const startGame = () => {
@@ -1237,6 +1257,30 @@ export default function TheLongGame() {
     setProgramEvents([]);
     setPhasesCompleted([]);
     setDecisionsLog([]);
+
+    // Set modality-specific starting risks (based on real failure patterns)
+    // Small molecules: efficacy is main risk (target engagement)
+    // Biologics: efficacy risk (pathway redundancy)
+    // Gene therapy: safety risk (immune response, durability)
+    // Cell therapy: safety risk (CRS, manufacturing)
+    if (mod === 'small-molecule') {
+      setEfficacyRisk(55); // Off-target effects, metabolism
+      setSafetyRisk(35);
+      setDesignRisk(20);
+    } else if (mod === 'biologic') {
+      setEfficacyRisk(50); // Target redundancy
+      setSafetyRisk(25);   // ADA risk
+      setDesignRisk(25);
+    } else if (mod === 'gene-therapy') {
+      setEfficacyRisk(40); // Durability concerns
+      setSafetyRisk(50);   // Pre-existing immunity, dose-limiting toxicity
+      setDesignRisk(30);
+    } else if (mod === 'cell-therapy') {
+      setEfficacyRisk(35); // Deep responses expected
+      setSafetyRisk(55);   // CRS/ICANS
+      setDesignRisk(35);   // Manufacturing complexity
+    }
+
     setScreen('phase');
   };
 
@@ -1444,13 +1488,20 @@ export default function TheLongGame() {
     setUsedQuestions([...usedQuestions, currentQuestion.id]);
     setQuestionResult(option);
 
+    // Apply risk effects from this decision
+    if (option.efficacyEffect) setEfficacyRisk(r => Math.max(0, Math.min(100, r + option.efficacyEffect)));
+    if (option.safetyEffect) setSafetyRisk(r => Math.max(0, Math.min(100, r + option.safetyEffect)));
+    if (option.designEffect) setDesignRisk(r => Math.max(0, Math.min(100, r + option.designEffect)));
+
     // Log this decision for the final report
+    const riskImpact = (option.efficacyEffect || 0) + (option.safetyEffect || 0) + (option.designEffect || 0);
     setDecisionsLog(prev => [...prev, {
       type: 'strategic',
       phase: PHASES[currentPhaseIndex]?.name,
       question: currentQuestion.title,
       decision: option.text,
-      impact: option.riskBonus > 0 ? 'positive' : option.riskBonus < 0 ? 'negative' : 'neutral'
+      impact: riskImpact > 0 ? 'risky' : riskImpact < 0 ? 'safe' : (option.riskBonus > 0 ? 'positive' : option.riskBonus < 0 ? 'negative' : 'neutral'),
+      riskChange: riskImpact
     }]);
   };
 
@@ -1554,8 +1605,50 @@ export default function TheLongGame() {
     setCash(c => c - phase.baseCost);
     setCapitalInvested(ci => ci + phase.baseCost);
 
-    // Game always advances - this is educational, not punitive
-    // But we show what the real-world probability would have been
+    // Decision-based failure check for clinical phases
+    // Your decisions accumulate risk - too much risk leads to failure
+    let failedDueToRisk = false;
+    let failureType = '';
+
+    if (phase.id === 'phase1') {
+      // Phase I: Safety focus - check safetyRisk
+      // Threshold: 70+ = high chance of toxicity issues
+      if (safetyRisk >= 70) {
+        failedDueToRisk = true;
+        failureType = 'safety';
+      }
+    } else if (phase.id === 'phase2') {
+      // Phase II: Efficacy focus - check efficacyRisk (Valley of Death)
+      // Threshold: 65+ = high chance of no efficacy signal
+      if (efficacyRisk >= 65) {
+        failedDueToRisk = true;
+        failureType = 'efficacy';
+      }
+    } else if (phase.id === 'phase3') {
+      // Phase III: Design focus - check designRisk
+      // Threshold: 60+ = high chance of missed primary endpoint
+      if (designRisk >= 60) {
+        failedDueToRisk = true;
+        failureType = 'design';
+      }
+    }
+
+    if (failedDueToRisk) {
+      // Track the failure reason based on decision type
+      setProgramEvents(prev => [...prev, {
+        title: `${failureType === 'safety' ? 'Safety Signal Detected' :
+          failureType === 'efficacy' ? 'Efficacy Signal Not Detected' :
+            'Primary Endpoint Missed'}`,
+        description: `Your accumulated ${failureType} risk (${failureType === 'safety' ? safetyRisk :
+          failureType === 'efficacy' ? efficacyRisk : designRisk}%) exceeded threshold`,
+        phase: phase.name,
+        isFailure: true
+      }]);
+      setScreen('failure');
+      return;
+    }
+
+    // Program advances
     setGateResult({ success: true, probability: realWorldProbability, realWorldRate: phase.realSuccessRate });
 
     // Track this phase completion for educational display in final report
