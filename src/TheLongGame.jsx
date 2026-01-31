@@ -845,14 +845,7 @@ Your therapy is approved for its initial indication. However, emerging evidence 
     {
       phase: 'post_market',
       title: 'Distribution and Delivery Strategy',
-      scenario: `SITUATION
-Your therapy is FDA-approved. For biologics requiring parenteral administration, delivery logistics significantly impact patient access and adherence. Your operations team presents three strategic options for your commercial launch.
-
-CONSIDERATIONS
-• Infusion therapies require healthcare facility administration
-• Patient convenience affects treatment adherence and outcomes
-• Distribution channel selection impacts margins and patient experience
-• Formulation changes require additional clinical development`,
+      scenario: `Your biologic therapy is FDA-approved. Delivery format affects patient access and adherence. Some biologics require IV infusion at healthcare facilities, while others can be self-administered subcutaneously at home. Your operations team presents strategic options for your commercial launch.`,
       options: [
         {
           text: 'Partner with infusion center networks',
@@ -1287,11 +1280,11 @@ const MODALITY_ACCESS_CHALLENGES = {
     typicalPrice: '$5,000-15,000/month',
     coverageTier: 'Specialty Tier (Tier 4-5)',
     patientCopay: '$200-500/month with specialty coinsurance',
-    accessChallenge: 'Specialty tier cost-sharing + infusion site access',
-    insuranceReality: 'Large molecules require injection or infusion, adding site-of-care costs. Many plans put biologics on specialty tiers with 20-30% coinsurance instead of flat copays.',
-    uniqueIssue: 'Infusion site access and biosimilar competition',
+    accessChallenge: 'Specialty tier cost-sharing and delivery logistics',
+    insuranceReality: 'Biologics require injection (subcutaneous at home) or infusion (IV at a facility). Many plans put biologics on specialty tiers with 20-30% coinsurance instead of flat copays.',
+    uniqueIssue: 'Delivery format choice and biosimilar competition',
     question: {
-      context: 'Your biologic requires IV infusion every 4 weeks. Patients need to find infusion centers, take time off work, and pay facility fees on top of drug costs. Total out-of-pocket can exceed $1,000/month.',
+      context: 'Your biologic is approved. You must decide on delivery format: IV infusion requires healthcare facility visits, while subcutaneous allows home self-injection. Each has trade-offs for patient convenience, adherence, and your commercial model.',
       options: [
         { text: 'Partner with infusion center networks', detail: 'Improve site access', cashEffect: -15, marketBonus: 0.8, lesson: 'Site-of-care matters. Home infusion or convenient centers improve adherence, but add complexity and cost to your distribution model.' },
         { text: 'Develop subcutaneous formulation', detail: 'Enable self-injection at home', cashEffect: -30, timeEffect: 24, marketBonus: 1.2, lesson: 'Subcutaneous formulations let patients self-inject at home, dramatically improving convenience. But reformulation takes years and isn\'t always possible.' },
@@ -2221,6 +2214,9 @@ export default function TheLongGame() {
               </p>
               <p className="text-slate-500 text-sm">
                 Navigate from target discovery through FDA approval. At each phase, you will face the strategic decisions that drug developers confront every day. Your choices will determine whether your drug reaches patients-and what you learn about why this industry works the way it does.
+              </p>
+              <p className="text-slate-600 text-xs italic mt-3">
+                This game models selected aspects of biotech development using simplified assumptions. It's designed to explore system dynamics, not to replicate real-world decision-making.
               </p>
             </div>
 
@@ -3356,6 +3352,19 @@ export default function TheLongGame() {
                 return null;
               })()}
             </div>
+
+            {/* Modality-Indication Challenge Overcome */}
+            {programEvents.some(e => e.type === 'warning' && e.phase === 'Modality Selection') && (
+              <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-5 mb-6">
+                <h3 className="text-lg font-semibold text-purple-400 mb-3">Scientific Challenge Overcome</h3>
+                <p className="text-slate-300 text-sm">
+                  {programEvents.find(e => e.type === 'warning' && e.phase === 'Modality Selection')?.message?.replace('⚠️ ', '')}
+                </p>
+                <p className="text-purple-300 text-sm mt-2">
+                  Your program succeeded despite this biological constraint, demonstrating that careful development can overcome delivery challenges.
+                </p>
+              </div>
+            )}
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-8">
               <h3 className="text-lg font-semibold text-emerald-400 mb-4">The Biotech Social Contract</h3>
