@@ -1208,10 +1208,18 @@ export default function TheLongGame() {
   const handleGateRoll = () => {
     const phase = PHASES[currentPhaseIndex];
 
-    // Check if we can afford this phase - if not, trigger financing
-    if (cash < phase.baseCost && currentRoundIndex < FINANCING_ROUNDS.length - 1) {
-      setShowFinancingScreen(true);
-      return;
+    // Check if we can afford this phase
+    if (cash < phase.baseCost) {
+      if (currentRoundIndex < FINANCING_ROUNDS.length - 1) {
+        // Financing available - trigger financing screen
+        setShowFinancingScreen(true);
+        return;
+      } else {
+        // Can't afford and no financing left - fail immediately
+        // This prevents the confusing UX of deducting money we don't have
+        setScreen('failure');
+        return;
+      }
     }
 
     const baseSuccess = GATE_SUCCESS[phase.id] || 0.5;
@@ -2282,11 +2290,16 @@ export default function TheLongGame() {
   if (screen === 'failure') {
     const failedPhase = PHASES[currentPhaseIndex];
     const noFinancingLeft = currentRoundIndex >= FINANCING_ROUNDS.length - 1;
-    const failReason = cash <= 0
-      ? (noFinancingLeft
-        ? 'ran out of capital with no financing options remaining'
-        : 'depleted capital')
-      : `could not continue development in ${failedPhase?.name || 'this phase'}`;
+    const phaseCost = failedPhase?.baseCost || 0;
+    const couldntAffordPhase = cash >= 0 && cash < phaseCost && noFinancingLeft;
+
+    const failReason = couldntAffordPhase
+      ? `could not afford ${failedPhase?.name || 'the next phase'} ($${phaseCost}M required, $${cash}M available)`
+      : cash <= 0
+        ? (noFinancingLeft
+          ? 'ran out of capital with no financing options remaining'
+          : 'depleted capital')
+        : `could not continue development in ${failedPhase?.name || 'this phase'}`;
 
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
@@ -2322,9 +2335,11 @@ export default function TheLongGame() {
             <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-4 mb-6">
               <h4 className="text-amber-400 font-semibold mb-2">What Happened</h4>
               <p className="text-slate-300 text-sm">
-                {cash <= 0
-                  ? `Your capital balance reached $${cash}M. ${noFinancingLeft ? 'You had already raised all available financing rounds (through ' + FINANCING_ROUNDS[currentRoundIndex]?.name + '), so no additional capital was available.' : 'Unable to continue without additional funding.'}`
-                  : `Development was discontinued during ${failedPhase?.name || 'this phase'}. Cash remaining: $${cash}M.`
+                {couldntAffordPhase
+                  ? `${failedPhase?.name || 'The next phase'} requires $${phaseCost}M, but you only have $${cash}M remaining. You had already raised all available financing (through ${FINANCING_ROUNDS[currentRoundIndex]?.name}), so no additional capital was available.`
+                  : cash <= 0
+                    ? `Your capital balance reached $${cash}M. ${noFinancingLeft ? 'You had already raised all available financing rounds (through ' + FINANCING_ROUNDS[currentRoundIndex]?.name + '), so no additional capital was available.' : 'Unable to continue without additional funding.'}`
+                    : `Development was discontinued during ${failedPhase?.name || 'this phase'}. Cash remaining: $${cash}M.`
                 }
               </p>
             </div>
