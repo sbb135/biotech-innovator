@@ -477,6 +477,19 @@ const PHASES = [
     description: 'Phase IV studies and ongoing safety surveillance',
     context: 'Study participants: Several thousand people with the disease/condition. Purpose: Long-term safety and efficacy in real-world patients. FDA monitors through MedWatch, MedSun, manufacturer inspections, drug advertising review, and the Sentinel Initiative.',
     activities: ['Phase IV studies', 'MedWatch reporting', 'Manufacturer inspections', 'Drug advertising review', 'Generic drug pathway', 'Sentinel surveillance']
+  },
+  {
+    id: 'patient_access',
+    name: 'Patient Access',
+    color: '#f59e0b',
+    duration: '6-18 months',
+    baseMonths: 12,
+    cost: '$10-50M',
+    baseCost: 20,
+    realSuccessRate: null,  // Not a clinical phase
+    description: 'Formulary negotiations, payer coverage, and patient affordability',
+    context: 'Regulatory approval establishes the right to market your therapy. However, patient access depends on coverage decisions by payers, formulary placement by pharmacy benefit managers (PBMs), and cost-sharing structures that determine out-of-pocket obligations. This phase determines whether patients who need your therapy can actually access it.',
+    activities: ['PBM formulary negotiations', 'Payer coverage discussions', 'Copay assistance programs', 'Patient support services', 'Specialty pharmacy setup', 'Policy engagement']
   }
 ];
 
@@ -788,6 +801,46 @@ const QUESTIONS = {
   post_market: [
     {
       phase: 'post_market',
+      question: 'Real-World Evidence and Market Expansion',
+      context: `SITUATION
+At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
+
+STRATEGIC CONSIDERATION
+Your therapy is approved for its initial indication. However, emerging evidence suggests potential benefit in additional patient populations. Each supplemental indication requires clinical development investment and regulatory approval.`,
+      options: [
+        {
+          text: 'Invest in additional clinical trials for new indications',
+          detail: 'Expand label through rigorous evidence',
+          cashEffect: -50,
+          timeEffect: 36,
+          marketBonus: 1.4,
+          designEffect: -10,
+          result: 'You run pivotal trials for a second indication. Success expands your market significantly and builds evidence base. But it\'s expensive and takes years.',
+          lesson: 'Label expansion through clinical trials is the gold standard. Rigorous evidence protects patients and builds trust. Each approved indication represents patients who can be treated with confidence.'
+        },
+        {
+          text: 'Generate real-world evidence to support broader use',
+          detail: 'Observational studies, registry data',
+          cashEffect: -10,
+          timeEffect: 12,
+          marketBonus: 0.3,
+          result: 'You partner with academic centers to study real-world outcomes. This generates hypothesis-generating data but doesn\'t change the label.',
+          lesson: 'Real-world evidence complements but doesn\'t replace clinical trials. It reveals how drugs perform outside controlled settings, in diverse populations, with comorbidities.'
+        },
+        {
+          text: 'Focus on original approved indication only',
+          detail: 'Concentrate resources, avoid expansion risk',
+          cashEffect: 0,
+          marketBonus: 0.1,
+          result: 'You focus only on the approved indication. Lower risk, but competitors may expand into adjacent spaces.',
+          lesson: 'Not every drug needs to be a platform. Focused execution in one indication can be valuable, especially for rare diseases where the patient population is well-defined.'
+        }
+      ]
+    }
+  ],
+  patient_access: [
+    {
+      phase: 'patient_access',
       question: 'PBM Formulary & Access Strategy',
       context: `SITUATION
 Following FDA approval, your commercial team has initiated negotiations with CVS Caremark's formulary committee. Their quarterly review is approaching. Express Scripts and OptumRx are awaiting the outcome of these discussions. Formulary placement will significantly impact patient access to your therapy.
@@ -820,7 +873,7 @@ Industry analyses indicate that PBMs may collect different prices from different
           marketBonus: 0.5,
           revenueEffect: -0.15,
           result: 'Lower formulary coverage means fewer patients, but your copay assistance programs help those who get prescriptions. You maintain higher net revenue per patient.',
-          lesson: 'Copay assistance programs help patients afford their out-of-pocket costs, but don\'t fix the underlying problem. Patients still pay twice—once through premiums, again at the pharmacy counter.'
+          lesson: 'Copay assistance programs help patients afford their out-of-pocket costs, but do not address the underlying benefit design. Cost-sharing requirements create access barriers regardless of list price.'
         },
         {
           text: 'Specialty pharmacy exclusive distribution',
@@ -829,13 +882,13 @@ Industry analyses indicate that PBMs may collect different prices from different
           marketBonus: 0.7,
           revenueEffect: -0.25,
           efficacyEffect: 10,
-          result: 'PBM-owned specialty pharmacy takes a large cut and can steer patients. Your drug access depends on PBM\'s vertically integrated interests, not patient needs.',
-          lesson: 'The Big 3 PBMs each own specialty pharmacies (CVS Specialty, Accredo, Optum Specialty). They\'re paid by manufacturers to manage costs while profiting from those same drugs—a conflict of interest that independent pharmacies and patient advocates have documented extensively.'
+          result: 'PBM-owned specialty pharmacy manages distribution. Access depends on the specialty pharmacy network\'s interests and capabilities.',
+          lesson: 'The three largest PBMs each own specialty pharmacies. Vertical integration creates potential conflicts between cost management and patient access that policymakers continue to examine.'
         }
       ]
     },
     {
-      phase: 'post_market',
+      phase: 'patient_access',
       question: 'Patient Out-of-Pocket Cost Crisis',
       context: `SITUATION
 Your patient services team reports increasing call volume from patients experiencing prescription abandonment at the pharmacy. Medical affairs has documented cases where insured patients are declining therapy due to cost-sharing obligations that exceed their ability to pay.
@@ -880,45 +933,7 @@ Prescription abandonment at the pharmacy counter represents a gap between regula
       ]
     },
     {
-      phase: 'post_market',
-      question: 'Real-World Evidence and Market Expansion',
-      context: `SITUATION
-At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
-
-STRATEGIC CONSIDERATION
-Your therapy is approved for its initial indication. However, emerging evidence suggests potential benefit in additional patient populations. Each supplemental indication requires clinical development investment and regulatory approval.`,
-      options: [
-        {
-          text: 'Invest in additional clinical trials for new indications',
-          detail: 'Expand label through rigorous evidence',
-          cashEffect: -50,
-          timeEffect: 36,
-          marketBonus: 1.4,
-          designEffect: -10,
-          result: 'You run pivotal trials for a second indication. Success expands your market significantly and builds evidence base. But it\'s expensive and takes years.',
-          lesson: 'Label expansion through clinical trials is the gold standard. Rigorous evidence protects patients and builds trust. Each approved indication represents patients who can be treated with confidence.'
-        },
-        {
-          text: 'Generate real-world evidence to support broader use',
-          detail: 'Observational studies, registry data',
-          cashEffect: -10,
-          timeEffect: 12,
-          marketBonus: 0.3,
-          result: 'You partner with academic centers to study real-world outcomes. This generates hypothesis-generating data but doesn\'t change the label.',
-          lesson: 'Real-world evidence complements but doesn\'t replace clinical trials. It reveals how drugs perform outside controlled settings, in diverse populations, with comorbidities.'
-        },
-        {
-          text: 'Focus on original approved indication only',
-          detail: 'Concentrate resources, avoid expansion risk',
-          cashEffect: 0,
-          marketBonus: 0.1,
-          result: 'You focus only on the approved indication. Lower risk, but competitors may expand into adjacent spaces.',
-          lesson: 'Not every drug needs to be a platform. Focused execution in one indication can be valuable, especially for rare diseases where the patient population is well-defined.'
-        }
-      ]
-    },
-    {
-      phase: 'post_market',
+      phase: 'patient_access',
       question: 'The System Reform Question',
       context: `SITUATION
 You have been invited to provide testimony before the Senate Health Committee. A member asks: "Your company invested over a decade and substantial capital developing this therapy. It is effective. However, constituents report they cannot afford it despite having insurance coverage. What policy reforms would you recommend?"
