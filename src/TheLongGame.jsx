@@ -3278,7 +3278,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Mountain of Generics:</span> Eventually generic/biosimilar competition drives prices down. Your innovation becomes permanently available at low cost, serving rare disease patients forever.
+                        <span className="font-medium">Genericization:</span> Eventually generic/biosimilar competition drives prices down. Your innovation becomes permanently available at low cost, serving rare disease patients forever.
                       </div>
                     </div>
                   </>
@@ -3300,7 +3300,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Mountain of Generics:</span> Your innovation becomes permanently available at low cost, serving humanity for the rest of time.
+                        <span className="font-medium">Genericization:</span> Your innovation becomes permanently available at low cost, serving humanity for the rest of time.
                       </div>
                     </div>
                   </>
