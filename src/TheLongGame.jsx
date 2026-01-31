@@ -886,7 +886,7 @@ CONSIDERATIONS
     {
       phase: 'patient_access',
       title: 'PBM Formulary & Access Strategy',
-      scenario: `FDA approval gives you permission to sell your drug—but Pharmacy Benefit Managers (PBMs) decide whether patients can actually access it. These intermediaries control formulary placement, negotiate rebates from manufacturers, and manage pharmacy networks. Patient cost-sharing is often calculated from list price, not the net price after rebates. Your commercial team is negotiating for formulary placement that will determine real-world patient access.`,
+      scenario: `FDA approval gives you permission to sell your drug, but Pharmacy Benefit Managers (PBMs) decide whether patients can actually access it. These intermediaries control formulary placement, negotiate rebates from manufacturers, and manage pharmacy networks. Patient cost-sharing is often calculated from list price, not the net price after rebates. Your commercial team is negotiating for formulary placement that will determine real-world patient access.`,
       options: [
         {
           text: 'Pay heavy rebates for preferred formulary placement',
@@ -954,7 +954,7 @@ CONSIDERATIONS
     {
       phase: 'patient_access',
       title: 'The System Reform Question',
-      scenario: `You're testifying before Congress. A Senator asks: "Your company spent over a decade and a billion dollars developing this therapy. It works. Yet my constituents can't afford it despite having insurance. What reforms would you recommend?" You've experienced the full journey—the 90%+ failure rate, the capital intensity, and now the access barriers.`,
+      scenario: `You're testifying before Congress. A Senator asks: "Your company spent over a decade and a billion dollars developing this therapy. It works. Yet my constituents can't afford it despite having insurance. What reforms would you recommend?" You've experienced the full journey: the 90%+ failure rate, the capital intensity, and now the access barriers.`,
       options: [
         {
           text: 'Recommend direct price controls on pharmaceuticals',
