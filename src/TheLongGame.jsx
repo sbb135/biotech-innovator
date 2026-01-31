@@ -3433,10 +3433,6 @@ export default function TheLongGame() {
                 <p className="text-slate-300 text-sm mb-4">
                   Here's the uncomfortable truth: FDA approval means you <em>can</em> sell your drug. It doesn't mean patients can <em>access</em> it. Between your innovation and the patient stand payers, PBMs, and cost-sharing structures.
                 </p>
-                <div className="bg-slate-800/50 p-4 rounded mb-4">
-                  <div className="text-amber-400 font-medium text-sm mb-2">Your Modality's Challenge: {MODALITY_DATA[modality]?.displayName || modality}</div>
-                  <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].accessChallenge}</div>
-                </div>
                 <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700 mb-4">
                   <p className="text-slate-400 text-sm">
                     {MODALITY_ACCESS_CHALLENGES[modality].insuranceReality}
