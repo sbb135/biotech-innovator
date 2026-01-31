@@ -2605,7 +2605,7 @@ export default function TheLongGame() {
               <h1 className="text-4xl font-bold mb-2">{drugName} Development Discontinued</h1>
               <p className="text-slate-400 text-lg">Your program {failReason}</p>
               <p className="text-slate-500 text-sm mt-2">
-                {programType === 'first-in-class' ? 'First-in-Class' : programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster'} • {MODALITIES[modality]?.displayName || modality} • {indication}
+                {programType === 'first-in-class' ? 'First-in-Class' : programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster'} • {modality === 'small-molecule' ? 'Small Molecule' : modality === 'biologic' ? 'Biologic' : modality === 'gene-therapy' ? 'Gene Therapy' : 'Cell Therapy'} • {indication}
               </p>
             </div>
 
@@ -2655,7 +2655,7 @@ export default function TheLongGame() {
               {/* Modality-specific issues */}
               <div className="border-t border-red-700/30 pt-4 mt-4">
                 <div className="text-slate-400 text-xs uppercase tracking-wider mb-1">
-                  {MODALITIES[modality]?.displayName || modality} Failure Pattern
+                  {modality === 'small-molecule' ? 'Small Molecule' : modality === 'biologic' ? 'Biologic' : modality === 'gene-therapy' ? 'Gene Therapy' : 'Cell Therapy'} Failure Pattern
                 </div>
                 <div className="text-slate-300 text-sm">
                   {isLatePhase ? modalityFailure.latePhase : modalityFailure.earlyPhase}
