@@ -2558,9 +2558,9 @@ export default function TheLongGame() {
                 </div>
                 <div className="text-lg font-semibold">{drugName}</div>
                 <div className="text-slate-400 text-sm">{indication}</div>
-                {platform && (
+                {exitStrategy && (
                   <div className="text-emerald-500 text-xs mt-1">
-                    {platform.name} • {exitStrategy?.name || 'Exit TBD'}
+                    {programType === 'orphan' ? 'Orphan Drug' : programType === 'first-in-class' ? 'First-in-Class' : 'Blockbuster Potential'} • {exitStrategy?.name || 'Exit TBD'}
                   </div>
                 )}
               </div>
@@ -3388,7 +3388,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
+                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good, permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
@@ -3418,7 +3418,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics or biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
+                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics or biosimilars enter the market. Your innovation transforms into a public good, permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
@@ -3440,7 +3440,7 @@ export default function TheLongGame() {
                 </div>
                 <div className="p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
                   <p className="text-emerald-300 text-sm">
-                    <strong>The Fix:</strong> Patients already pay through premiums. The problem is cost-sharing at the pharmacy counter—they're asked to pay again. Cap out-of-pocket costs. Ban copay accumulators. Let insurance actually work like insurance. Innovation incentives remain intact.
+                    <strong>The Fix:</strong> Patients already pay through premiums. The problem is cost-sharing at the pharmacy counter, where they're asked to pay again. Cap out-of-pocket costs. Ban copay accumulators. Let insurance actually work like insurance. Innovation incentives remain intact.
                   </p>
                 </div>
               </div>
