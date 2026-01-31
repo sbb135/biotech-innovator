@@ -789,20 +789,20 @@ const QUESTIONS = {
     {
       phase: 'post_market',
       question: 'PBM Formulary & Access Strategy',
-      context: `📋 THE SITUATION
-It's Monday morning after FDA approval. Your commercial team just finished a call with CVS Caremark's formulary committee. They want to know your rebate offer before their quarterly formulary review. Express Scripts and OptumRx are waiting to see what deal you offer their competitor. Your decision will determine whether millions of patients can actually get your drug.
+      context: `SITUATION
+Following FDA approval, your commercial team has initiated negotiations with CVS Caremark's formulary committee. Their quarterly review is approaching. Express Scripts and OptumRx are awaiting the outcome of these discussions. Formulary placement will significantly impact patient access to your therapy.
 
-📌 WHAT IS A PBM?
-Pharmacy Benefit Managers (PBMs) are middlemen between drug manufacturers, insurers, and pharmacies. The Big 3 (CVS Caremark, Express Scripts, OptumRx) control ~80% of the market.
+BACKGROUND: PHARMACY BENEFIT MANAGERS
+Pharmacy Benefit Managers (PBMs) serve as intermediaries between drug manufacturers, insurers, and pharmacies. The three largest PBMs—CVS Caremark, Express Scripts, and OptumRx—represent approximately 80% of the market.
 
-📌 HOW THEY WORK
-• PBMs decide which drugs go on the formulary (covered drug list)
-• They negotiate "rebates" from manufacturers in exchange for placement
-• They use "spread pricing" - charging insurers more than they pay pharmacies, keeping the difference
-• They own specialty pharmacies and can steer patients to their own services
+Their functions include:
+• Establishing formulary coverage (the list of covered medications)
+• Negotiating rebates from manufacturers in exchange for preferred placement
+• Managing pharmacy reimbursement rates
+• Operating specialty pharmacy subsidiaries
 
-📌 THE PATIENT IMPACT
-Research from 46brooklyn and 3 Axis Advisors shows PBMs can charge employers different amounts for the same drug on the same day. Patients often pay copays based on list price, not the discounted net price insurers actually pay.`,
+MARKET DYNAMICS
+Industry analyses indicate that PBMs may collect different prices from different plan sponsors for identical medications. Patient cost-sharing is frequently calculated from list price rather than the net price negotiated by insurers.`,
       options: [
         {
           text: 'Pay heavy rebates for preferred formulary placement',
@@ -837,22 +837,19 @@ Research from 46brooklyn and 3 Axis Advisors shows PBMs can charge employers dif
     {
       phase: 'post_market',
       question: 'Patient Out-of-Pocket Cost Crisis',
-      context: `📋 THE SITUATION
-Your patient services hotline is getting flooded with calls. A woman just called in tears—she has metastatic cancer, your drug could extend her life, but the pharmacy quoted her $1,200 for her first month's supply. She's retired on fixed income. "I thought my insurance covered this," she says. Your medical affairs team reports this patient's story is not unique: abandonment rates at the pharmacy counter are climbing.
+      context: `SITUATION
+Your patient services team reports increasing call volume from patients experiencing prescription abandonment at the pharmacy. Medical affairs has documented cases where insured patients are declining therapy due to cost-sharing obligations that exceed their ability to pay.
 
-📌 WHY DO PATIENTS PAY SO MUCH?
-• Copays are often based on LIST PRICE, not the discounted NET price insurers actually pay
-• Specialty tier drugs may have 20-30% coinsurance instead of flat copays
-• Patients pay through premiums AND at the pharmacy—paying twice for the same coverage
+COST-SHARING MECHANICS
+• Patient copays may be calculated from list price rather than negotiated net price
+• Specialty tier placement often involves coinsurance (percentage of cost) rather than flat copays
+• Cost-sharing represents an additional financial obligation beyond premium contributions
 
-📌 COPAY ACCUMULATORS
-Since 2018, many insurers use "copay accumulator" programs that block manufacturer copay assistance from counting toward deductibles. Once the coupon runs out, patients face the full cost.
+COPAY ACCUMULATOR PROGRAMS
+Some insurance benefit designs exclude manufacturer-provided copay assistance from counting toward deductible or out-of-pocket maximum requirements. When assistance programs expire, patients bear the full cost-sharing burden.
 
-📌 THE RESULT
-For specialty drugs, patients may face $1,000+ monthly out-of-pocket costs. Studies show ~30% of specialty prescriptions are never picked up due to cost.
-
-📌 NO PATIENT LEFT BEHIND
-Innovation only matters if patients can access it. A drug that works but patients can't afford is a broken promise.`,
+ACCESS IMPLICATIONS
+Prescription abandonment at the pharmacy counter represents a gap between regulatory approval and actual patient access. Therapies that cannot be accessed by covered patients represent incomplete market access.`,
       options: [
         {
           text: 'Launch robust copay assistance program',
@@ -860,8 +857,8 @@ Innovation only matters if patients can access it. A drug that works but patient
           cashEffect: -15,
           marketBonus: 0.9,
           revenueEffect: -0.1,
-          result: 'Your copay cards cover patient out-of-pocket costs. Adherence improves dramatically. But this only works for commercial insurance—Medicare patients cannot use copay cards by law.',
-          lesson: 'Patients shouldn\'t have to pay twice—through premiums AND at the pharmacy. Copay assistance addresses symptoms, not causes. The real fix is insurance redesign: if a drug is covered, it should be accessible without punitive cost-sharing.'
+          result: 'Your copay assistance program addresses immediate patient cost-sharing barriers. Adherence improves significantly. However, this solution is limited to commercial insurance; federal healthcare programs prohibit manufacturer copay assistance.',
+          lesson: 'Copay assistance programs address immediate access barriers but do not resolve underlying benefit design issues. If a therapy is covered by insurance, cost-sharing structures should not create prohibitive access barriers.'
         },
         {
           text: 'Work with patient advocacy groups',
@@ -869,27 +866,27 @@ Innovation only matters if patients can access it. A drug that works but patient
           cashEffect: -5,
           marketBonus: 0.6,
           designEffect: -5,
-          result: 'Patient advocates amplify stories of access barriers. This builds political pressure for reform but doesn\'t immediately solve today\'s access problems.',
-          lesson: 'Patient advocacy organizations give voice to those harmed by the system. Real stories make abstract policy debates concrete—but advocacy alone can\'t fix structural misalignments in how insurance cost-sharing works.'
+          result: 'Patient advocates document and publicize access barriers. This builds political momentum for policy reform but does not resolve immediate access challenges.',
+          lesson: 'Patient advocacy organizations articulate the real-world impact of access barriers. Their documentation of individual patient experiences informs policy discussions but systemic change requires legislative or regulatory action.'
         },
         {
           text: 'Accept access limitations',
-          detail: 'Focus on patients who can afford it',
+          detail: 'Focus on patients who can afford cost-sharing',
           cashEffect: 0,
           marketBonus: 0.3,
-          result: 'You accept that only patients who can afford high copays will get your drug. This may be financially easier but fails the mission.',
-          lesson: 'Inventing a medicine that patients can\'t access breaks the social contract. The goal isn\'t just FDA approval—it\'s ensuring NO PATIENT IS LEFT BEHIND. Access is the last mile of drug development.'
+          result: 'You accept that access will be limited to patients who can afford prevailing cost-sharing requirements. This approach accepts incomplete market penetration.',
+          lesson: 'Developing a therapy that covered patients cannot access represents an incomplete fulfillment of the development mission. Regulatory approval establishes efficacy; market access determines patient benefit.'
         }
       ]
     },
     {
       phase: 'post_market',
       question: 'Real-World Evidence and Market Expansion',
-      context: `📋 THE SITUATION
-You're at ASCO, the world's largest oncology conference. A prominent oncologist approaches your booth showing you case studies: she's been using your drug off-label in patients with a related mutation, and the responses are remarkable. "When are you going to run a trial for this?" she asks. Your medical affairs team confirms: off-label use is spreading. Physicians are sharing cases on social media. You have a decision to make.
+      context: `SITUATION
+At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
 
-📌 THE OPPORTUNITY
-Your drug is approved for its initial indication, but real-world data suggests benefits in broader populations. Each new indication requires clinical trials, investment, and regulatory approval—but could help thousands more patients.`,
+STRATEGIC CONSIDERATION
+Your therapy is approved for its initial indication. However, emerging evidence suggests potential benefit in additional patient populations. Each supplemental indication requires clinical development investment and regulatory approval.`,
       options: [
         {
           text: 'Invest in additional clinical trials for new indications',
@@ -923,37 +920,38 @@ Your drug is approved for its initial indication, but real-world data suggests b
     {
       phase: 'post_market',
       question: 'The System Reform Question',
-      context: `📋 THE SITUATION
-You've been invited to testify before the Senate Health Committee. Senator Martinez asks: "Your company spent 12 years and $2 billion developing this drug. It works. But I'm hearing from constituents who can't afford it, even with insurance. What's broken, and how do we fix it?"
+      context: `SITUATION
+You have been invited to provide testimony before the Senate Health Committee. A member asks: "Your company invested over a decade and substantial capital developing this therapy. It is effective. However, constituents report they cannot afford it despite having insurance coverage. What policy reforms would you recommend?"
 
-The cameras are rolling. Patient advocates, PBM lobbyists, and insurance executives are in the audience. Your answer will shape the national conversation about drug pricing. What do you tell Congress?
+CONTEXT
+The hearing includes representatives from patient advocacy organizations, pharmacy benefit managers, and insurance carriers. Your testimony will inform ongoing policy discussions regarding pharmaceutical pricing and access.
 
-📌 YOUR PERSPECTIVE
-You've lived the journey: 93% of clinical programs fail. Your success required years of risk-taking and investment. But you've also seen patients unable to access your drug because of cost-sharing. The system largely works—but specific issues prevent it from working for everyone.`,
+PERSPECTIVE
+Your experience encompasses the full development trajectory: the high clinical failure rate, the capital requirements, and the post-approval access barriers. The pharmaceutical innovation ecosystem largely functions effectively, though specific structural issues create access gaps for covered patients.`,
       options: [
         {
-          text: 'Cap drug prices at the source',
-          detail: 'Government sets maximum prices',
+          text: 'Recommend direct price controls on pharmaceuticals',
+          detail: 'Government-established maximum prices',
           cashEffect: 0,
           marketBonus: 0.4,
-          result: 'Price controls reduce what you can charge but don\'t fix the fundamental access problem. Patients still face high copays because insurance cost-sharing remains unchanged. And with lower revenue, you have less to invest in the 93% of drugs that fail.',
-          lesson: 'Price controls target the symptom rather than the cause. High drug prices matter less if insurance actually covers them. The issue isn\'t what drugs cost—it\'s that insured patients are asked to pay again at the counter.'
+          result: 'Price controls reduce manufacturer revenue but do not address the underlying access challenge. Patients continue to face cost-sharing requirements because insurance benefit design remains unchanged. Reduced revenue diminishes capital available for future R&D investment.',
+          lesson: 'Price controls address revenue without addressing access. If insurance coverage includes the therapy, cost-sharing structures determine patient access. The policy question is not pharmaceutical pricing alone, but the interaction between pricing and benefit design.'
         },
         {
-          text: 'Reform insurance cost-sharing',
-          detail: 'Cap patient out-of-pocket costs, eliminate copay accumulator programs',
+          text: 'Recommend insurance cost-sharing reform',
+          detail: 'Cap patient out-of-pocket costs, prohibit copay accumulator programs',
           cashEffect: 0,
           marketBonus: 0.9,
-          result: 'Insurance reform addresses the real problem: patients pay twice—once through premiums, again at the pharmacy. When drugs covered by insurance are actually accessible, the system starts working. Innovation incentives remain intact.',
-          lesson: 'THE KEY FIX: Patients already pay for their drugs through insurance premiums. The specific issue is that they\'re asked to pay again at the pharmacy. Solution: reform insurance cost-sharing so covered drugs are actually accessible. Cap out-of-pocket costs, ban copay accumulators. The system works—we just need to close this gap.'
+          result: 'Insurance benefit reform addresses the structural access gap: patients currently bear cost-sharing obligations in addition to premium contributions. When covered therapies become accessible without prohibitive cost-sharing, the system functions as intended. Innovation incentives remain intact.',
+          lesson: 'Patients contribute through insurance premiums. Cost-sharing requirements create an additional access barrier for covered therapies. Policy solutions include capping out-of-pocket maximums and prohibiting accumulator programs. These reforms address access without disrupting pharmaceutical innovation economics.'
         },
         {
-          text: 'Increase transparency on the supply chain',
-          detail: 'PBM disclosure requirements, rebate pass-through',
+          text: 'Recommend supply chain transparency requirements',
+          detail: 'PBM disclosure requirements, rebate pass-through mandates',
           cashEffect: 0,
           marketBonus: 0.7,
-          result: 'Transparency reveals that PBMs capture 40%+ of specialty drug value through rebates and fees. It shows where the money goes—but doesn\'t automatically fix patient access.',
-          lesson: 'HELPFUL BUT NOT COMPLETE: Transparency helps employers and patients understand where money flows. But knowing the problem and fixing it are different. Transparency creates pressure for targeted reforms—like PBM fiduciary duty requirements—that address specific misalignments.'
+          result: 'Transparency requirements reveal the distribution of pharmaceutical value across the supply chain, including PBM rebate retention. This information enables informed policy discussion but does not directly resolve patient access barriers.',
+          lesson: 'Transparency is a necessary but insufficient condition for reform. Understanding value distribution across the supply chain informs targeted policy interventions. Fiduciary duty requirements for PBMs and rebate pass-through mandates represent potential applications of transparency findings.'
         }
       ]
     }
@@ -3329,10 +3327,18 @@ export default function TheLongGame() {
                         <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way.
                       </div>
                     </div>
-                    <div className="flex gap-4 bg-amber-900/30 p-3 rounded-lg border border-amber-700/50">
-                      <div className="w-24 text-amber-400 flex-shrink-0 font-medium">Year {modality === 'small-molecule' ? '9' : '13'}+</div>
-                      <div className="text-amber-300">
-                        <span className="font-medium">⚠ IRA Medicare Negotiation:</span> Under the Inflation Reduction Act, {modality === 'small-molecule' ? 'small molecules face Medicare negotiation after 9 years' : 'biologics face Medicare negotiation after 13 years'}. This shortens the effective exclusivity period compared to pre-IRA timelines.
+                    <div className={`flex gap-4 ${modality === 'small-molecule' ? 'bg-amber-900/30 p-3 rounded-lg border border-amber-700/50' : 'bg-slate-800/50 p-3 rounded-lg'}`}>
+                      <div className={`w-24 flex-shrink-0 font-medium ${modality === 'small-molecule' ? 'text-amber-400' : 'text-slate-500'}`}>Year {modality === 'small-molecule' ? '9' : '13'}+</div>
+                      <div className={modality === 'small-molecule' ? 'text-amber-300' : 'text-slate-300'}>
+                        {modality === 'small-molecule' ? (
+                          <>
+                            <span className="font-medium">IRA Medicare Negotiation:</span> Under the Inflation Reduction Act, small molecules face Medicare price negotiation after 9 years. This represents a significant reduction in the effective exclusivity period, potentially reducing net present value by up to 40% and shifting R&D investment toward biologics.
+                          </>
+                        ) : (
+                          <>
+                            <span className="font-medium">IRA Medicare Negotiation:</span> Under the Inflation Reduction Act, biologics face Medicare price negotiation after 13 years. This timeline closely parallels existing biosimilar competition timelines, resulting in minimal incremental impact on biologic investment economics.
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="flex gap-4">
@@ -3349,36 +3355,22 @@ export default function TheLongGame() {
             {/* Patient Access & Affordability Reality */}
             {MODALITY_ACCESS_CHALLENGES[modality] && (
               <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-amber-400 mb-4">🏥 No Patient Left Behind: Access Reality</h3>
+                <h3 className="text-lg font-semibold text-amber-400 mb-4">Market Access Reality</h3>
                 <p className="text-slate-300 text-sm mb-4">
-                  FDA approval is just the beginning. The last mile of drug development is ensuring patients can actually ACCESS your medicine. Here's the reality for {MODALITY_DATA[modality]?.displayName || modality}:
+                  Regulatory approval establishes the right to market your therapy. However, patient access depends on coverage decisions by payers, formulary placement by pharmacy benefit managers, and cost-sharing structures that determine out-of-pocket obligations.
                 </p>
-                <div className="grid grid-cols-2 gap-4 mb-4">
-                  <div className="bg-slate-800/50 p-3 rounded">
-                    <div className="text-amber-400 font-medium text-sm">💰 Typical Price</div>
-                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].typicalPrice}</div>
-                  </div>
-                  <div className="bg-slate-800/50 p-3 rounded">
-                    <div className="text-amber-400 font-medium text-sm">📋 Coverage Tier</div>
-                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].coverageTier}</div>
-                  </div>
-                  <div className="bg-slate-800/50 p-3 rounded">
-                    <div className="text-amber-400 font-medium text-sm">💳 Patient Copay</div>
-                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].patientCopay}</div>
-                  </div>
-                  <div className="bg-slate-800/50 p-3 rounded">
-                    <div className="text-amber-400 font-medium text-sm">⚠️ Key Challenge</div>
-                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].uniqueIssue}</div>
-                  </div>
+                <div className="bg-slate-800/50 p-4 rounded mb-4">
+                  <div className="text-amber-400 font-medium text-sm mb-2">Primary Access Challenge: {MODALITY_DATA[modality]?.displayName || modality}</div>
+                  <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].accessChallenge}</div>
                 </div>
                 <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700 mb-4">
-                  <p className="text-slate-400 text-sm italic">
-                    "{MODALITY_ACCESS_CHALLENGES[modality].insuranceReality}"
+                  <p className="text-slate-400 text-sm">
+                    {MODALITY_ACCESS_CHALLENGES[modality].insuranceReality}
                   </p>
                 </div>
                 <div className="p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
                   <p className="text-emerald-300 text-sm">
-                    <strong>The Path Forward:</strong> The system isn't fundamentally broken—but insurance cost-sharing needs reform. Patients already pay through premiums; they shouldn't pay again at the pharmacy. When drugs become generic, they join humanity's permanent medicine cabinet. The goal: ensure every patient who needs your drug can access it, today and forever.
+                    <strong>Policy Consideration:</strong> Patients contribute through insurance premiums. When covered therapies remain inaccessible due to cost-sharing requirements, the gap reflects insurance benefit design rather than therapeutic value. Targeted reforms to out-of-pocket structures can address this without disrupting innovation incentives.
                   </p>
                 </div>
               </div>
