@@ -45,7 +45,7 @@ const MODALITY_DATA = {
     capitalRange: '$300M-$1B'
   },
   'gene-therapy': {
-    displayName: 'Gene Therapy (AAV)',
+    displayName: 'Gene Therapy',
     dominantFailure: 'Immunity & durability',
     failureModes: [
       'Pre-existing immunity to vector',
@@ -62,7 +62,7 @@ const MODALITY_DATA = {
     capitalRange: '$400M-$1.5B+'
   },
   'cell-therapy': {
-    displayName: 'Cell Therapy (CAR-T)',
+    displayName: 'Cell Therapy',
     dominantFailure: 'Safety & manufacturing',
     failureModes: [
       'Cytokine release syndrome (CRS)',
@@ -1619,7 +1619,7 @@ export default function TheLongGame() {
             <div className="flex justify-between mt-2 text-xs text-slate-500">
               {PHASES.map((phase, i) => (
                 <span key={phase.id} className={i === currentPhaseIndex ? 'text-slate-300' : ''}>
-                  {phase.name.split(' ')[0]}
+                  {phase.id === 'phase1' ? 'Phase I' : phase.id === 'phase2' ? 'Phase II' : phase.id === 'phase3' ? 'Phase III' : phase.name.split(' ')[0]}
                 </span>
               ))}
             </div>
@@ -2246,15 +2246,15 @@ export default function TheLongGame() {
               </p>
               <div className="space-y-4 text-sm">
                 <div className="flex gap-4">
-                  <div className="w-24 text-slate-500 flex-shrink-0">Years 1-12</div>
+                  <div className="w-24 text-slate-500 flex-shrink-0">Years 1-{modality === 'small-molecule' ? '9' : '13'}</div>
                   <div className="text-slate-300">
-                    <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way. These are mortgage payments toward an asset of permanent value.
+                    <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way. {modality === 'small-molecule' ? 'Under the IRA, small molecules face Medicare negotiation after 9 years.' : 'Biologics get 13 years before Medicare negotiation under the IRA.'}
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-24 text-slate-500 flex-shrink-0">Year 12+</div>
+                  <div className="w-24 text-slate-500 flex-shrink-0">Year {modality === 'small-molecule' ? '9' : '13'}+</div>
                   <div className="text-slate-300">
-                    <span className="font-medium">Patent Expiry:</span> Generic manufacturers enter. Competition drives prices down 80-90%. The mortgage is paid off.
+                    <span className="font-medium">IRA Negotiation / Generic Entry:</span> Medicare can negotiate prices. Eventually generic/biosimilar competition drives prices down 80-90%.
                   </div>
                 </div>
                 <div className="flex gap-4">
@@ -2308,7 +2308,7 @@ export default function TheLongGame() {
                 <div className="text-slate-500 text-sm">Capital lost</div>
               </div>
               <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 text-center">
-                <div className="text-2xl font-bold" style={{ color: failedPhase?.color }}>{failedPhase?.name?.split(' ')[0]}</div>
+                <div className="text-xl font-bold" style={{ color: failedPhase?.color }}>{failedPhase?.id === 'phase1' ? 'Phase I' : failedPhase?.id === 'phase2' ? 'Phase II' : failedPhase?.id === 'phase3' ? 'Phase III' : failedPhase?.name}</div>
                 <div className="text-slate-500 text-sm">Failed at</div>
               </div>
             </div>
