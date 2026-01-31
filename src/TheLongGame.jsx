@@ -3415,7 +3415,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Years 1-{modality === 'small-molecule' ? '9' : '13'}</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~88% of clinical programs that failed along the way.
+                        <span className="font-medium">Innovation Period:</span> Premium pricing reflects the investment required to develop this drug and compensates for the ~90% of clinical programs that failed along the way.
                       </div>
                     </div>
                     <div className={`flex gap-4 ${modality === 'small-molecule' ? 'bg-amber-900/30 p-3 rounded-lg border border-amber-700/50' : 'bg-slate-800/50 p-3 rounded-lg'}`}>
