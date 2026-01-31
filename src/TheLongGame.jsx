@@ -1200,6 +1200,107 @@ const MODALITY_INDICATION_COMPATIBILITY = {
   }
 };
 
+// Modality-Specific Access & Affordability Challenges
+// Each modality faces different insurance/coverage realities
+const MODALITY_ACCESS_CHALLENGES = {
+  'small-molecule': {
+    typicalPrice: '$500-5,000/month',
+    coverageTier: 'Tier 2-3 (specialty may be Tier 4)',
+    patientCopay: '$50-150/month typical',
+    accessChallenge: 'Generic competition and formulary wars',
+    insuranceReality: 'Oral drugs are easier for patients but face intense formulary competition. When generics exist, insurers require step therapy through cheaper options first.',
+    uniqueIssue: 'Step-through requirements',
+    question: {
+      context: 'Your small molecule is approved, but insurers require patients to fail on 2-3 generic alternatives before covering yours. This "step therapy" delays your drug by 6-12 months per patient.',
+      options: [
+        { text: 'Accept step therapy requirements', detail: 'Patients try generics first', marketBonus: 0.5, lesson: 'Step therapy protects payer budgets but delays access to newer, potentially better drugs. Patients who fail generics have already suffered longer.' },
+        { text: 'Prove differentiation with head-to-head data', detail: 'Expensive but removes barriers', cashEffect: -20, marketBonus: 0.85, lesson: 'Head-to-head trials against generics can exempt you from step therapy—but they\'re expensive and risky. If you lose, access gets even harder.' },
+        { text: 'Launch copay program + advocacy', detail: 'Work around the system', cashEffect: -10, marketBonus: 0.7, lesson: 'Copay programs help commercially insured patients, but Medicare and Medicaid patients still face barriers. Advocacy can change policies but takes years.' }
+      ]
+    }
+  },
+  'biologic': {
+    typicalPrice: '$5,000-15,000/month',
+    coverageTier: 'Specialty Tier (Tier 4-5)',
+    patientCopay: '$200-500/month with specialty coinsurance',
+    accessChallenge: 'Specialty tier cost-sharing + infusion site access',
+    insuranceReality: 'Large molecules require injection or infusion, adding site-of-care costs. Many plans put biologics on specialty tiers with 20-30% coinsurance instead of flat copays.',
+    uniqueIssue: 'Infusion site access and biosimilar competition',
+    question: {
+      context: 'Your biologic requires IV infusion every 4 weeks. Patients need to find infusion centers, take time off work, and pay facility fees on top of drug costs. Total out-of-pocket can exceed $1,000/month.',
+      options: [
+        { text: 'Partner with infusion center networks', detail: 'Improve site access', cashEffect: -15, marketBonus: 0.8, lesson: 'Site-of-care matters. Home infusion or convenient centers improve adherence, but add complexity and cost to your distribution model.' },
+        { text: 'Develop subcutaneous formulation', detail: 'Enable self-injection at home', cashEffect: -30, timeEffect: 24, marketBonus: 1.2, lesson: 'Subcutaneous formulations let patients self-inject at home, dramatically improving convenience. But reformulation takes years and isn\'t always possible.' },
+        { text: 'Focus on specialty pharmacy partnerships', detail: 'Leverage existing infrastructure', marketBonus: 0.6, revenueEffect: -0.2, lesson: 'Specialty pharmacies handle complex logistics but take a large cut. They\'re often owned by PBMs, creating conflicts of interest.' }
+      ]
+    }
+  },
+  'gene-therapy': {
+    typicalPrice: '$1-3.5 million one-time',
+    coverageTier: 'No standard tier - individual coverage decisions',
+    patientCopay: 'Often $100,000+ without assistance',
+    accessChallenge: 'Unprecedented pricing, outcomes-based contracts, center capacity',
+    insuranceReality: 'One-time curative therapies at $2M+ break insurance models designed for monthly payments. Payers demand outcomes guarantees and phased payments. Only specialized centers can administer.',
+    uniqueIssue: 'Center of excellence capacity and outcomes contracts',
+    question: {
+      context: 'Your gene therapy is priced at $2.1 million for a one-time treatment. Insurers are refusing coverage, demanding proof of long-term durability. Only 15 centers nationwide can administer it. Patients are stuck waiting.',
+      options: [
+        { text: 'Offer outcomes-based annuity payments', detail: 'Pay over 5 years, refund if it fails', cashEffect: -5, marketBonus: 0.75, revenueEffect: -0.15, lesson: 'Outcomes-based contracts align incentives: if the therapy works, everyone benefits. But they require years of follow-up data and complex contracts.' },
+        { text: 'Expand center of excellence network', detail: 'Train more sites to administer', cashEffect: -25, marketBonus: 0.9, lesson: 'Gene therapies require specialized centers for safe administration. Expanding access means training sites and ensuring quality—not just shipping drug.' },
+        { text: 'Work with state Medicaid on coverage', detail: 'Public payers often cover rare disease', cashEffect: -10, marketBonus: 0.6, lesson: 'Medicaid and state programs sometimes cover rare disease therapies when commercial insurers won\'t. But reimbursement rates are lower and approval is slow.' }
+      ]
+    }
+  },
+  'cell-therapy': {
+    typicalPrice: '$400,000-500,000 one-time',
+    coverageTier: 'Hospital outpatient/inpatient, not pharmacy',
+    patientCopay: '$50,000-100,000 potential hospital coinsurance',
+    accessChallenge: 'Manufacturing slot availability, site-of-care complexity',
+    insuranceReality: 'Cell therapies are administered in hospitals, not pharmacies—different coverage rules apply. Manufacturing takes 3-4 weeks; patients may progress while waiting. Only certified transplant centers can treat.',
+    uniqueIssue: 'Manufacturing delays and hospital reimbursement',
+    question: {
+      context: 'Your CAR-T therapy requires 3-week manufacturing per patient. 20% of patients progress while waiting and become ineligible. Hospitals lose money on each treatment due to ICU stays for CRS management not covered by the drug price.',
+      options: [
+        { text: 'Invest in manufacturing speed', detail: 'Reduce vein-to-vein time', cashEffect: -40, marketBonus: 0.9, lesson: 'Faster manufacturing saves lives—patients with aggressive cancer can\'t wait a month. But speed requires massive investment in specialized facilities.' },
+        { text: 'Partner with hospitals on CRS management costs', detail: 'Cover ICU and supportive care', cashEffect: -20, revenueEffect: -0.1, marketBonus: 0.8, lesson: 'Hospitals often lose money on cell therapy patients due to ICU stays. Covering these costs improves hospital willingness to treat, expanding access.' },
+        { text: 'Focus on academic medical centers only', detail: 'Limited sites but experienced', marketBonus: 0.5, lesson: 'Academic centers have transplant expertise but limited capacity. Restricting to these sites ensures safety but limits access for patients far from major cities.' }
+      ]
+    }
+  },
+  'sirna': {
+    typicalPrice: '$10,000-30,000/year (quarterly dosing)',
+    coverageTier: 'Specialty Tier',
+    patientCopay: '$500-1,500/quarter',
+    accessChallenge: 'Specialty pharmacy and quarterly injection compliance',
+    insuranceReality: 'siRNA therapies typically require quarterly subcutaneous injections. Better than biologics for compliance, but still specialty tier with high cost-sharing. Liver-targeted design limits indications.',
+    uniqueIssue: 'Quarterly dosing adherence and specialty tier placement',
+    question: {
+      context: 'Your siRNA requires quarterly injections for a chronic condition. Patients must remember to schedule and attend appointments every 3 months. 30% of patients miss at least one dose per year, reducing efficacy.',
+      options: [
+        { text: 'Launch adherence support program', detail: 'Reminder calls, nurse support', cashEffect: -8, marketBonus: 0.85, lesson: 'Adherence programs improve outcomes by helping patients stay on therapy. The investment pays off through better real-world evidence and outcomes-based contracts.' },
+        { text: 'Pursue annual dosing formulation', detail: 'Reduce injection frequency', cashEffect: -35, timeEffect: 36, marketBonus: 1.3, lesson: 'Less frequent dosing dramatically improves adherence. Annual injections would be transformative—but extending siRNA durability is scientifically challenging.' },
+        { text: 'Partner with specialty pharmacy on patient services', detail: 'Leverage their patient programs', marketBonus: 0.7, revenueEffect: -0.15, lesson: 'Specialty pharmacies offer patient support services but take a cut of revenue. Their interests may not always align with optimal patient care.' }
+      ]
+    }
+  },
+  'gene-editing': {
+    typicalPrice: '$2-3 million one-time (no precedent yet)',
+    coverageTier: 'Undefined - first-in-class coverage battles',
+    patientCopay: 'TBD - likely outcomes-based',
+    accessChallenge: 'First-in-class coverage with no precedent, permanent change concerns',
+    insuranceReality: 'Gene editing for disease is unprecedented. Insurers have no framework. Concerns about long-term safety of permanent genomic changes create coverage hesitation. Only a few specialized centers can perform.',
+    uniqueIssue: 'Novel therapy with no insurance precedent',
+    question: {
+      context: 'Your gene editing therapy is the first of its kind approved. Insurers don\'t know how to categorize or price coverage. Some are waiting to see long-term safety data before covering. Patients are caught in limbo.',
+      options: [
+        { text: 'Negotiate individual coverage decisions with major payers', detail: 'One-by-one contract negotiations', cashEffect: -15, marketBonus: 0.6, lesson: 'First-in-class therapies require payer-by-payer negotiations. Each contract is unique, requiring significant market access resources.' },
+        { text: 'Offer long-term outcomes guarantee', detail: '10-year durability commitment', cashEffect: 0, revenueEffect: -0.2, marketBonus: 0.8, lesson: 'Guaranteeing long-term outcomes shifts risk from payers to you. If editing reverses or safety issues emerge, you bear the cost—but it unlocks coverage.' },
+        { text: 'Work with patient advocacy to pressure coverage', detail: 'Grassroots coverage campaign', cashEffect: -10, marketBonus: 0.7, lesson: 'Patient advocacy can pressure insurers to cover breakthrough therapies. Stories of patients denied access create public and political pressure for coverage.' }
+      ]
+    }
+  }
+};
+
 // Drug name generator - modality aware
 const generateDrugName = () => {
   // Generate simple alphanumeric code names that don't imply modality
@@ -1725,7 +1826,24 @@ export default function TheLongGame() {
 
     if (phaseStep === 0) {
       // Phase intro -> Question (if available) or Event
-      const phaseQuestions = QUESTIONS[phase.id] || [];
+      let phaseQuestions = QUESTIONS[phase.id] || [];
+
+      // For post_market phase, inject modality-specific access question first
+      if (phase.id === 'post_market' && MODALITY_ACCESS_CHALLENGES[modality]) {
+        const modalityAccess = MODALITY_ACCESS_CHALLENGES[modality];
+        const modalityQuestion = {
+          id: `access_${modality}`,
+          phase: 'post_market',
+          question: `${modalityAccess.accessChallenge}: ${MODALITY_DATA[modality]?.displayName || modality}`,
+          context: `${modalityAccess.insuranceReality}\n\n📊 Typical Price: ${modalityAccess.typicalPrice}\n💳 Coverage: ${modalityAccess.coverageTier}\n💰 Patient Copay: ${modalityAccess.patientCopay}\n\n${modalityAccess.question.context}`,
+          options: modalityAccess.question.options
+        };
+        // Add modality-specific question if not already used
+        if (!usedQuestions.includes(modalityQuestion.id)) {
+          phaseQuestions = [modalityQuestion, ...phaseQuestions];
+        }
+      }
+
       const available = phaseQuestions.filter(q => !usedQuestions.includes(q.id));
       if (available.length > 0) {
         setCurrentQuestion(available[0]);
@@ -3190,7 +3308,45 @@ export default function TheLongGame() {
               </div>
             </div>
 
-            {/* Alternative Financing Used */}
+            {/* Patient Access & Affordability Reality */}
+            {MODALITY_ACCESS_CHALLENGES[modality] && (
+              <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-amber-400 mb-4">🏥 Patient Access Reality</h3>
+                <p className="text-slate-300 text-sm mb-4">
+                  FDA approval doesn't guarantee patients can access your drug. Here's the reality for {MODALITY_DATA[modality]?.displayName || modality}:
+                </p>
+                <div className="grid grid-cols-2 gap-4 mb-4">
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <div className="text-amber-400 font-medium text-sm">💰 Typical Price</div>
+                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].typicalPrice}</div>
+                  </div>
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <div className="text-amber-400 font-medium text-sm">📋 Coverage Tier</div>
+                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].coverageTier}</div>
+                  </div>
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <div className="text-amber-400 font-medium text-sm">💳 Patient Copay</div>
+                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].patientCopay}</div>
+                  </div>
+                  <div className="bg-slate-800/50 p-3 rounded">
+                    <div className="text-amber-400 font-medium text-sm">⚠️ Key Challenge</div>
+                    <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].uniqueIssue}</div>
+                  </div>
+                </div>
+                <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700">
+                  <p className="text-slate-400 text-sm italic">
+                    "{MODALITY_ACCESS_CHALLENGES[modality].insuranceReality}"
+                  </p>
+                </div>
+                <div className="mt-4 p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
+                  <p className="text-emerald-300 text-sm">
+                    <strong>The Fix:</strong> Patients already pay through insurance premiums. The issue is cost-sharing that makes them pay again at the pharmacy. Reform insurance so covered drugs are actually accessible.
+                  </p>
+                </div>
+              </div>
+            )}
+
+
             {alternativeFinancingUsed.length > 0 && (
               <div className="bg-blue-900/20 border border-blue-700/50 rounded-lg p-5 mb-6">
                 <h3 className="text-lg font-semibold text-blue-400 mb-3">Alternative Financing Secured</h3>
@@ -3211,21 +3367,6 @@ export default function TheLongGame() {
                 </p>
               </div>
             )}
-
-            {/* Sources & Citations */}
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-              <h3 className="text-lg font-semibold text-slate-400 mb-4">Sources & Citations</h3>
-              <div className="text-xs text-slate-500 space-y-2">
-                <p><strong>Clinical Phase Success Rates:</strong> Citeline analysis of clinical development data, 2014-2023. Phase I→II: 47%, Phase II→III: 28%, Phase III→Approval: 55%.</p>
-                <p><strong>Overall Drug Development Success:</strong> BIO/Informa Pharma Intelligence. ~7% of drugs entering Phase I reach approval.</p>
-                <p><strong>Drug Development Timelines:</strong> FDA, PhRMA. Average 10-15 years from discovery to approval.</p>
-                <p><strong>R&D Costs:</strong> Journal of Health Economics (2016). Estimated $2.6B per approved drug including cost of failures.</p>
-                <p><strong>PBM & Access:</strong> Scripta Insights, 46brooklyn Research, Drug Channels Institute. Net prices rose only 1.5% in 2017 despite list price increases.</p>
-                <p><strong>Cost-Sharing Impact:</strong> The Biotech Social Contract. Patients with 20% copay on rebated drugs may effectively pay 33% of net cost.</p>
-                <p><strong>IRA Medicare Negotiation:</strong> Inflation Reduction Act of 2022 (P.L. 117-169). Small molecules: 9 years, Biologics: 13 years.</p>
-                <p><strong>Modality Failure Modes:</strong> Nature Reviews Drug Discovery, FDA Advisory Committee briefing documents.</p>
-              </div>
-            </div>
 
             <button
               onClick={() => setScreen('title')}
