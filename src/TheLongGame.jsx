@@ -8,76 +8,164 @@ import React, { useState, useEffect } from 'react';
 // Modality-specific data: failure modes, biomarkers, and disease fit
 // Based on: "Modalities fail in predictable, non-random ways. 
 // Choosing a modality is choosing your risk profile before you ever choose a target."
+// 5-Class Failure Framework:
+// 1. Biology risk (does the intervention do what we think?)
+// 2. Chemistry/Engineering risk (can we make and control it?)
+// 3. Delivery risk (does it reach the site of action?)
+// 4. Safety risk (what breaks when it works?)
+// 5. Clinical/Translational risk (does human biology diverge?)
 const MODALITY_DATA = {
   'small-molecule': {
     displayName: 'Small Molecule',
     dominantFailure: 'Selectivity & toxicity',
     failureModes: [
-      'Insufficient target engagement in humans',
-      'Off-target toxicity due to promiscuous binding',
-      'Metabolic liabilities (CYP induction/inhibition)',
-      'Narrow therapeutic window',
-      'Resistance mutations (oncology)'
+      'Insufficient target engagement in humans (Biology)',
+      'Off-target toxicity due to promiscuous binding (Safety)',
+      'Metabolic liabilities - CYP induction/inhibition (Chemistry)',
+      'Narrow therapeutic window (Safety)',
+      'Resistance mutations in oncology (Biology)'
     ],
+    biologyRisk: 'Moderate - well-understood pharmacology',
+    chemistryRisk: 'High - lead optimization difficulty, ADME/Tox issues',
+    deliveryRisk: 'Low - broad intracellular exposure, oral possible',
+    safetyRisk: 'Moderate - off-target binding predictable from structure',
+    translationalRisk: 'Moderate - species differences in metabolism',
     goNoGoBiomarker: 'Target occupancy + pathway PD',
     commonFailureSignal: 'Clean PK but no PD shift → target not causal',
-    translationalMustHave: 'Clear exposure-response relationship',
+    keyDrivers: ['Lead optimization difficulty', 'ADME/Tox issues', 'Large Phase 3 trials (chronic indications)'],
+    biggestCapitalSinks: ['Clinical trials (Phase 2→3)', 'Preclinical toxicology', 'Medicinal chemistry & DMPK'],
+    platformEffect: 'Limited - chemistry skills reusable but each target requires bespoke optimization',
+    speedUps: ['Clear target with biomarker', 'Drug repurposing', 'Strong predictive animal models'],
     bestFitDiseases: ['CNS', 'Cardiovascular', 'Metabolic', 'Infectious'],
     poorFitDiseases: ['One-time curative intent', 'Extracellular protein replacement'],
-    timeline: '5-10 years',
+    timeline: '8-12 years',
     capitalRange: '$200M-$800M'
   },
   'biologic': {
     displayName: 'Biologic',
-    dominantFailure: 'Biology redundancy',
+    dominantFailure: 'Biology redundancy / pathway compensation',
     failureModes: [
-      'Poor tissue penetration (solid tumors, CNS)',
-      'Target redundancy / pathway compensation',
-      'Anti-drug antibodies (ADA)',
-      'Lack of efficacy despite strong target binding'
+      'Poor tissue penetration - solid tumors, CNS (Delivery)',
+      'Target redundancy / pathway compensation (Biology)',
+      'Anti-drug antibodies - ADA/immunogenicity (Safety)',
+      'Lack of efficacy despite strong target binding (Biology)'
     ],
+    biologyRisk: 'High - target biology may not translate from preclinical',
+    chemistryRisk: 'Moderate - CMC scale-up, GMP bioreactors',
+    deliveryRisk: 'Moderate - IV administration, poor CNS penetration',
+    safetyRisk: 'Low-Moderate - immunogenicity main concern',
+    translationalRisk: 'High - solid tumor vs hematologic, patient recruitment complexity',
     goNoGoBiomarker: 'Sustained ligand suppression',
     commonFailureSignal: 'Complete target neutralization with no clinical benefit',
-    translationalMustHave: 'Biomarker differentiation from placebo',
+    keyDrivers: ['Target biology (solid tumor vs hematologic)', 'Combination studies needed', 'Immunogenicity', 'Patient recruitment complexity'],
+    biggestCapitalSinks: ['Phase 2/3 trials', 'Biologics CMC scale-up', 'Cell line development', 'GMP bioreactors'],
+    platformEffect: 'Significant - antibody discovery, Fc engineering, platform CMC cut lead time & cost',
+    speedUps: ['Platform cell lines', 'Platform toxicology packages', 'Accelerated approval with biomarkers'],
     bestFitDiseases: ['Autoimmune', 'Oncology (extracellular)', 'Rare diseases'],
     poorFitDiseases: ['CNS (unless barrier disrupted)', 'Intracellular targets'],
-    timeline: '7-12 years',
-    capitalRange: '$300M-$1B'
+    timeline: '9-14 years',
+    capitalRange: '$400M-$1.5B'
   },
   'gene-therapy': {
-    displayName: 'Gene Therapy',
+    displayName: 'Gene Therapy (AAV)',
     dominantFailure: 'Immunity & durability',
     failureModes: [
-      'Pre-existing immunity to vector',
-      'Loss of transgene expression over time',
-      'Dose-limiting toxicity',
-      'Inability to redose'
+      'Pre-existing immunity to AAV vector (Delivery)',
+      'Loss of transgene expression over time (Biology)',
+      'Dose-limiting hepatotoxicity (Safety)',
+      'Inability to redose due to immune memory (Delivery)'
     ],
+    biologyRisk: 'Moderate - monogenic diseases well-understood',
+    chemistryRisk: 'High - viral vector CMC, manufacturing capacity constrained',
+    deliveryRisk: 'High - pre-existing antibodies, tissue tropism',
+    safetyRisk: 'High - dose-limiting toxicities, insertional mutagenesis risk',
+    translationalRisk: 'High - durability in humans vs animal models',
     goNoGoBiomarker: 'Durable transgene expression',
     commonFailureSignal: 'Early expression that wanes clinically',
-    translationalMustHave: 'Durable expression correlated with function',
+    keyDrivers: ['Vector manufacturing scale', 'Immunogenicity (pre-existing antibodies)', 'Durability of expression', 'Dose-limiting toxicities'],
+    biggestCapitalSinks: ['Viral vector CMC (manufacturing capacity)', 'Long-term toxicology', 'Registrational trial costs'],
+    platformEffect: 'Moderate - constrained by manufacturing facilities (CMO scarcity raises cost/time)',
+    speedUps: ['Novel vectors avoiding pre-existing immunity', 'Tissue-specific promoters'],
     bestFitDiseases: ['Rare monogenic', 'Pediatric genetic', 'Ophthalmology', 'Muscle disorders'],
     poorFitDiseases: ['Polygenic diseases', 'Diseases requiring regulated protein levels'],
     timeline: '8-14 years',
     capitalRange: '$400M-$1.5B+'
   },
   'cell-therapy': {
-    displayName: 'Cell Therapy',
+    displayName: 'Cell Therapy (CAR-T)',
     dominantFailure: 'Safety & manufacturing',
     failureModes: [
-      'Cytokine release syndrome (CRS)',
-      'Neurotoxicity (ICANS)',
-      'Limited persistence or over-persistence',
-      'Antigen escape',
-      'Manufacturing failures'
+      'Cytokine release syndrome - CRS (Safety)',
+      'Neurotoxicity - ICANS (Safety)',
+      'Limited persistence or over-persistence (Biology)',
+      'Antigen escape / tumor heterogeneity (Biology)',
+      'Manufacturing failures / vein-to-vein time (Chemistry)'
     ],
-    goNoGoBiomarker: 'Expansion correlates with response',
+    biologyRisk: 'Moderate - living, self-amplifying drugs',
+    chemistryRisk: 'Very High - autologous COGS, GMP manufacturing complexity',
+    deliveryRisk: 'Low-Moderate - direct infusion but logistics complex',
+    safetyRisk: 'Very High - CRS/ICANS require intensive management',
+    translationalRisk: 'High - complex clinical trial operations, long-term safety monitoring',
+    goNoGoBiomarker: 'CAR-T expansion correlates with response',
     commonFailureSignal: 'Expansion without durability or safety control',
-    translationalMustHave: 'Controlled persistence linked to efficacy',
+    keyDrivers: ['Autologous vs allogeneic (manufacturing complexity)', 'CRS/ICANS safety management', 'Persistence vs exhaustion balancing', 'Logistics (vein-to-vein time)'],
+    biggestCapitalSinks: ['GMP manufacturing facilities', 'Release testing', 'Complex clinical trial operations', 'Long-term safety monitoring'],
+    platformEffect: 'Very high for allogeneic - once off-the-shelf product validated, per-program costs fall dramatically',
+    speedUps: ['Allogeneic approaches', 'Established manufacturing', 'Real-world evidence from prior CAR-T'],
     bestFitDiseases: ['Hematologic cancers', 'Certain solid tumors (emerging)'],
     poorFitDiseases: ['Chronic non-fatal diseases', 'Widespread systemic diseases'],
     timeline: '8-15 years',
     capitalRange: '$600M-$2B+'
+  },
+  'sirna': {
+    displayName: 'siRNA / RNAi',
+    dominantFailure: 'Delivery to target tissue',
+    failureModes: [
+      'Delivery failure to target tissue (Delivery)',
+      'Innate immune activation (Safety)',
+      'Incomplete knockdown (Biology)',
+      'Durability mismatch with disease (Biology)'
+    ],
+    biologyRisk: 'Moderate - sequence-specific knockdown well-understood',
+    chemistryRisk: 'Moderate - chemistry backbone variations, GalNAc conjugation',
+    deliveryRisk: 'High - liver is easiest, other tissues much harder',
+    safetyRisk: 'Moderate - immune activation risk manageable with chemistry',
+    translationalRisk: 'Moderate - knockdown duration may differ from preclinical',
+    goNoGoBiomarker: 'Target mRNA knockdown in tissue of interest',
+    commonFailureSignal: 'Strong knockdown in liver but disease in different tissue',
+    keyDrivers: ['Delivery optimization', 'Clinical proof-of-concept (biomarker assays)', 'Durability of knockdown'],
+    biggestCapitalSinks: ['Delivery optimization', 'Clinical proof-of-concept', 'Manufacturing scale-up'],
+    platformEffect: 'Strong - GalNAc or LNP platforms make many liver targets fast to advance',
+    speedUps: ['Liver targets', 'Platform chemistry', 'Biomarker endpoints'],
+    bestFitDiseases: ['Liver diseases', 'Rare genetic (liver-expressed)', 'Cardiovascular (liver targets)'],
+    poorFitDiseases: ['CNS without special delivery', 'Diseases requiring CNS or muscle delivery'],
+    timeline: '6-10 years',
+    capitalRange: '$150M-$600M'
+  },
+  'gene-editing': {
+    displayName: 'Gene Editing (CRISPR)',
+    dominantFailure: 'Off-target edits & regulatory uncertainty',
+    failureModes: [
+      'Off-target genomic edits (Safety)',
+      'Mosaicism - incomplete editing (Biology)',
+      'Unintended on-target effects (Biology)',
+      'Ethical and regulatory barriers (Translational)'
+    ],
+    biologyRisk: 'High - permanent change, unintended consequences possible',
+    chemistryRisk: 'High - specialized analytics, ex vivo vs in vivo manufacturing',
+    deliveryRisk: 'High - delivery (ex vivo vs in vivo), tissue-specific access',
+    safetyRisk: 'Very High - permanent genomic alteration requires extensive monitoring',
+    translationalRisk: 'Very High - regulatory scrutiny, long-term safety follow-up',
+    goNoGoBiomarker: 'On-target editing efficiency with acceptable off-target profile',
+    commonFailureSignal: 'High editing efficiency but concerning off-target signature',
+    keyDrivers: ['Off-target/edit specificity', 'Delivery (ex vivo vs in vivo)', 'Permanent change → heavy long-term safety monitoring'],
+    biggestCapitalSinks: ['Bespoke safety/long-term follow-up', 'Specialized analytics', 'Regulatory studies', 'Manufacturing for ex vivo cell editing'],
+    platformEffect: 'Strong for ex vivo workflows - in vivo editing remains high-risk/high-cost until delivery platforms mature',
+    speedUps: ['Ex vivo approaches', 'Well-characterized guide RNAs', 'Platform delivery systems'],
+    bestFitDiseases: ['Severe monogenic diseases', 'Diseases with clear single-gene cause', 'Sickle cell/thalassemia (ex vivo)'],
+    poorFitDiseases: ['Polygenic diseases', 'Non-life-threatening conditions'],
+    timeline: '8-14+ years',
+    capitalRange: '$500M-$2B+'
   }
 };
 
@@ -1279,6 +1367,14 @@ export default function TheLongGame() {
       setEfficacyRisk(35); // Deep responses expected
       setSafetyRisk(55);   // CRS/ICANS
       setDesignRisk(35);   // Manufacturing complexity
+    } else if (mod === 'sirna') {
+      setEfficacyRisk(40); // Knockdown duration, tissue delivery
+      setSafetyRisk(30);   // Immune activation manageable
+      setDesignRisk(45);   // Delivery optimization critical
+    } else if (mod === 'gene-editing') {
+      setEfficacyRisk(35); // Editing efficiency usually high
+      setSafetyRisk(60);   // Off-target edits, permanent changes
+      setDesignRisk(40);   // Regulatory scrutiny
     }
 
     setScreen('phase');
@@ -1875,7 +1971,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400">5-10 YRS • $200M-$800M</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Chemically synthesized compound. Oral dosing possible.{programType !== 'orphan' && ' Subject to IRA negotiation after 9 years.'}
+                  <span className="text-slate-400">Covers:</span> Kinase inhibitors, receptor modulators, enzyme inhibitors, allosteric modulators, PROTACs. Oral dosing possible.
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
@@ -1898,7 +1994,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-400">7-12 YRS • $300M-$1B</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Large molecule produced in living cells. High specificity.{programType !== 'orphan' && ' 13 years before IRA negotiation.'}
+                  <span className="text-slate-400">Covers:</span> Monoclonal antibodies (mAbs), ADCs, bispecifics, fusion proteins. High target specificity.
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
@@ -1921,7 +2017,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400">8-14 YRS • $400M-$1.5B+</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Viral vector delivering functional gene copy. One-time curative potential. Often orphan-eligible.
+                  <span className="text-slate-400">Covers:</span> AAV vectors, lentivirus. One-time curative potential for monogenic diseases.
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
@@ -1944,7 +2040,7 @@ export default function TheLongGame() {
                   <span className="text-xs px-2 py-1 rounded bg-pink-500/20 text-pink-400">8-15 YRS • $600M-$2B+</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Living cells engineered to fight disease. Per-patient manufacturing. Revolutionary efficacy in hematologic cancers.
+                  <span className="text-slate-400">Covers:</span> CAR-T, CAR-NK, TILs, stem cells. Living drugs with deep responses in hematologic cancers.
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
@@ -1955,6 +2051,52 @@ export default function TheLongGame() {
                   <span className="text-emerald-400">✓ Deep responses</span>
                   <span className="text-amber-400">⚠ CRS/ICANS toxicity</span>
                   <span className="text-red-400">⚠ Expansion without durability</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => selectModality('sirna')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-teal-400">siRNA / RNAi</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-teal-500/20 text-teal-400">6-10 YRS • $150M-$600M</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  <span className="text-slate-400">Covers:</span> siRNA, ASOs, RNAi. GalNAc or LNP delivery. Strong platform effect for liver targets.
+                </p>
+                <div className="bg-slate-800/50 rounded p-3 mb-3">
+                  <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
+                  <div className="text-teal-400 text-sm font-medium">Delivery to target tissue</div>
+                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: Target mRNA knockdown in tissue of interest</div>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <span className="text-emerald-400">✓ Platform chemistry</span>
+                  <span className="text-amber-400">⚠ Non-liver targets difficult</span>
+                  <span className="text-red-400">⚠ Durability mismatch with disease</span>
+                </div>
+              </button>
+
+              <button
+                onClick={() => selectModality('gene-editing')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-rose-400">Gene Editing (CRISPR)</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-400">8-14+ YRS • $500M-$2B+</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  <span className="text-slate-400">Covers:</span> CRISPR-Cas9, base editing, prime editing. Permanent genomic changes. Curative potential.
+                </p>
+                <div className="bg-slate-800/50 rounded p-3 mb-3">
+                  <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
+                  <div className="text-rose-400 text-sm font-medium">Off-target edits & regulatory uncertainty</div>
+                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: On-target editing with acceptable off-target profile</div>
+                </div>
+                <div className="flex flex-wrap gap-2 text-xs">
+                  <span className="text-emerald-400">✓ Curative potential</span>
+                  <span className="text-amber-400">⚠ Off-target edits</span>
+                  <span className="text-red-400">⚠ Permanent change requires long-term monitoring</span>
                 </div>
               </button>
             </div>
@@ -1977,7 +2119,9 @@ export default function TheLongGame() {
                     programType === 'orphan' ? 'ORPHAN DRUG' : 'BLOCKBUSTER'} • {
                     modality === 'biologic' ? 'BIOLOGIC' :
                       modality === 'gene-therapy' ? 'GENE THERAPY' :
-                        modality === 'cell-therapy' ? 'CELL THERAPY' : 'SMALL MOLECULE'}
+                        modality === 'cell-therapy' ? 'CELL THERAPY' :
+                          modality === 'sirna' ? 'siRNA/RNAi' :
+                            modality === 'gene-editing' ? 'GENE EDITING' : 'SMALL MOLECULE'}
                 </div>
                 <div className="text-lg font-semibold">{drugName}</div>
                 <div className="text-slate-400 text-sm">{indication}</div>
