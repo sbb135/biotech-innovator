@@ -3405,7 +3405,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not a perpetual toll. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
+                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
@@ -3435,7 +3435,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not a perpetual toll. When it ends, generics or biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
+                        <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics or biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
