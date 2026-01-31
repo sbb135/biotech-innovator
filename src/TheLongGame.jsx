@@ -3212,6 +3212,21 @@ export default function TheLongGame() {
               </div>
             )}
 
+            {/* Sources & Citations */}
+            <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
+              <h3 className="text-lg font-semibold text-slate-400 mb-4">Sources & Citations</h3>
+              <div className="text-xs text-slate-500 space-y-2">
+                <p><strong>Clinical Phase Success Rates:</strong> Citeline analysis of clinical development data, 2014-2023. Phase I→II: 47%, Phase II→III: 28%, Phase III→Approval: 55%.</p>
+                <p><strong>Overall Drug Development Success:</strong> BIO/Informa Pharma Intelligence. ~7% of drugs entering Phase I reach approval.</p>
+                <p><strong>Drug Development Timelines:</strong> FDA, PhRMA. Average 10-15 years from discovery to approval.</p>
+                <p><strong>R&D Costs:</strong> Journal of Health Economics (2016). Estimated $2.6B per approved drug including cost of failures.</p>
+                <p><strong>PBM & Access:</strong> Scripta Insights, 46brooklyn Research, Drug Channels Institute. Net prices rose only 1.5% in 2017 despite list price increases.</p>
+                <p><strong>Cost-Sharing Impact:</strong> The Biotech Social Contract. Patients with 20% copay on rebated drugs may effectively pay 33% of net cost.</p>
+                <p><strong>IRA Medicare Negotiation:</strong> Inflation Reduction Act of 2022 (P.L. 117-169). Small molecules: 9 years, Biologics: 13 years.</p>
+                <p><strong>Modality Failure Modes:</strong> Nature Reviews Drug Discovery, FDA Advisory Committee briefing documents.</p>
+              </div>
+            </div>
+
             <button
               onClick={() => setScreen('title')}
               className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-semibold py-3 px-8 rounded-lg transition-colors"
