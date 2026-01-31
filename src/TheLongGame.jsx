@@ -807,11 +807,7 @@ const QUESTIONS = {
     {
       phase: 'post_market',
       title: 'Real-World Evidence and Market Expansion',
-      scenario: `SITUATION
-At a major medical conference, a key opinion leader presents case studies of off-label use of your therapy in patients with related indications. She reports favorable responses. Your medical affairs team confirms that off-label prescribing is increasing. Physicians are discussing outcomes in clinical forums.
-
-STRATEGIC CONSIDERATION
-Your therapy is approved for its initial indication. However, emerging evidence suggests potential benefit in additional patient populations. Each supplemental indication requires clinical development investment and regulatory approval.`,
+      scenario: `At a major medical conference, a key opinion leader presents case studies of off-label use in related indications. Off-label prescribing is increasing. Your therapy is approved for one indication, but emerging evidence suggests benefit in other patient populations. Each supplemental indication requires clinical investment and regulatory approval.`,
       options: [
         {
           text: 'Invest in additional clinical trials for new indications',
@@ -878,12 +874,14 @@ Your therapy is approved for its initial indication. However, emerging evidence 
   patient_access: [
     {
       phase: 'patient_access',
-      title: 'PBM Formulary & Access Strategy',
-      scenario: `FDA approval gives you permission to sell your drug, but Pharmacy Benefit Managers (PBMs) decide whether patients can actually access it. These intermediaries control formulary placement, negotiate rebates from manufacturers, and manage pharmacy networks. Patient cost-sharing is often calculated from list price, not the net price after rebates. Your commercial team is negotiating for formulary placement that will determine real-world patient access.`,
+      title: 'How will you navigate PBM formulary access?',
+      scenario: `FDA approval gives you permission to sell your drug, but Pharmacy Benefit Managers (PBMs) decide whether patients can actually access it. These intermediaries control formulary placement, negotiate rebates, and manage pharmacy networks. Your commercial team must now secure a position that balances access with profitability.
+
+The Reality: PBMs act as gatekeepers between you and patients. Patient cost-sharing is calculated from list price, not net price after rebates. Formulary placement determines whether doctors can prescribe and patients can afford your drug.`,
       options: [
         {
           text: 'Pay heavy rebates for preferred formulary placement',
-          detail: 'High access but 40-60% of revenue goes to rebates',
+          detail: 'Guarantees broad access, 40-60% revenue to rebates',
           cashEffect: 0,
           marketBonus: 0.85,
           revenueEffect: -0.35,
@@ -1909,8 +1907,8 @@ export default function TheLongGame() {
         const modalityQuestion = {
           id: `access_${modality}`,
           phase: 'post_market',
-          title: `${modalityAccess.accessChallenge}: ${MODALITY_DATA[modality]?.displayName || modality}`,
-          scenario: `${modalityAccess.insuranceReality}\n\n📊 Typical Price: ${modalityAccess.typicalPrice}\n💳 Coverage: ${modalityAccess.coverageTier}\n💰 Patient Copay: ${modalityAccess.patientCopay}\n\n${modalityAccess.question.context}`,
+          title: `How will you overcome ${modalityAccess.uniqueIssue.toLowerCase()}?`,
+          scenario: `${modalityAccess.question.context}\n\nThe Challenge: ${modalityAccess.insuranceReality} Typical price: ${modalityAccess.typicalPrice}. Coverage: ${modalityAccess.coverageTier}. Patient copay: ${modalityAccess.patientCopay}.`,
           options: modalityAccess.question.options
         };
         // Add modality-specific question if not already used
