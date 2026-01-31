@@ -887,6 +887,37 @@ const QUESTIONS = {
           lesson: 'Not every drug needs to be a platform. Focused execution in one indication can be valuable, especially for rare diseases where the patient population is well-defined.'
         }
       ]
+    },
+    {
+      phase: 'post_market',
+      question: 'The System Reform Question',
+      context: 'After navigating FDA approval, PBM negotiations, and access barriers, you reflect on the journey. Your drug works—the science succeeded. But some patients who need it can\'t access it. The system largely works: innovation happens, drugs get approved, most patients get treated. But a few specific issues prevent it from working for everyone. Congress is debating reforms. What do you advocate for?',
+      options: [
+        {
+          text: 'Cap drug prices at the source',
+          detail: 'Government sets maximum prices',
+          cashEffect: 0,
+          marketBonus: 0.4,
+          result: 'Price controls reduce what you can charge but don\'t fix the fundamental access problem. Patients still face high copays because insurance cost-sharing remains unchanged. And with lower revenue, you have less to invest in the 93% of drugs that fail.',
+          lesson: 'Price controls target the symptom rather than the cause. High drug prices matter less if insurance actually covers them. The issue isn\'t what drugs cost—it\'s that insured patients are asked to pay again at the counter.'
+        },
+        {
+          text: 'Reform insurance cost-sharing',
+          detail: 'Cap patient out-of-pocket costs, eliminate copay accumulator programs',
+          cashEffect: 0,
+          marketBonus: 0.9,
+          result: 'Insurance reform addresses the real problem: patients pay twice—once through premiums, again at the pharmacy. When drugs covered by insurance are actually accessible, the system starts working. Innovation incentives remain intact.',
+          lesson: 'THE KEY FIX: Patients already pay for their drugs through insurance premiums. The specific issue is that they\'re asked to pay again at the pharmacy. Solution: reform insurance cost-sharing so covered drugs are actually accessible. Cap out-of-pocket costs, ban copay accumulators. The system works—we just need to close this gap.'
+        },
+        {
+          text: 'Increase transparency on the supply chain',
+          detail: 'PBM disclosure requirements, rebate pass-through',
+          cashEffect: 0,
+          marketBonus: 0.7,
+          result: 'Transparency reveals that PBMs capture 40%+ of specialty drug value through rebates and fees. It shows where the money goes—but doesn\'t automatically fix patient access.',
+          lesson: 'HELPFUL BUT NOT COMPLETE: Transparency helps employers and patients understand where money flows. But knowing the problem and fixing it are different. Transparency creates pressure for targeted reforms—like PBM fiduciary duty requirements—that address specific misalignments.'
+        }
+      ]
     }
   ]
 };
