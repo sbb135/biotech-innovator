@@ -330,6 +330,11 @@ const FAILURE_REASONS = {
     primary: 'Post-market safety signal',
     details: 'Real-world evidence revealed safety issues not detected in clinical trials.',
     endpoint: 'Black box warning or market withdrawal required'
+  },
+  patient_access: {
+    primary: 'Failed to achieve sustainable market access',
+    details: 'Despite FDA approval, payer coverage decisions, formulary exclusions, and prohibitive cost-sharing structures prevented patients from accessing your therapy.',
+    endpoint: 'Commercial failure - unable to reach patients who need the treatment'
   }
 };
 
@@ -486,7 +491,7 @@ const PHASES = [
     baseMonths: 12,
     cost: '$10-50M',
     baseCost: 20,
-    realSuccessRate: 85,  // Access depends on payer/PBM decisions
+    realSuccessRate: null,  // Commercial phase, not clinical trial
     description: 'Formulary negotiations, payer coverage, and patient affordability',
     context: 'Regulatory approval establishes the right to market your therapy. However, patient access depends on coverage decisions by payers, formulary placement by pharmacy benefit managers (PBMs), and cost-sharing structures that determine out-of-pocket obligations. This phase determines whether patients who need your therapy can actually access it.',
     activities: ['PBM formulary negotiations', 'Payer coverage discussions', 'Copay assistance programs', 'Patient support services', 'Specialty pharmacy setup', 'Policy engagement']
@@ -1218,8 +1223,8 @@ const GATE_SUCCESS = {
   phase2: 0.28,           // Citeline 2014-2023: 28% - "Valley of Death"
   phase3: 0.55,           // Citeline 2014-2023: 55%
   fda_review: 0.90,       // Most complete NDAs approved
-  post_market: 0.95,      // Most drugs remain on market
-  patient_access: 0.85    // Access depends on payer/PBM decisions
+  post_market: 0.95       // Most drugs remain on market post-approval
+  // patient_access has no gate - it's a commercial phase
 };
 
 // Modality-Indication Compatibility Matrix
@@ -1973,6 +1978,9 @@ export default function TheLongGame() {
       } else if (currentPhaseIndex === 6 && !seenIRA && modality === 'small-molecule' && programType !== 'orphan') {
         // Phase III for small molecules (non-orphan) - IRA implications
         setPhaseStep(2.7);
+      } else if (PHASES[currentPhaseIndex]?.id === 'patient_access') {
+        // Patient Access is last phase - skip gate and go to victory
+        setScreen('victory');
       } else {
         setPhaseStep(3);
       }
