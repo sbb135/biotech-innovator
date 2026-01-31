@@ -789,7 +789,19 @@ const QUESTIONS = {
     {
       phase: 'post_market',
       question: 'PBM Formulary & Access Strategy',
-      context: 'Your drug is approved, but approval doesn\'t guarantee access. PBMs (Express Scripts, CVS Caremark, OptumRx) control 80% of prescriptions. They can exclude your drug, require prior authorization, or steer patients to competitors. Specialty drugs face even higher barriers.',
+      context: `Your drug is approved, but approval doesn't guarantee patient access.
+
+📌 WHAT IS A PBM?
+Pharmacy Benefit Managers (PBMs) are middlemen between drug manufacturers, insurers, and pharmacies. The Big 3 (CVS Caremark, Express Scripts, OptumRx) control ~80% of the market.
+
+📌 HOW THEY WORK
+• PBMs decide which drugs go on the formulary (covered drug list)
+• They negotiate "rebates" from manufacturers in exchange for placement
+• They use "spread pricing" - charging insurers more than they pay pharmacies, keeping the difference
+• They own specialty pharmacies and can steer patients to their own services
+
+📌 THE PATIENT IMPACT
+Research from 46brooklyn and 3 Axis Advisors shows PBMs can charge employers different amounts for the same drug on the same day. Patients often pay copays based on list price, not the discounted net price insurers actually pay.`,
       options: [
         {
           text: 'Pay heavy rebates for preferred formulary placement',
@@ -817,14 +829,28 @@ const QUESTIONS = {
           revenueEffect: -0.25,
           efficacyEffect: 10,
           result: 'PBM-owned specialty pharmacy takes a large cut and can steer patients. Your drug access depends on PBM\'s vertically integrated interests, not patient needs.',
-          lesson: 'PBMs own specialty pharmacies and set the prices there. They\'re paid by drug companies to manage costs while profiting from those same drugs. This conflict of interest means your drug\'s fate is in the hands of entities with misaligned incentives.'
+          lesson: 'The Big 3 PBMs each own specialty pharmacies (CVS Specialty, Accredo, Optum Specialty). They\'re paid by manufacturers to manage costs while profiting from those same drugs—a conflict of interest that independent pharmacies and patient advocates have documented extensively.'
         }
       ]
     },
     {
       phase: 'post_market',
       question: 'Patient Out-of-Pocket Cost Crisis',
-      context: 'Despite FDA approval and insurance coverage, patients are abandoning prescriptions at the pharmacy due to high copays. For specialty drugs, patients may face $1,000+ copays per month. 30% of patient prescriptions are never picked up due to cost.',
+      context: `Despite FDA approval and insurance "coverage," patients are abandoning prescriptions at the pharmacy.
+
+📌 WHY DO PATIENTS PAY SO MUCH?
+• Copays are often based on LIST PRICE, not the discounted NET price insurers actually pay
+• Specialty tier drugs may have 20-30% coinsurance instead of flat copays
+• Patients pay through premiums AND at the pharmacy—paying twice for the same coverage
+
+📌 COPAY ACCUMULATORS
+Since 2018, many insurers use "copay accumulator" programs that block manufacturer copay assistance from counting toward deductibles. Once the coupon runs out, patients face the full cost.
+
+📌 THE RESULT
+For specialty drugs, patients may face $1,000+ monthly out-of-pocket costs. Studies show ~30% of specialty prescriptions are never picked up due to cost.
+
+📌 NO PATIENT LEFT BEHIND
+Innovation only matters if patients can access it. A drug that works but patients can't afford is a broken promise.`,
       options: [
         {
           text: 'Launch robust copay assistance program',
@@ -832,8 +858,8 @@ const QUESTIONS = {
           cashEffect: -15,
           marketBonus: 0.9,
           revenueEffect: -0.1,
-          result: 'Your copay cards cover patient out-of-pocket costs. Adherence improves dramatically. But this only works for commercial insurance—Medicare patients cannot use copay cards.',
-          lesson: 'Patients shouldn\'t have to pay twice—through premiums AND at the pharmacy. Copay assistance addresses symptoms, not causes. The real fix is insurance redesign so that drugs covered by premiums are accessible without additional cost barriers.'
+          result: 'Your copay cards cover patient out-of-pocket costs. Adherence improves dramatically. But this only works for commercial insurance—Medicare patients cannot use copay cards by law.',
+          lesson: 'Patients shouldn\'t have to pay twice—through premiums AND at the pharmacy. Copay assistance addresses symptoms, not causes. The real fix is insurance redesign: if a drug is covered, it should be accessible without punitive cost-sharing.'
         },
         {
           text: 'Work with patient advocacy groups',
@@ -841,16 +867,16 @@ const QUESTIONS = {
           cashEffect: -5,
           marketBonus: 0.6,
           designEffect: -5,
-          result: 'Patient advocates amplify stories of access barriers. This builds political pressure for reform but doesn\'t immediately solve access problems.',
-          lesson: 'Patient advocacy organizations give voice to those harmed by the system. Their stories make abstract policy debates concrete. But advocacy alone can\'t fix structural misalignments in drug pricing.'
+          result: 'Patient advocates amplify stories of access barriers. This builds political pressure for reform but doesn\'t immediately solve today\'s access problems.',
+          lesson: 'Patient advocacy organizations give voice to those harmed by the system. Real stories make abstract policy debates concrete—but advocacy alone can\'t fix structural misalignments in how insurance cost-sharing works.'
         },
         {
           text: 'Accept access limitations',
           detail: 'Focus on patients who can afford it',
           cashEffect: 0,
           marketBonus: 0.3,
-          result: 'You accept that only patients who can afford high copays will get your drug. This is financially easier but ethically troubling.',
-          lesson: 'Inventing a medicine that patients can\'t access fails the social contract. The goal isn\'t just FDA approval—it\'s getting treatments to the patients who need them. Access is the last mile.'
+          result: 'You accept that only patients who can afford high copays will get your drug. This may be financially easier but fails the mission.',
+          lesson: 'Inventing a medicine that patients can\'t access breaks the social contract. The goal isn\'t just FDA approval—it\'s ensuring NO PATIENT IS LEFT BEHIND. Access is the last mile of drug development.'
         }
       ]
     },
@@ -3311,9 +3337,9 @@ export default function TheLongGame() {
             {/* Patient Access & Affordability Reality */}
             {MODALITY_ACCESS_CHALLENGES[modality] && (
               <div className="bg-amber-900/20 border border-amber-700/50 rounded-lg p-6 mb-6">
-                <h3 className="text-lg font-semibold text-amber-400 mb-4">🏥 Patient Access Reality</h3>
+                <h3 className="text-lg font-semibold text-amber-400 mb-4">🏥 No Patient Left Behind: Access Reality</h3>
                 <p className="text-slate-300 text-sm mb-4">
-                  FDA approval doesn't guarantee patients can access your drug. Here's the reality for {MODALITY_DATA[modality]?.displayName || modality}:
+                  FDA approval is just the beginning. The last mile of drug development is ensuring patients can actually ACCESS your medicine. Here's the reality for {MODALITY_DATA[modality]?.displayName || modality}:
                 </p>
                 <div className="grid grid-cols-2 gap-4 mb-4">
                   <div className="bg-slate-800/50 p-3 rounded">
@@ -3333,14 +3359,14 @@ export default function TheLongGame() {
                     <div className="text-slate-300 text-sm">{MODALITY_ACCESS_CHALLENGES[modality].uniqueIssue}</div>
                   </div>
                 </div>
-                <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700">
+                <div className="bg-slate-800/70 p-4 rounded-lg border border-slate-700 mb-4">
                   <p className="text-slate-400 text-sm italic">
                     "{MODALITY_ACCESS_CHALLENGES[modality].insuranceReality}"
                   </p>
                 </div>
-                <div className="mt-4 p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
+                <div className="p-3 bg-emerald-900/30 border border-emerald-700/50 rounded-lg">
                   <p className="text-emerald-300 text-sm">
-                    <strong>The Fix:</strong> Patients already pay through insurance premiums. The issue is cost-sharing that makes them pay again at the pharmacy. Reform insurance so covered drugs are actually accessible.
+                    <strong>The Path Forward:</strong> The system isn't fundamentally broken—but insurance cost-sharing needs reform. Patients already pay through premiums; they shouldn't pay again at the pharmacy. When drugs become generic, they join humanity's permanent medicine cabinet. The goal: ensure every patient who needs your drug can access it, today and forever.
                   </p>
                 </div>
               </div>
