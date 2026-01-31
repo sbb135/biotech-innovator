@@ -3405,7 +3405,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">The Social Contract Fulfilled:</span> When exclusivity ends, generics and biosimilars enter the market. Your breakthrough—once expensive—becomes permanently affordable. This is the deal: society grants temporary exclusivity to fund innovation, then innovation becomes humanity's shared inheritance, forever.
+                        <span className="font-medium">Genericization:</span> Branded drug exclusivity is a finite mortgage, not a perpetual toll. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
@@ -3435,7 +3435,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
                       <div className="text-slate-300">
-                        <span className="font-medium">The Social Contract Fulfilled:</span> After exclusivity ends, generics or biosimilars drive prices down. Your innovation—once premium-priced to fund R&D—becomes accessible to everyone, permanently. This is the biotech social contract in action.
+                        <span className="font-medium">Genericization:</span> Branded drug exclusivity is a finite mortgage, not a perpetual toll. When it ends, generics or biosimilars enter the market. Your innovation transforms into a public good—permanently affordable and accessible to all who need it.
                       </div>
                     </div>
                   </>
