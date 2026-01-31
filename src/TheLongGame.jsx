@@ -2606,7 +2606,7 @@ export default function TheLongGame() {
             <div className="flex justify-between mt-2 text-xs text-slate-500">
               {PHASES.map((phase, i) => (
                 <span key={phase.id} className={i === currentPhaseIndex ? 'text-slate-300' : ''}>
-                  {phase.id === 'phase1' ? 'Phase I' : phase.id === 'phase2' ? 'Phase II' : phase.id === 'phase3' ? 'Phase III' : phase.name.split(' ')[0]}
+                  {phase.id === 'phase1' ? 'Phase I' : phase.id === 'phase2' ? 'Phase II' : phase.id === 'phase3' ? 'Phase III' : phase.id === 'patient_access' ? 'Access' : phase.name.split(' ')[0]}
                 </span>
               ))}
             </div>
