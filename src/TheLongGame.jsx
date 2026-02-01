@@ -2886,35 +2886,23 @@ export default function TheLongGame() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 2</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 2</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Program Type</h1>
               <p className="text-slate-400">This decision shapes your entire development strategy</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
-              <div className="flex justify-between items-start mb-2">
-                <div>
-                  <div className="text-slate-500 text-xs mb-1">LEAD PROGRAM</div>
-                  <div className="text-lg font-semibold text-emerald-400">{indication}</div>
-                </div>
-                {indicationData && (
-                  <span className="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">
-                    {indicationData.area}
-                  </span>
-                )}
+              <div className="text-slate-500 text-xs mb-1">MODALITY SELECTED</div>
+              <div className="text-lg font-semibold" style={{
+                color: modality === 'small-molecule' ? '#fbbf24' :
+                  modality === 'biologic' ? '#34d399' :
+                    modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+              }}>
+                {MODALITY_DATA[modality]?.displayName || modality}
               </div>
-              {indicationData && (
-                <>
-                  <div className="flex flex-wrap gap-2 mt-3 mb-2">
-                    {indicationData.challenges.map((challenge, idx) => (
-                      <span key={idx} className="text-xs px-2 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
-                        {challenge}
-                      </span>
-                    ))}
-                  </div>
-                  <p className="text-slate-500 text-xs mt-2">{indicationData.note}</p>
-                </>
-              )}
+              <p className="text-slate-500 text-xs mt-2">
+                {MODALITY_DATA[modality]?.description || 'Drug modality platform'}
+              </p>
             </div>
 
             <div className="space-y-4">
@@ -2984,20 +2972,9 @@ export default function TheLongGame() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 2</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 2</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Modality</h1>
               <p className="text-slate-400">The type of molecule determines your development path</p>
-            </div>
-
-            <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
-              <div className="text-slate-500 text-xs mb-1">PROGRAM TYPE SELECTED</div>
-              <div className="text-lg font-semibold" style={{
-                color: programType === 'first-in-class' ? '#34d399' :
-                  programType === 'orphan' ? '#a78bfa' : '#60a5fa'
-              }}>
-                {programType === 'first-in-class' ? 'First-in-Class' :
-                  programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster Potential'}
-              </div>
             </div>
 
             <div className="space-y-4">
