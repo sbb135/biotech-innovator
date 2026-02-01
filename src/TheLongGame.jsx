@@ -2715,6 +2715,9 @@ export default function TheLongGame() {
   const acknowledgeFinancing = () => {
     setShowFinancingScreen(false);
     setFinancingResult(null);
+    // Continue the game flow from where we left off
+    // Use setTimeout to ensure state updates have propagated
+    setTimeout(() => advanceStep(), 0);
   };
 
   // Handle alternative financing selection
