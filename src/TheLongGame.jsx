@@ -1245,6 +1245,111 @@ The Reality: PBMs act as gatekeepers between you and patients. Patient cost-shar
           lesson: 'Transparency is a necessary but insufficient condition for reform. Understanding value distribution across the supply chain informs targeted policy interventions. Fiduciary duty requirements for PBMs and rebate pass-through mandates represent potential applications of transparency findings.'
         }
       ]
+    },
+    // GCEA Value Flower Framework Questions (Shafrin et al. 2024)
+    {
+      phase: 'patient_access',
+      title: 'How will you demonstrate value to payers under outcome uncertainty?',
+      scenario: `Traditional cost-effectiveness analysis uses Quality-Adjusted Life Years (QALYs) based on clinical trial data. However, your therapy's long-term outcomes remain uncertain. The Generalized Cost-Effectiveness Analysis (GCEA) framework recognizes that payers face "outcome uncertainty" when making coverage decisions. Your health economics team proposes different approaches to address this uncertainty gap.
+
+The Reality: Payers increasingly demand real-world evidence, not just trial results. Outcomes-based contracts can share risk between manufacturers and payers, but require robust data infrastructure.`,
+      options: [
+        {
+          text: 'Real-world evidence commitment with value-based pricing',
+          detail: 'Lower launch price, escalating based on demonstrated outcomes',
+          cashEffect: -10,
+          marketBonus: 0.85,
+          revenueEffect: -0.2,
+          result: 'You launch at a lower price with contractual commitments to collect real-world evidence. If outcomes match or exceed trial results, price increases are permitted. This approach reduces payer risk and accelerates coverage decisions.',
+          lesson: 'The GCEA framework recognizes "outcome certainty" as a distinct value element. When long-term outcomes are uncertain, value-based pricing arrangements can bridge the evidence gap. Real-world evidence infrastructure is an investment that pays dividends across your portfolio.'
+        },
+        {
+          text: 'Outcomes-based contracting with money-back guarantee',
+          detail: 'Full price with rebates for non-responders',
+          cashEffect: -5,
+          marketBonus: 0.75,
+          revenueEffect: -0.15,
+          result: 'Payers appreciate the risk-sharing but implementation proves complex. Defining "response" and tracking individual patient outcomes requires data infrastructure that many health systems lack.',
+          lesson: 'Outcomes-based contracts align manufacturer and payer incentives around patient outcomes. However, execution requires agreement on outcome definitions, measurement timing, and data sharing. The administrative burden can exceed the value for therapies with high response rates.'
+        },
+        {
+          text: 'Traditional fixed pricing with comprehensive trial dossier',
+          detail: 'Standard approach based on Phase III data',
+          cashEffect: 0,
+          marketBonus: 0.55,
+          revenueEffect: 0,
+          result: 'Some payers accept your trial evidence, but others impose step therapy or prior authorization requirements, citing uncertainty about real-world performance. Access is slower and more variable across payer segments.',
+          lesson: 'Relying solely on clinical trial evidence leaves payers bearing all outcome uncertainty. The GCEA framework suggests that therapies with greater outcome certainty warrant premium pricing. Manufacturers who invest in reducing uncertainty can capture more value.'
+        }
+      ]
+    },
+    {
+      phase: 'patient_access',
+      title: 'How will you address equity in patient access?',
+      scenario: `Your therapy works across all patient populations, but access is uneven. Patients in well-resourced health systems get rapid access while those in underserved communities face delays and denials. The GCEA framework explicitly includes "equity" as a value element - recognizing that society may place additional value on therapies that reach underserved populations.
+
+The Reality: Health equity has become a boardroom priority. Institutional investors, regulators, and patient advocates all scrutinize whether breakthrough therapies reach the patients who need them most.`,
+      options: [
+        {
+          text: 'Income-based tiered patient assistance with equity metrics',
+          detail: 'Copay support scaled to income, public equity reporting',
+          cashEffect: -20,
+          marketBonus: 0.9,
+          result: 'Your tiered assistance program ensures that out-of-pocket costs never exceed a percentage of household income. Public reporting of access metrics by demographic group demonstrates commitment to equity and builds trust with advocacy organizations.',
+          lesson: 'The GCEA framework values equity explicitly: society may prefer therapies that reduce health disparities. Manufacturers who design access programs with equity in mind - and measure their effectiveness - can differentiate their products and build durable relationships with stakeholders.'
+        },
+        {
+          text: 'Single global reference price with universal access commitment',
+          detail: 'Same price worldwide, maximize access over revenue',
+          cashEffect: -15,
+          marketBonus: 0.7,
+          revenueEffect: -0.3,
+          result: 'A single global price prevents arbitrage and signals commitment to equity. However, lower revenue constrains investment in future research and development. Some shareholders question whether this approach maximizes long-term value.',
+          lesson: 'Global reference pricing eliminates the tension between affordability and arbitrage but may not maximize either access or innovation over time. The pharmaceutical ecosystem depends on returns sufficient to fund the next generation of therapies.'
+        },
+        {
+          text: 'Market-based pricing with standard copay assistance',
+          detail: 'Maximize revenue, standard industry assistance programs',
+          cashEffect: 0,
+          marketBonus: 0.5,
+          result: 'Standard copay assistance helps commercially insured patients, but access gaps persist for underserved populations. Advocacy groups and media document disparities, creating reputational risk.',
+          lesson: 'Standard assistance programs help patients who can navigate them, but often fail to reach the most vulnerable. The GCEA framework suggests that failing to address equity represents uncaptured societal value - and increasingly, uncaptured commercial value as stakeholders prioritize health equity.'
+        }
+      ]
+    },
+    {
+      phase: 'patient_access',
+      title: 'How will you capture broader societal value beyond clinical endpoints?',
+      scenario: `Your therapy keeps patients working, reduces caregiver burden, and generates scientific knowledge that benefits future research. Traditional cost-effectiveness analysis focuses narrowly on patient health outcomes. The GCEA framework includes productivity gains, caregiver spillovers, and scientific spillovers as legitimate value elements.
+
+The Reality: Employers lose billions annually to disease-related productivity loss. Caregivers reduce work hours or exit the workforce entirely. Your therapy addresses these burdens, but payers focus on direct medical costs.`,
+      options: [
+        {
+          text: 'Submit full GCEA value dossier including productivity and caregiver impact',
+          detail: 'Comprehensive societal value case to all stakeholders',
+          cashEffect: -8,
+          marketBonus: 0.8,
+          result: 'Your dossier documents productivity gains, reduced caregiver burden, and scientific contributions. Some innovative payers incorporate these elements into coverage decisions. Employer groups become advocates for coverage.',
+          lesson: 'The GCEA framework legitimizes broader value capture. Productivity spillovers (patients returning to work), caregiver spillovers (family members freed from care duties), and scientific spillovers (knowledge enabling future innovation) all represent real value. Manufacturers who document these elements expand the value conversation.'
+        },
+        {
+          text: 'Partner with self-insured employers on productivity-based contracts',
+          detail: 'Direct contracting with employers who capture productivity value',
+          cashEffect: -5,
+          marketBonus: 0.65,
+          revenueEffect: 0.1,
+          result: 'Large self-insured employers enthusiastically adopt your therapy - they directly benefit from reduced absenteeism and disability claims. This channel grows faster than traditional payer coverage.',
+          lesson: 'Self-insured employers capture productivity value directly, making them natural partners for therapies that keep workers healthy. The GCEA framework\'s productivity element aligns manufacturer and employer incentives. This market segment often moves faster than traditional payers.'
+        },
+        {
+          text: 'Focus exclusively on clinical endpoints in traditional cost-effectiveness framework',
+          detail: 'Standard QALY-based value demonstration',
+          cashEffect: 0,
+          marketBonus: 0.5,
+          result: 'Your traditional cost-effectiveness analysis meets basic payer requirements but fails to differentiate your therapy. Payers treat your drug as a commodity, pressuring for lowest-cost alternatives.',
+          lesson: 'Traditional cost-effectiveness frameworks capture only a portion of your therapy\'s value. The GCEA framework identifies value elements that conventional analysis ignores: productivity, caregiver burden, option value, and scientific spillovers. Manufacturers who accept narrow framing leave value on the table.'
+        }
+      ]
     }
   ]
 };
