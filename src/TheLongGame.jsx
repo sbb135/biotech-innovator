@@ -511,7 +511,7 @@ const QUESTIONS = {
             timeEffect: 0,
             riskBonus: 0.03,
             result: 'HTS identifies several hit series with confirmed activity. The diversity of chemotypes gives you options for lead optimization.',
-            lesson: 'HTS remains the workhorse of hit discovery. The quality of your compound library determines the quality of your hits.'
+            lesson: 'HTS remains the workhorse of small molecule discovery. Small molecules (under 900 Da) can be orally bioavailable: a massive advantage for chronic conditions. The quality of your compound library determines the quality of your hits.'
           },
           {
             text: 'In silico design and modeling',
@@ -547,7 +547,7 @@ const QUESTIONS = {
             timeEffect: -3,
             riskBonus: 0.02,
             result: 'Phage display identifies multiple binders. Some require humanization to reduce immunogenicity risk.',
-            lesson: 'Phage display offers speed and enormous diversity. The trade-off is that hits may need engineering for optimal human use.'
+            lesson: 'Phage display offers speed and enormous diversity. Biologics (150+ kDa) must be injected or infused since they cannot survive the gut. Anti-drug antibodies (immunogenicity) are a key clinical risk: fully human sequences reduce but do not eliminate this risk.'
           },
           {
             text: 'Transgenic mouse immunization',
@@ -582,8 +582,8 @@ const QUESTIONS = {
             cashEffect: -10,
             timeEffect: 6,
             riskBonus: 0.04,
-            result: 'AAV provides good tissue transduction but a subset of patients have pre-existing antibodies that exclude them from treatment.',
-            lesson: 'AAV vectors can reach many tissues but pre-existing immunity limits the treatable population. Novel capsids may help.'
+            result: 'AAV provides good tissue transduction but 30-60% of patients have pre-existing antibodies that exclude them from treatment.',
+            lesson: 'AAV vectors can reach many tissues but pre-existing immunity from natural AAV exposure excludes 30-60% of patients. Novel capsids and immunosuppression protocols are being developed to expand eligible populations.'
           },
           {
             text: 'Lipid nanoparticle (LNP) delivery',
@@ -608,36 +608,38 @@ const QUESTIONS = {
     ],
     'cell-therapy': [
       {
-        id: 'cell_engineering',
-        title: 'What cell engineering approach will you use?',
-        scenario: 'Your therapy requires engineering immune cells to recognize and kill tumor cells. CAR constructs are proven but limited to surface antigens. TCR engineering accesses intracellular targets. Armored CAR-T add cytokines or switches.',
+        id: 'cell_source_strategy',
+        title: 'What cell source strategy will you pursue?',
+        scenario: 'Cell therapy manufacturing begins with sourcing cells. Autologous approaches use each patient\'s own cells collected via leukapheresis. Allogeneic approaches use universal donor cells that require gene editing to prevent rejection. iPSC-derived cells offer manufacturing scale but require longer development.',
         options: [
           {
-            text: 'Standard CAR-T design',
-            detail: 'Proven approach, surface antigens only',
-            cashEffect: -8,
+            text: 'Autologous patient-derived T cells',
+            detail: 'Personalized, leukapheresis required, 2-4 week vein-to-vein time',
+            cashEffect: -10,
             timeEffect: 0,
             riskBonus: 0.05,
-            result: 'Your CAR-T design follows established principles. Regulatory pathway is clear and manufacturing protocols are established.',
-            lesson: 'Following proven designs reduces risk. Innovation should be targeted where it adds value, not everywhere.'
+            safetyEffect: -10,
+            result: 'Each patient\'s cells are collected, engineered, expanded, and reinfused. No rejection risk, but manufacturing is patient-specific and logistics are complex.',
+            lesson: 'Autologous cell therapy eliminates rejection but creates logistical challenges. Vein-to-vein time (collection to infusion) can exceed the clinical window for rapidly progressing patients.'
           },
           {
-            text: 'TCR-engineered T cells',
-            detail: 'Access intracellular antigens, HLA restrictions',
-            cashEffect: -12,
-            timeEffect: 6,
+            text: 'Allogeneic universal donor cells',
+            detail: 'Off-the-shelf, requires gene editing to avoid GvHD',
+            cashEffect: -25,
+            timeEffect: 12,
             riskBonus: 0.02,
-            result: 'TCR therapy can target intracellular tumor antigens presented on MHC. However, HLA matching limits the patient population.',
-            lesson: 'TCRs access the entire proteome, not just surface proteins. The trade-off is patient HLA matching requirements.'
+            safetyEffect: 15,
+            result: 'Gene editing knocks out TCR and HLA to create universal donor cells. Manufacturing is scalable but rejection and GvHD risks require monitoring.',
+            lesson: 'Allogeneic approaches solve logistics but introduce new biology. TCR knockout prevents GvHD; HLA knockout prevents rejection. Both add development complexity.'
           },
           {
-            text: 'Armored CAR-T with cytokine payload',
-            detail: 'Enhanced activity, additional safety considerations',
-            cashEffect: -15,
-            timeEffect: 9,
+            text: 'iPSC-derived engineered cells',
+            detail: 'Unlimited source, longer development timeline',
+            cashEffect: -35,
+            timeEffect: 18,
             riskBonus: -0.02,
-            result: 'Armored CAR-T secrete cytokines for enhanced tumor microenvironment modulation. Manufacturing and safety require more attention.',
-            lesson: 'Adding features increases complexity. Each addition must justify its development burden with clinical benefit.'
+            result: 'iPSC differentiation provides unlimited cell source. Development timeline is longer but manufacturing economics improve at scale.',
+            lesson: 'iPSC-derived cells represent the future of cell therapy manufacturing. The challenge is achieving consistent differentiation and demonstrating safety of pluripotent-derived products.'
           }
         ]
       }
@@ -716,7 +718,7 @@ const QUESTIONS = {
             detail: 'Higher expression levels',
             cashEffect: -4, timeEffect: 3, riskBonus: 0.04,
             result: 'Codon optimization improves expression 3-5 fold. Manufacturing yields improve as well.',
-            lesson: 'Codon optimization is standard practice. Higher expression can mean lower doses and better manufacturing economics.'
+            lesson: 'Codon optimization is standard practice. Higher expression can mean lower doses and better manufacturing economics. For gene therapy, durability of expression is the key question: will the therapeutic effect last years, decades, or require re-dosing?'
           },
           {
             text: 'Select tissue-specific promoter',
@@ -860,30 +862,63 @@ const QUESTIONS = {
     ],
     'cell-therapy': [
       {
-        id: 'manufacturing_model',
-        title: 'What manufacturing model will you use?',
-        scenario: 'Cell therapy manufacturing is complex. Autologous (patient-specific) ensures compatibility but limits scale. Allogeneic (off-the-shelf) enables scale but faces rejection risk. Hybrid approaches are emerging.',
+        id: 'gmp_validation_strategy',
+        title: 'How will you establish GMP manufacturing and release testing?',
+        scenario: 'Cell therapy INDs require detailed Chemistry, Manufacturing, and Controls (CMC) documentation. You must establish GMP-compliant manufacturing with validated release testing, potency assays, and stability studies. FDA\'s CBER Office of Tissues and Advanced Therapies (OTAT) reviews all cell therapy applications.',
         options: [
           {
-            text: 'Autologous manufacturing',
-            detail: 'Patient-specific, no rejection, complex logistics',
-            cashEffect: -20, timeEffect: 0, riskBonus: 0.05, safetyEffect: -10,
-            result: 'Each patient gets their own cells. Manufacturing is complex but rejection risk is minimal.',
-            lesson: 'Autologous manufacturing ensures compatibility but vein-to-vein time and logistics are challenging.'
+            text: 'Build internal GMP facility with full validation',
+            detail: 'High upfront cost, complete control, FACT accreditation path',
+            cashEffect: -45, timeEffect: 18, riskBonus: 0.08, safetyEffect: -15,
+            result: 'Your facility achieves FACT accreditation and GMP compliance. Release testing, potency assays, and stability protocols are fully validated. FDA accepts your CMC package without questions.',
+            lesson: 'Internal manufacturing provides control over quality systems, SOPs, and capacity. FACT accreditation (Foundation for Accreditation of Cellular Therapy) is the gold standard for cell therapy facilities.'
           },
           {
-            text: 'Allogeneic (off-the-shelf)',
-            detail: 'Scalable, but rejection/GvHD risks',
-            cashEffect: -30, timeEffect: 12, riskBonus: 0.02, safetyEffect: 15,
-            result: 'Universal donor cells enable manufacturing scale but require gene editing to prevent rejection.',
-            lesson: 'Allogeneic approaches solve logistics but introduce biological complexity around rejection.'
+            text: 'Partner with FACT-accredited CMO',
+            detail: 'External expertise, capacity constraints, cross-reference facility master file',
+            cashEffect: -20, timeEffect: 6, riskBonus: 0.04,
+            result: 'CMO provides regulatory expertise and cross-references their Facility Master File in your IND. Slot availability for commercial scale may become a bottleneck.',
+            lesson: 'CMOs with FDA Type V Facility Master Files on file simplify IND submission. Early engagement is critical: cell therapy manufacturing capacity is constrained industry-wide.'
           },
           {
-            text: 'Decentralized point-of-care manufacturing',
-            detail: 'Novel approach, regulatory uncertainty',
-            cashEffect: -15, timeEffect: 9, riskBonus: -0.02,
-            result: 'Manufacturing at treatment centers reduces transport but standardization is challenging.',
-            lesson: 'Decentralized manufacturing is emerging but regulatory frameworks are still evolving.'
+            text: 'Accelerated platform approach with minimal validation',
+            detail: 'Faster to clinic, may require repeat for commercial',
+            cashEffect: -12, timeEffect: 0, riskBonus: -0.04, safetyEffect: 10,
+            result: 'You reach clinic faster but FDA requests additional CMC information. Validation studies must be repeated for commercial manufacturing.',
+            lesson: 'Minimal CMC packages can delay approval. FDA expects detailed release testing, potency assays, and stability data for cell therapy products. Pre-IND meetings are essential to align expectations.'
+          }
+        ]
+      }
+    ]
+  },
+  // MODALITY-SPECIFIC PHASE I QUESTIONS
+  phase1_modality: {
+    'cell-therapy': [
+      {
+        id: 'crs_management_strategy',
+        title: 'How will you manage cytokine release syndrome (CRS) risk?',
+        scenario: 'CRS and immune effector cell-associated neurotoxicity syndrome (ICANS) are the most serious complications of CAR-T therapy. Your Phase I protocol must include a Risk Evaluation and Mitigation Strategy (REMS). Tocilizumab (IL-6 receptor blocker) is FDA-approved for CRS management. Your dose escalation and monitoring strategy will determine the safety profile.',
+        options: [
+          {
+            text: 'Conservative dosing with prophylactic tocilizumab',
+            detail: 'Pre-emptive CRS management, may reduce efficacy signal',
+            cashEffect: -8, timeEffect: 6, riskBonus: 0.08, safetyEffect: -25,
+            result: 'No severe CRS events occur. However, your efficacy signal is modest. Did prophylactic tocilizumab blunt the CAR-T expansion?',
+            lesson: 'Prophylactic CRS management prioritizes safety but may confound efficacy assessment. The IL-6 pathway plays a role in CAR-T expansion, so blocking it pre-emptively creates uncertainty about optimal dosing.'
+          },
+          {
+            text: 'Standard dosing with reactive CRS management',
+            detail: 'Tocilizumab at Grade 2+ CRS, clearer efficacy signal',
+            cashEffect: -5, timeEffect: 0, riskBonus: 0.02, safetyEffect: 10,
+            result: 'Two patients experience Grade 3 CRS requiring ICU admission and tocilizumab. Both recover fully. Your efficacy signal is strong.',
+            lesson: 'Reactive CRS management accepts higher acute toxicity for clearer efficacy signals. CAR-T infusion centers must have ICU access, neurology consultation, and tocilizumab immediately available per REMS requirements.'
+          },
+          {
+            text: 'Split dosing schedule with fractionated infusion',
+            detail: 'Lower peak expansion, reduced CRS, complex protocol',
+            cashEffect: -10, timeEffect: 9, riskBonus: 0.04, safetyEffect: -10,
+            result: 'Fractionated dosing reduces peak cytokine levels. CRS is manageable. The protocol complexity increases manufacturing and logistics burden.',
+            lesson: 'Dose fractionation can reduce CRS severity by slowing CAR-T expansion kinetics. The trade-off is increased protocol complexity and potentially reduced peak efficacy.'
           }
         ]
       }
@@ -2104,6 +2139,13 @@ export default function TheLongGame() {
         phaseQuestions = questionsData;
       }
 
+      // For phase1, inject modality-specific questions (e.g., CRS/ICANS for cell therapy)
+      if (phase.id === 'phase1' && QUESTIONS.phase1_modality && QUESTIONS.phase1_modality[modality]) {
+        const modalityPhase1Questions = QUESTIONS.phase1_modality[modality];
+        const unusedModalityQuestions = modalityPhase1Questions.filter(q => !usedQuestions.includes(q.id));
+        phaseQuestions = [...unusedModalityQuestions, ...phaseQuestions];
+      }
+
       // For post_market phase, inject modality-specific access question first
       if (phase.id === 'post_market' && MODALITY_ACCESS_CHALLENGES[modality]) {
         const modalityAccess = MODALITY_ACCESS_CHALLENGES[modality];
@@ -3300,7 +3342,13 @@ export default function TheLongGame() {
                     : currentPhase.id === 'basic_research'
                       ? 'Have you identified and validated a promising drug target?'
                       : currentPhase.id === 'drug_discovery'
-                        ? 'Have you found hit compounds worth optimizing?'
+                        ? (modality === 'cell-therapy'
+                          ? 'Have you established your cell engineering process and source strategy?'
+                          : modality === 'genetic-medicine'
+                            ? 'Have you validated your delivery platform and target tissue access?'
+                            : modality === 'biologic'
+                              ? 'Have you identified antibody candidates worth optimizing?'
+                              : 'Have you found hit compounds worth optimizing?')
                         : currentPhase.id === 'lead_optimization'
                           ? 'Is your lead compound ready for formal safety testing?'
                           : currentPhase.id === 'ind_enabling'
@@ -3349,7 +3397,13 @@ export default function TheLongGame() {
                         {currentPhase.id === 'basic_research'
                           ? 'Most targets fail validation. Only those with strong biological evidence should advance.'
                           : currentPhase.id === 'drug_discovery'
-                            ? 'Most screening campaigns yield few viable hits. Quality matters more than quantity.'
+                            ? (modality === 'cell-therapy'
+                              ? 'Cell therapy development requires engineering cells with the right phenotype, persistence, and safety profile. Manufacturing complexity is the key challenge.'
+                              : modality === 'genetic-medicine'
+                                ? 'Delivery platform selection determines which tissues you can reach. Liver is well-established; other organs remain challenging.'
+                                : modality === 'biologic'
+                                  ? 'Antibody discovery requires balancing affinity, specificity, and developability. Immunogenicity is a key clinical risk.'
+                                  : 'Most screening campaigns yield few viable hits. Quality matters more than quantity.')
                             : currentPhase.id === 'lead_optimization'
                               ? 'Many leads fail due to poor ADME, toxicity, or lack of efficacy in animal models.'
                               : currentPhase.id === 'ind_enabling'
@@ -3413,7 +3467,13 @@ export default function TheLongGame() {
                         {currentPhase.id === 'basic_research'
                           ? 'You have validated your target. Most research programs never find a viable target - yours has cleared the first hurdle.'
                           : currentPhase.id === 'drug_discovery'
-                            ? 'You have identified hit compounds. Now the real work begins - optimizing them into a drug candidate.'
+                            ? (modality === 'cell-therapy'
+                              ? 'You have established your cell engineering process. Now the manufacturing optimization and safety characterization begins.'
+                              : modality === 'genetic-medicine'
+                                ? 'You have validated your delivery platform. Now optimization of expression and durability begins.'
+                                : modality === 'biologic'
+                                  ? 'You have identified antibody candidates. Now the engineering and optimization work begins.'
+                                  : 'You have identified hit compounds. Now the real work begins - optimizing them into a drug candidate.')
                             : currentPhase.id === 'lead_optimization'
                               ? 'Your lead compound has acceptable properties. Time to prepare for IND-enabling studies.'
                               : 'Your IND package is ready. FDA will review before you can begin human trials.'}
