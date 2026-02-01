@@ -1285,35 +1285,35 @@ const QUESTIONS = {
     'genetic-medicine': [
       {
         id: 'pricing_gene',
-        title: 'One-Time Curative Pricing Strategy',
-        scenario: 'FDA approval is imminent for your genetic therapy. Health economic analyses support one-time pricing of $2-3 million, reflecting lifetime value and potential cure. But upfront cost creates payer challenges.',
+        title: 'Genetic Medicine Pricing Strategy',
+        scenario: 'FDA approval is imminent for your genetic therapy. Your pricing strategy depends on your product type: siRNA therapies typically price at $20,000-40,000/year for chronic dosing, while one-time gene therapies may command $500K-3M reflecting curative potential.',
         options: [
           {
-            text: 'Full value pricing ($2.5 million one-time)',
-            detail: 'Reflects curative potential, requires innovative payment models',
+            text: 'Annual subscription pricing (~$30,000/year)',
+            detail: 'For siRNA/RNAi: chronic therapy model like specialty biologics',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 0.9,
+            result: 'Your siRNA therapy is priced competitively with specialty biologics. Patients receive periodic subcutaneous injections at home or in clinic.',
+            lesson: 'siRNA therapies (like GalNAc-conjugated) can be manufactured, shipped, and self-administered like subcutaneous biologics. Pricing reflects chronic treatment economics.'
+          },
+          {
+            text: 'One-time curative pricing ($1-2 million)',
+            detail: 'For AAV gene therapy: reflects lifetime value and specialized centers',
             cashEffect: 0,
             timeEffect: 0,
             marketBonus: 1.0,
-            result: 'Your pricing reflects lifetime value, but many payers cannot absorb $2.5M upfront. Access is limited to patients at specialized centers.',
-            lesson: 'One-time curative therapies create a timing mismatch: all costs upfront, all savings over decades. Traditional insurance was designed for chronic, not curative, therapies.'
-          },
-          {
-            text: 'Annuity-based pricing ($300,000/year for 10 years)',
-            detail: 'Spreads cost, aligns with payer budgets',
-            cashEffect: -5,
-            timeEffect: 0,
-            marketBonus: 0.85,
-            result: 'Spreading payments over time aligns with payer budgets. However, patient churn between insurers creates orphan payment risk.',
-            lesson: 'Annuity models solve upfront cost barriers but create "orphan payment" problems when patients switch insurers. Who pays in year 5 if the patient has new coverage?'
+            result: 'Your gene therapy pricing reflects lifetime value, but requires specialized centers and outcomes-based contracts to manage payer concerns.',
+            lesson: 'AAV gene therapies offer potential cures but require cold-chain logistics, specialized administration centers, and innovative payment models for multi-million dollar one-time costs.'
           },
           {
             text: 'Outcomes-based subscription model',
-            detail: 'Pay only if cure maintained, requires long-term monitoring',
+            detail: 'Pay only if therapy maintains effect, requires long-term monitoring',
             cashEffect: -15,
             timeEffect: 12,
-            marketBonus: 0.9,
+            marketBonus: 0.85,
             result: 'Your payment-for-durability model requires extensive real-world evidence infrastructure. Payers appreciate the risk sharing.',
-            lesson: 'Outcomes-based payment for curative therapies requires robust long-term monitoring. Demonstrating durability enables continued payments and refund provisions if effect wanes.'
+            lesson: 'Outcomes-based payment aligns incentives for both chronic siRNA and curative gene therapies. Demonstrating durability enables continued payments.'
           }
         ]
       }
@@ -2071,18 +2071,18 @@ const MODALITY_ACCESS_CHALLENGES = {
     }
   },
   'genetic-medicine': {
-    typicalPrice: '$500K-3M one-time or $20K-40K/year',
-    coverageTier: 'No standard tier - individual coverage decisions',
-    patientCopay: 'Highly variable - often $10,000+ without assistance',
-    accessChallenge: 'Novel pricing models, outcomes contracts, specialized centers',
-    insuranceReality: 'Genetic medicines range from periodic injections (siRNA) to one-time cures (gene therapy). Insurers struggle with pricing for transformative therapies. Specialized administration required.',
-    uniqueIssue: 'Outcomes-based contracts and center capacity',
+    typicalPrice: '$20K-40K/year (siRNA) or $500K-3M one-time (gene therapy)',
+    coverageTier: 'Specialty tier (siRNA) or individual coverage decisions (gene therapy)',
+    patientCopay: '$500-2,000/month (siRNA) or highly variable (gene therapy)',
+    accessChallenge: 'Varies by modality subtype: siRNA is shippable and self-injectable; gene therapy requires specialized centers',
+    insuranceReality: 'Genetic medicines span a wide range: siRNA therapies (e.g., GalNAc-conjugated) can be synthesized, shipped, and self-injected at home like subcutaneous biologics. AAV gene therapies are one-time cures requiring specialized centers and cold-chain logistics.',
+    uniqueIssue: 'Subtype-specific: siRNA faces formulary competition; gene therapy faces center capacity and outcomes contracts',
     question: {
-      context: 'Your genetic medicine is approved but insurers are uncertain how to price coverage. They want proof of long-term durability. Only specialized centers can administer it safely.',
+      context: 'Your genetic medicine is approved. The access strategy depends on your specific product type and administration requirements.',
       options: [
-        { text: 'Offer outcomes-based payment structure', detail: 'Pay over time, refund if it fails', cashEffect: -5, marketBonus: 0.75, revenueEffect: -0.15, lesson: 'Outcomes-based contracts align incentives. If the therapy works, everyone benefits.' },
-        { text: 'Expand center of excellence network', detail: 'Train more sites to administer', cashEffect: -25, marketBonus: 0.9, lesson: 'Genetic medicines require specialized centers. Expanding access means training sites and ensuring quality.' },
-        { text: 'Work with public payers on coverage', detail: 'Medicaid and state programs', cashEffect: -10, marketBonus: 0.6, lesson: 'Public payers sometimes cover breakthrough therapies when commercial insurers hesitate.' }
+        { text: 'Partner with specialty pharmacies for home delivery', detail: 'If siRNA: shippable, self-injectable', cashEffect: -5, marketBonus: 0.85, lesson: 'siRNA therapies (like GalNAc-conjugated ASOs) can be self-injected at home. Specialty pharmacy partnerships enable broad access without specialized centers.' },
+        { text: 'Expand center of excellence network', detail: 'If gene therapy: requires specialized administration', cashEffect: -25, marketBonus: 0.7, lesson: 'AAV gene therapies require trained centers for administration, monitoring, and immunosuppression management. This limits access.' },
+        { text: 'Offer outcomes-based payment structure', detail: 'Align payment with durability', cashEffect: -5, marketBonus: 0.75, revenueEffect: -0.15, lesson: 'For expensive one-time therapies, outcomes-based contracts align incentives. If the therapy works, everyone benefits.' }
       ]
     }
   },
@@ -4432,7 +4432,7 @@ export default function TheLongGame() {
               </p>
               <div className="space-y-4 text-sm">
                 {programType === 'orphan' ? (
-                  // Orphan Drug - IRA EXEMPT
+                  // Orphan Drug - IRA EXEMPT (conditionally)
                   <>
                     <div className="flex gap-4">
                       <div className="w-24 text-slate-500 flex-shrink-0">Years 1-7</div>
@@ -4441,13 +4441,16 @@ export default function TheLongGame() {
                       </div>
                     </div>
                     <div className="flex gap-4 bg-emerald-900/30 p-3 rounded-lg border border-emerald-700/50">
-                      <div className="w-24 text-emerald-400 flex-shrink-0 font-medium">IRA EXEMPT</div>
+                      <div className="w-24 text-emerald-400 flex-shrink-0 font-medium">IRA Status</div>
                       <div className="text-emerald-300">
-                        <span className="font-medium">✓ Exempt from Medicare Price Negotiation:</span> Orphan drugs are specifically excluded from the IRA's Medicare negotiation provisions. Your drug maintains market-based pricing indefinitely, recognizing the higher per-patient economics of rare disease treatments.
+                        <span className="font-medium">✓ Exempt from Medicare Negotiation</span> <span className="text-emerald-400/80">(while treating only rare diseases)</span>
+                        <p className="text-slate-400 text-xs mt-2">
+                          Under the IRA, orphan drugs remain exempt as long as all approved indications are for rare diseases. Under the July 2025 "One Big Beautiful Bill Act" updates, this protection extends even to multiple orphan indications. However, if later approved for a non-orphan (common) disease, negotiation eligibility begins {modality === 'small-molecule' ? '9' : '13'} years after that non-orphan approval.
+                        </p>
                       </div>
                     </div>
                     <div className="flex gap-4">
-                      <div className="w-24 text-slate-500 flex-shrink-0">Perpetuity</div>
+                      <div className="w-24 text-slate-500 flex-shrink-0">Year 8+</div>
                       <div className="text-slate-300">
                         <span className="font-medium">Generics entry:</span> Branded drug exclusivity is a finite mortgage, not an infinite rent. When it ends, generics and biosimilars enter the market. Your innovation transforms into a public good, permanently affordable and accessible to all who need it.
                       </div>
