@@ -1930,7 +1930,7 @@ const MODALITY_PROGRAM_FIT = {
   'blockbuster': {
     'small-molecule': { modifier: -5, note: 'Oral convenience drives blockbuster adoption' },
     'biologic': { modifier: -10, note: 'BCG 2025: GLP-1 peptides dominate blockbusters - 8 of top 10 drugs are new modalities' },
-    'genetic-medicine': { modifier: 10, note: 'Manufacturing scale limits blockbuster economics', riskType: 'design' },
+    'genetic-medicine': { modifier: 0, note: 'siRNA scales well for blockbuster (Inclisiran precedent); AAV gene therapy limited but typically orphan anyway' },
     'cell-therapy': { modifier: 15, note: 'Autologous manufacturing incompatible with blockbuster volumes', riskType: 'design' }
   }
 };
