@@ -17,6 +17,7 @@ import React, { useState, useEffect } from 'react';
 const MODALITY_DATA = {
   'small-molecule': {
     displayName: 'Small Molecule',
+    description: 'Traditional chemistry-based drugs. Oral delivery possible. HTS and medicinal chemistry.',
     dominantFailure: 'Selectivity & toxicity',
     failureModes: [
       'Insufficient target engagement in humans (Biology)',
@@ -43,6 +44,7 @@ const MODALITY_DATA = {
   },
   'biologic': {
     displayName: 'Biologic',
+    description: 'Antibodies, therapeutic proteins. Injection/infusion delivery. Protein engineering.',
     dominantFailure: 'Biology redundancy / pathway compensation',
     failureModes: [
       'Poor tissue penetration - solid tumors, CNS (Delivery)',
@@ -52,7 +54,7 @@ const MODALITY_DATA = {
     ],
     biologyRisk: 'High - target biology may not translate from preclinical',
     chemistryRisk: 'Moderate - CMC scale-up, GMP bioreactors',
-    deliveryRisk: 'Moderate - IV administration, poor CNS penetration',
+    deliveryRisk: 'Moderate - IV/SC administration, poor CNS penetration',
     safetyRisk: 'Low-Moderate - immunogenicity main concern',
     translationalRisk: 'High - solid tumor vs hematologic, patient recruitment complexity',
     goNoGoBiomarker: 'Sustained ligand suppression',
@@ -66,33 +68,36 @@ const MODALITY_DATA = {
     timeline: '9-14 years',
     capitalRange: '$400M-$1.5B'
   },
-  'gene-therapy': {
-    displayName: 'Gene Therapy (AAV)',
-    dominantFailure: 'Immunity & durability',
+  'genetic-medicine': {
+    displayName: 'Genetic Medicine',
+    description: 'Gene therapy (AAV), siRNA/RNAi, CRISPR gene editing. Sequence-based therapeutics.',
+    dominantFailure: 'Delivery & durability',
     failureModes: [
-      'Pre-existing immunity to AAV vector (Delivery)',
-      'Loss of transgene expression over time (Biology)',
-      'Dose-limiting hepatotoxicity (Safety)',
-      'Inability to redose due to immune memory (Delivery)'
+      'Delivery failure to target tissue (Delivery)',
+      'Pre-existing immunity to viral vectors (Delivery)',
+      'Loss of expression/knockdown over time (Biology)',
+      'Off-target effects - genomic or transcriptomic (Safety)',
+      'Immune activation (Safety)'
     ],
-    biologyRisk: 'Moderate - monogenic diseases well-understood',
-    chemistryRisk: 'High - viral vector CMC, manufacturing capacity constrained',
-    deliveryRisk: 'High - pre-existing antibodies, tissue tropism',
-    safetyRisk: 'High - dose-limiting toxicities, insertional mutagenesis risk',
-    translationalRisk: 'High - durability in humans vs animal models',
-    goNoGoBiomarker: 'Durable transgene expression',
-    commonFailureSignal: 'Early expression that wanes clinically',
-    keyDrivers: ['Vector manufacturing scale', 'Immunogenicity (pre-existing antibodies)', 'Durability of expression', 'Dose-limiting toxicities'],
-    biggestCapitalSinks: ['Viral vector CMC (manufacturing capacity)', 'Long-term toxicology', 'Registrational trial costs'],
-    platformEffect: 'Moderate - constrained by manufacturing facilities (CMO scarcity raises cost/time)',
-    speedUps: ['Novel vectors avoiding pre-existing immunity', 'Tissue-specific promoters'],
-    bestFitDiseases: ['Rare monogenic', 'Pediatric genetic', 'Ophthalmology', 'Muscle disorders'],
-    poorFitDiseases: ['Polygenic diseases', 'Diseases requiring regulated protein levels'],
-    timeline: '8-14 years',
-    capitalRange: '$400M-$1.5B+'
+    biologyRisk: 'Moderate - sequence-specific mechanisms well-understood',
+    chemistryRisk: 'High - viral vector or LNP manufacturing, specialized analytics',
+    deliveryRisk: 'Very High - tissue targeting is the key challenge',
+    safetyRisk: 'High - permanent changes (editing) or immune activation',
+    translationalRisk: 'High - durability in humans often differs from animal models',
+    goNoGoBiomarker: 'Target tissue expression/knockdown with acceptable safety',
+    commonFailureSignal: 'Strong activity in easy tissues (liver) but disease elsewhere',
+    keyDrivers: ['Delivery platform (AAV, LNP, GalNAc)', 'Tissue targeting', 'Durability of effect', 'Manufacturing capacity'],
+    biggestCapitalSinks: ['Vector/LNP manufacturing', 'Long-term follow-up studies', 'Delivery optimization'],
+    platformEffect: 'Strong for liver targets - other tissues require bespoke solutions',
+    speedUps: ['Liver-targeted indications', 'Platform delivery systems', 'Biomarker endpoints'],
+    bestFitDiseases: ['Rare monogenic (liver-expressed)', 'Genetic diseases with clear single-gene cause', 'Liver diseases'],
+    poorFitDiseases: ['CNS without specialized delivery', 'Polygenic diseases', 'Non-life-threatening conditions (for editing)'],
+    timeline: '7-14 years',
+    capitalRange: '$300M-$1.5B+'
   },
   'cell-therapy': {
-    displayName: 'Cell Therapy (CAR-T)',
+    displayName: 'Cell Therapy',
+    description: 'CAR-T, stem cells, engineered cells. Living drugs with patient-specific manufacturing.',
     dominantFailure: 'Safety & manufacturing',
     failureModes: [
       'Cytokine release syndrome - CRS (Safety)',
@@ -116,58 +121,9 @@ const MODALITY_DATA = {
     poorFitDiseases: ['Chronic non-fatal diseases', 'Widespread systemic diseases'],
     timeline: '8-15 years',
     capitalRange: '$600M-$2B+'
-  },
-  'sirna': {
-    displayName: 'siRNA / RNAi',
-    dominantFailure: 'Delivery to target tissue',
-    failureModes: [
-      'Delivery failure to target tissue (Delivery)',
-      'Innate immune activation (Safety)',
-      'Incomplete knockdown (Biology)',
-      'Durability mismatch with disease (Biology)'
-    ],
-    biologyRisk: 'Moderate - sequence-specific knockdown well-understood',
-    chemistryRisk: 'Moderate - chemistry backbone variations, GalNAc conjugation',
-    deliveryRisk: 'High - liver is easiest, other tissues much harder',
-    safetyRisk: 'Moderate - immune activation risk manageable with chemistry',
-    translationalRisk: 'Moderate - knockdown duration may differ from preclinical',
-    goNoGoBiomarker: 'Target mRNA knockdown in tissue of interest',
-    commonFailureSignal: 'Strong knockdown in liver but disease in different tissue',
-    keyDrivers: ['Delivery optimization', 'Clinical proof-of-concept (biomarker assays)', 'Durability of knockdown'],
-    biggestCapitalSinks: ['Delivery optimization', 'Clinical proof-of-concept', 'Manufacturing scale-up'],
-    platformEffect: 'Strong - GalNAc or LNP platforms make many liver targets fast to advance',
-    speedUps: ['Liver targets', 'Platform chemistry', 'Biomarker endpoints'],
-    bestFitDiseases: ['Liver diseases', 'Rare genetic (liver-expressed)', 'Cardiovascular (liver targets)'],
-    poorFitDiseases: ['CNS without special delivery', 'Diseases requiring CNS or muscle delivery'],
-    timeline: '6-10 years',
-    capitalRange: '$150M-$600M'
-  },
-  'gene-editing': {
-    displayName: 'Gene Editing (CRISPR)',
-    dominantFailure: 'Off-target edits & regulatory uncertainty',
-    failureModes: [
-      'Off-target genomic edits (Safety)',
-      'Mosaicism - incomplete editing (Biology)',
-      'Unintended on-target effects (Biology)',
-      'Ethical and regulatory barriers (Translational)'
-    ],
-    biologyRisk: 'High - permanent change, unintended consequences possible',
-    chemistryRisk: 'High - specialized analytics, ex vivo vs in vivo manufacturing',
-    deliveryRisk: 'High - delivery (ex vivo vs in vivo), tissue-specific access',
-    safetyRisk: 'Very High - permanent genomic alteration requires extensive monitoring',
-    translationalRisk: 'Very High - regulatory scrutiny, long-term safety follow-up',
-    goNoGoBiomarker: 'On-target editing efficiency with acceptable off-target profile',
-    commonFailureSignal: 'High editing efficiency but concerning off-target signature',
-    keyDrivers: ['Off-target/edit specificity', 'Delivery (ex vivo vs in vivo)', 'Permanent change → heavy long-term safety monitoring'],
-    biggestCapitalSinks: ['Bespoke safety/long-term follow-up', 'Specialized analytics', 'Regulatory studies', 'Manufacturing for ex vivo cell editing'],
-    platformEffect: 'Strong for ex vivo workflows - in vivo editing remains high-risk/high-cost until delivery platforms mature',
-    speedUps: ['Ex vivo approaches', 'Well-characterized guide RNAs', 'Platform delivery systems'],
-    bestFitDiseases: ['Severe monogenic diseases', 'Diseases with clear single-gene cause', 'Sickle cell/thalassemia (ex vivo)'],
-    poorFitDiseases: ['Polygenic diseases', 'Non-life-threatening conditions'],
-    timeline: '8-14+ years',
-    capitalRange: '$500M-$2B+'
   }
 };
+
 
 // Financing rounds - biotech capital progression
 // Standard biotech financing ranges (source: industry data)
@@ -540,117 +496,399 @@ const QUESTIONS = {
       ]
     }
   ],
-  drug_discovery: [
-    {
-      id: 'screening_strategy',
-      title: 'Screening Approach',
-      scenario: 'You need to find compounds that modulate your validated target. You can run a traditional high-throughput screen (HTS) of your compound library, use computational methods to design molecules in silico, or pursue a fragment-based approach.',
-      options: [
-        {
-          text: 'High-throughput screening (HTS)',
-          detail: 'Proven approach, large compound library required',
-          cashEffect: -5,
-          timeEffect: 0,
-          riskBonus: 0.03,
-          result: 'HTS identifies several hit series with confirmed activity. The diversity of chemotypes gives you options for lead optimization.',
-          lesson: 'HTS remains the workhorse of hit discovery - testing real compounds provides reliable data. The quality of your compound library determines the quality of your hits.'
-        },
-        {
-          text: 'In silico design and modeling',
-          detail: 'Faster, cheaper, but requires structural data',
-          cashEffect: -2,
-          timeEffect: -3,
-          riskBonus: -0.04,
-          result: 'Computational methods predict several promising scaffolds. When synthesized and tested, some show activity but many do not match predictions.',
-          lesson: 'In silico methods can accelerate discovery when structural data is available, but predictions must be validated experimentally. Models are approximations of reality.'
-        },
-        {
-          text: 'Fragment-based drug discovery',
-          detail: 'Small fragments, requires biophysical methods',
-          cashEffect: -3,
-          timeEffect: 6,
-          riskBonus: 0.05,
-          result: 'Fragment screening identifies small, weak binders that provide excellent starting points for rational design.',
-          lesson: 'Fragment-based approaches often yield higher-quality leads with better properties, but require significant chemistry effort to build fragments into drug-like molecules.'
-        }
-      ]
-    }
-  ],
-  lead_optimization: [
-    {
-      id: 'adme_strategy',
-      title: 'ADME Optimization Priority',
-      scenario: 'Your lead compound shows excellent target potency but concerning metabolic instability. Chemistry can prioritize improving metabolic stability (risking potency loss) or maintaining potency while accepting higher doses.',
-      options: [
-        {
-          text: 'Prioritize metabolic stability',
-          detail: 'Better PK, potential potency trade-off',
-          cashEffect: -5,
-          timeEffect: 6,
-          riskBonus: 0.06,
-          result: 'Chemistry improves half-life significantly through strategic modifications. Some potency is lost but can be compensated with dose adjustment.',
-          lesson: 'Poor pharmacokinetics is a major cause of clinical failure. A drug that doesn\'t reach and stay at its target cannot work, regardless of how potent it is in a test tube.'
-        },
-        {
-          text: 'Maintain potency, accept higher dosing',
-          detail: 'Preserve efficacy, larger pills needed',
-          cashEffect: -3,
-          timeEffect: 0,
-          riskBonus: -0.04,
-          result: 'Your drug requires high doses, increasing API cost and pill burden. Some patients may struggle with compliance.',
-          lesson: 'Drug-like properties matter beyond just efficacy. Patient compliance, manufacturing cost, and practical dosing considerations affect real-world effectiveness.'
-        },
-        {
-          text: 'Explore prodrug approach',
-          detail: 'Innovative but adds complexity',
-          cashEffect: -8,
-          timeEffect: 12,
-          riskBonus: 0.02,
-          result: 'The prodrug strategy works - your compound is converted to active drug in the body with excellent PK. But regulatory and CMC complexity increase.',
-          lesson: 'Prodrug strategies can solve PK problems elegantly but add development complexity. The active metabolite becomes your real drug.'
-        }
-      ]
-    }
-  ],
-  ind_enabling: [
-    {
-      id: 'tox_species',
-      title: 'GLP Toxicology Species Selection',
-      scenario: 'FDA requires toxicology in a rodent and non-rodent species. For your target, dogs are standard but expensive. Minipigs are cheaper but less common. NHP provide best human prediction but raise ethical and cost concerns.',
-      options: [
-        {
-          text: 'Standard package: rat + dog',
-          detail: 'Regulatory comfort, established protocols',
-          cashEffect: -8,
-          timeEffect: 0,
-          riskBonus: 0.02,
-          safetyEffect: -10, // Standard choice = lower safety risk
-          result: 'The FDA accepts your standard tox package without questions. Dogs show a GI finding that requires monitoring in clinical trials but is manageable.',
-          lesson: 'Standard species choices reduce regulatory risk. FDA is familiar with interpreting rat and dog data, which minimizes back-and-forth during IND review.'
-        },
-        {
-          text: 'Alternative: rat + minipig',
-          detail: 'Cost savings, potential regulatory questions',
-          cashEffect: -5,
-          timeEffect: 0,
-          riskBonus: -0.03,
-          safetyEffect: 10, // Alternative species = higher safety risk (less data)
-          result: 'FDA asks for justification of minipig selection. After providing scientific rationale, they accept the package, but the exchange adds time.',
-          lesson: 'Non-standard species choices require strong scientific justification. Cost savings must be weighed against regulatory risk and potential delays.'
-        },
-        {
-          text: 'Enhanced package: rat + NHP',
-          detail: 'Best human prediction, ethical and cost considerations',
-          cashEffect: -15,
-          timeEffect: 6,
-          riskBonus: 0.08,
-          safetyEffect: -20, // NHP = much lower safety risk (best predictor)
-          result: 'NHP studies identify a cardiac signal not seen in dogs. You modify your Phase I protocol to include cardiac monitoring, avoiding a potential clinical hold.',
-          lesson: 'NHP are often the most predictive non-rodent species for human safety but require ethical justification.'
-        }
-      ]
-    }
-  ],
+  // MODALITY-SPECIFIC DISCOVERY QUESTIONS
+  drug_discovery: {
+    'small-molecule': [
+      {
+        id: 'screening_strategy',
+        title: 'How will you find lead compounds?',
+        scenario: 'You need compounds that modulate your validated target. Traditional high-throughput screening tests large compound libraries. Computational methods design molecules in silico. Fragment-based approaches identify small building blocks.',
+        options: [
+          {
+            text: 'High-throughput screening (HTS)',
+            detail: 'Screen compound library for hits',
+            cashEffect: -5,
+            timeEffect: 0,
+            riskBonus: 0.03,
+            result: 'HTS identifies several hit series with confirmed activity. The diversity of chemotypes gives you options for lead optimization.',
+            lesson: 'HTS remains the workhorse of hit discovery. The quality of your compound library determines the quality of your hits.'
+          },
+          {
+            text: 'In silico design and modeling',
+            detail: 'Computational design, requires structural data',
+            cashEffect: -2,
+            timeEffect: -3,
+            riskBonus: -0.04,
+            result: 'Computational methods predict promising scaffolds. When synthesized and tested, some show activity but many do not match predictions.',
+            lesson: 'In silico methods accelerate discovery when structural data exists, but predictions must be validated experimentally.'
+          },
+          {
+            text: 'Fragment-based drug discovery',
+            detail: 'Small fragments, biophysical methods',
+            cashEffect: -3,
+            timeEffect: 6,
+            riskBonus: 0.05,
+            result: 'Fragment screening identifies small, weak binders that provide excellent starting points for rational design.',
+            lesson: 'Fragment approaches often yield higher-quality leads with better properties, but require significant chemistry effort.'
+          }
+        ]
+      }
+    ],
+    'biologic': [
+      {
+        id: 'antibody_discovery',
+        title: 'How will you discover your antibody?',
+        scenario: 'You need to find antibodies that bind your target with high affinity and specificity. Phage display screens billions of variants rapidly. Transgenic mice generate fully human antibodies. Single B cell cloning captures natural immune responses.',
+        options: [
+          {
+            text: 'Phage display library screening',
+            detail: 'Fast, high diversity, may need humanization',
+            cashEffect: -4,
+            timeEffect: -3,
+            riskBonus: 0.02,
+            result: 'Phage display identifies multiple binders. Some require humanization to reduce immunogenicity risk.',
+            lesson: 'Phage display offers speed and enormous diversity. The trade-off is that hits may need engineering for optimal human use.'
+          },
+          {
+            text: 'Transgenic mouse immunization',
+            detail: 'Fully human antibodies, longer timeline',
+            cashEffect: -8,
+            timeEffect: 6,
+            riskBonus: 0.06,
+            result: 'Transgenic mice generate fully human antibodies with natural affinity maturation. Less immunogenicity risk in clinic.',
+            lesson: 'Fully human antibodies from transgenic mice reduce immunogenicity risk but take longer to generate.'
+          },
+          {
+            text: 'Single B cell cloning',
+            detail: 'Natural antibodies from patients/donors',
+            cashEffect: -6,
+            timeEffect: 3,
+            riskBonus: 0.04,
+            result: 'B cells from donors with relevant immune responses yield antibodies with proven human relevance.',
+            lesson: 'Cloning from natural immunity captures antibodies already validated by the human immune system.'
+          }
+        ]
+      }
+    ],
+    'genetic-medicine': [
+      {
+        id: 'delivery_platform',
+        title: 'What delivery platform will you use?',
+        scenario: 'Genetic medicines require delivery to target tissues. AAV vectors offer broad tropism but face pre-existing immunity. LNP delivery works well for liver. GalNAc conjugation is elegant for hepatocytes.',
+        options: [
+          {
+            text: 'AAV vector platform',
+            detail: 'Broad tissue access, immunity challenges',
+            cashEffect: -10,
+            timeEffect: 6,
+            riskBonus: 0.04,
+            result: 'AAV provides good tissue transduction but a subset of patients have pre-existing antibodies that exclude them from treatment.',
+            lesson: 'AAV vectors can reach many tissues but pre-existing immunity limits the treatable population. Novel capsids may help.'
+          },
+          {
+            text: 'Lipid nanoparticle (LNP) delivery',
+            detail: 'Excellent for liver, limited elsewhere',
+            cashEffect: -6,
+            timeEffect: 0,
+            riskBonus: 0.05,
+            result: 'LNP delivery achieves excellent liver targeting. The platform is well-characterized with established manufacturing.',
+            lesson: 'LNP is the gold standard for liver delivery. The limitation is that non-liver tissues remain difficult to reach.'
+          },
+          {
+            text: 'GalNAc conjugation',
+            detail: 'Hepatocyte-specific, elegant chemistry',
+            cashEffect: -4,
+            timeEffect: -3,
+            riskBonus: 0.06,
+            result: 'GalNAc elegantly delivers payload directly to hepatocytes via ASGPR receptor. Manufacturing is straightforward.',
+            lesson: 'GalNAc conjugation exemplifies platform power: once validated, new targets can advance rapidly with known delivery.'
+          }
+        ]
+      }
+    ],
+    'cell-therapy': [
+      {
+        id: 'cell_engineering',
+        title: 'What cell engineering approach will you use?',
+        scenario: 'Your therapy requires engineering immune cells to recognize and kill tumor cells. CAR constructs are proven but limited to surface antigens. TCR engineering accesses intracellular targets. Armored CAR-T add cytokines or switches.',
+        options: [
+          {
+            text: 'Standard CAR-T design',
+            detail: 'Proven approach, surface antigens only',
+            cashEffect: -8,
+            timeEffect: 0,
+            riskBonus: 0.05,
+            result: 'Your CAR-T design follows established principles. Regulatory pathway is clear and manufacturing protocols are established.',
+            lesson: 'Following proven designs reduces risk. Innovation should be targeted where it adds value, not everywhere.'
+          },
+          {
+            text: 'TCR-engineered T cells',
+            detail: 'Access intracellular antigens, HLA restrictions',
+            cashEffect: -12,
+            timeEffect: 6,
+            riskBonus: 0.02,
+            result: 'TCR therapy can target intracellular tumor antigens presented on MHC. However, HLA matching limits the patient population.',
+            lesson: 'TCRs access the entire proteome, not just surface proteins. The trade-off is patient HLA matching requirements.'
+          },
+          {
+            text: 'Armored CAR-T with cytokine payload',
+            detail: 'Enhanced activity, additional safety considerations',
+            cashEffect: -15,
+            timeEffect: 9,
+            riskBonus: -0.02,
+            result: 'Armored CAR-T secrete cytokines for enhanced tumor microenvironment modulation. Manufacturing and safety require more attention.',
+            lesson: 'Adding features increases complexity. Each addition must justify its development burden with clinical benefit.'
+          }
+        ]
+      }
+    ]
+  },
+  // MODALITY-SPECIFIC LEAD OPTIMIZATION QUESTIONS
+  lead_optimization: {
+    'small-molecule': [
+      {
+        id: 'adme_strategy',
+        title: 'How will you optimize drug-like properties?',
+        scenario: 'Your lead compound shows excellent target potency but concerning metabolic instability. Chemistry can prioritize metabolic stability (risking potency loss) or maintain potency while accepting higher doses.',
+        options: [
+          {
+            text: 'Prioritize metabolic stability',
+            detail: 'Better PK, potential potency trade-off',
+            cashEffect: -5, timeEffect: 6, riskBonus: 0.06,
+            result: 'Chemistry improves half-life significantly. Some potency is lost but can be compensated with dose adjustment.',
+            lesson: 'Poor pharmacokinetics is a major cause of clinical failure. A drug that does not reach its target cannot work.'
+          },
+          {
+            text: 'Maintain potency, accept higher dosing',
+            detail: 'Preserve efficacy, larger pills needed',
+            cashEffect: -3, timeEffect: 0, riskBonus: -0.04,
+            result: 'Your drug requires high doses, increasing API cost and pill burden.',
+            lesson: 'Drug-like properties matter beyond efficacy. Patient compliance and manufacturing cost affect real-world effectiveness.'
+          },
+          {
+            text: 'Explore prodrug approach',
+            detail: 'Innovative but adds complexity',
+            cashEffect: -8, timeEffect: 12, riskBonus: 0.02,
+            result: 'The prodrug works, but regulatory and CMC complexity increase.',
+            lesson: 'Prodrug strategies can solve PK problems elegantly but add development complexity.'
+          }
+        ]
+      }
+    ],
+    'biologic': [
+      {
+        id: 'fc_engineering',
+        title: 'How will you engineer your antibody?',
+        scenario: 'Your antibody binds target well but half-life is short and effector function needs optimization. Fc engineering can extend half-life, enhance or silence effector function, or create bispecific formats.',
+        options: [
+          {
+            text: 'Extend half-life via Fc modifications',
+            detail: 'Less frequent dosing, better compliance',
+            cashEffect: -6, timeEffect: 6, riskBonus: 0.05,
+            result: 'YTE or similar mutations extend half-life to monthly dosing. Patient convenience improves significantly.',
+            lesson: 'Half-life extension reduces dosing frequency, improving patient compliance and potentially allowing outpatient administration.'
+          },
+          {
+            text: 'Enhance effector function (ADCC/CDC)',
+            detail: 'Improved cell killing, more safety monitoring',
+            cashEffect: -8, timeEffect: 3, riskBonus: 0.03, safetyEffect: 15,
+            result: 'Enhanced ADCC improves tumor cell killing but requires careful safety monitoring for cytokine release.',
+            lesson: 'Effector function enhancement is a trade-off: more potent killing versus increased risk of immune-related adverse events.'
+          },
+          {
+            text: 'Create bispecific format',
+            detail: 'Novel mechanism, complex manufacturing',
+            cashEffect: -15, timeEffect: 12, riskBonus: 0.00,
+            result: 'Bispecific engages two targets simultaneously. Manufacturing complexity increases substantially.',
+            lesson: 'Bispecifics offer novel mechanisms but multiply development challenges. Each arm must be optimized.'
+          }
+        ]
+      }
+    ],
+    'genetic-medicine': [
+      {
+        id: 'sequence_optimization',
+        title: 'How will you optimize your genetic construct?',
+        scenario: 'Your payload shows activity but expression is variable and durability is uncertain. Codon optimization can enhance expression. Promoter choice affects tissue specificity. Modified nucleotides can reduce immunogenicity.',
+        options: [
+          {
+            text: 'Codon optimize for expression',
+            detail: 'Higher expression levels',
+            cashEffect: -4, timeEffect: 3, riskBonus: 0.04,
+            result: 'Codon optimization improves expression 3-5 fold. Manufacturing yields improve as well.',
+            lesson: 'Codon optimization is standard practice. Higher expression can mean lower doses and better manufacturing economics.'
+          },
+          {
+            text: 'Select tissue-specific promoter',
+            detail: 'Precise targeting, may limit expression',
+            cashEffect: -6, timeEffect: 6, riskBonus: 0.05, safetyEffect: -10,
+            result: 'Tissue-specific promoter limits off-target expression, improving safety profile.',
+            lesson: 'Promoter selection is critical for safety. Ubiquitous expression may cause toxicity in non-target tissues.'
+          },
+          {
+            text: 'Use modified nucleotides',
+            detail: 'Reduce immune activation',
+            cashEffect: -8, timeEffect: 6, riskBonus: 0.03, safetyEffect: -15,
+            result: 'Modified nucleotides reduce innate immune activation, allowing higher doses.',
+            lesson: 'Immune activation limits dosing. Chemical modifications can expand the therapeutic window.'
+          }
+        ]
+      }
+    ],
+    'cell-therapy': [
+      {
+        id: 'persistence_optimization',
+        title: 'How will you optimize cell persistence?',
+        scenario: 'Your engineered cells show initial activity but may exhaust or fail to persist. Incorporating memory phenotypes, adding costimulatory domains, or using cytokine support can improve durability.',
+        options: [
+          {
+            text: 'Optimize costimulatory domains',
+            detail: '4-1BB vs CD28, affects persistence vs speed',
+            cashEffect: -5, timeEffect: 6, riskBonus: 0.04,
+            result: '4-1BB domain provides better persistence while CD28 offers faster expansion. Your choice shapes the kinetics.',
+            lesson: 'Costimulatory domain choice is a trade-off: CD28 = faster but shorter; 4-1BB = slower but more durable.'
+          },
+          {
+            text: 'Select for memory phenotype',
+            detail: 'Stem cell memory T cells persist longer',
+            cashEffect: -8, timeEffect: 9, riskBonus: 0.06,
+            result: 'Selecting for Tscm phenotype improves long-term persistence but manufacturing becomes more complex.',
+            lesson: 'Cell phenotype at infusion predicts durability. Stem cell memory T cells persist longer than effector cells.'
+          },
+          {
+            text: 'Add cytokine secretion capability',
+            detail: 'Self-supporting cells, safety considerations',
+            cashEffect: -12, timeEffect: 12, riskBonus: 0.01, safetyEffect: 20,
+            result: 'Cytokine-armored cells support themselves but require careful safety monitoring.',
+            lesson: 'Autocrine support can sustain cells but adds complexity and safety considerations.'
+          }
+        ]
+      }
+    ]
+  },
+  // MODALITY-SPECIFIC IND-ENABLING QUESTIONS
+  ind_enabling: {
+    'small-molecule': [
+      {
+        id: 'tox_species',
+        title: 'What toxicology species will you use?',
+        scenario: 'FDA requires toxicology in rodent and non-rodent species. Dogs are standard. Minipigs are cheaper but less common. NHP provide best human prediction but raise ethical and cost concerns.',
+        options: [
+          {
+            text: 'Standard package: rat + dog',
+            detail: 'Regulatory comfort, established protocols',
+            cashEffect: -8, timeEffect: 0, riskBonus: 0.02, safetyEffect: -10,
+            result: 'FDA accepts your standard package without questions.',
+            lesson: 'Standard species choices reduce regulatory risk. FDA is familiar with rat and dog data interpretation.'
+          },
+          {
+            text: 'Alternative: rat + minipig',
+            detail: 'Cost savings, potential questions',
+            cashEffect: -5, timeEffect: 0, riskBonus: -0.03, safetyEffect: 10,
+            result: 'FDA asks for justification. After providing rationale, they accept.',
+            lesson: 'Non-standard species require scientific justification. Cost savings versus regulatory risk.'
+          },
+          {
+            text: 'Enhanced: rat + NHP',
+            detail: 'Best prediction, ethical considerations',
+            cashEffect: -15, timeEffect: 6, riskBonus: 0.08, safetyEffect: -20,
+            result: 'NHP studies identify a signal not seen in dogs. You adjust Phase I protocol accordingly.',
+            lesson: 'NHP are most predictive for human safety but require ethical justification.'
+          }
+        ]
+      }
+    ],
+    'biologic': [
+      {
+        id: 'cell_line_development',
+        title: 'How will you establish your production cell line?',
+        scenario: 'Biologics require stable production cell lines. CHO is standard. HEK293 offers faster timelines and better glycosylation for some products. Novel hosts may offer advantages but increase risk.',
+        options: [
+          {
+            text: 'Standard CHO cell line',
+            detail: 'Industry standard, regulatory familiarity',
+            cashEffect: -10, timeEffect: 6, riskBonus: 0.05, safetyEffect: -5,
+            result: 'CHO-derived product has well-understood quality profile. Regulatory path is clear.',
+            lesson: 'CHO is the workhorse of biologics manufacturing. Regulatory familiarity reduces risk.'
+          },
+          {
+            text: 'HEK293 for complex glycoproteins',
+            detail: 'Better glycosylation, less regulatory history',
+            cashEffect: -8, timeEffect: 3, riskBonus: 0.02,
+            result: 'HEK293 produces more human-like glycosylation patterns but CMC documentation needs more detail.',
+            lesson: 'Cell host affects product quality attributes. Novel hosts may offer advantages but require more characterization.'
+          },
+          {
+            text: 'Accelerated stable pool approach',
+            detail: 'Faster to clinic, may need repeat for commercial',
+            cashEffect: -5, timeEffect: -6, riskBonus: -0.02,
+            result: 'You reach clinic faster but may need to repeat cell line development for commercial manufacturing.',
+            lesson: 'Speed to clinic is valuable but rushing cell line work can create problems later.'
+          }
+        ]
+      }
+    ],
+    'genetic-medicine': [
+      {
+        id: 'vector_manufacturing',
+        title: 'How will you manufacture your vector/delivery system?',
+        scenario: 'Manufacturing is often the bottleneck for genetic medicines. Scale, purity, and consistency are critical. In-house versus CMO, suspension versus adherent, and platform versus bespoke all impact timelines.',
+        options: [
+          {
+            text: 'Partner with specialized CMO',
+            detail: 'Expertise, but capacity constrained',
+            cashEffect: -15, timeEffect: 6, riskBonus: 0.04,
+            result: 'CMO provides expertise but slot availability delays your timeline.',
+            lesson: 'Vector manufacturing capacity is limited industry-wide. Early CMO engagement is critical.'
+          },
+          {
+            text: 'Build internal manufacturing capability',
+            detail: 'Control and flexibility, high upfront cost',
+            cashEffect: -40, timeEffect: 18, riskBonus: 0.06,
+            result: 'Internal capability provides control over production but requires significant capital investment.',
+            lesson: 'Internal manufacturing offers control but the capital commitment is substantial.'
+          },
+          {
+            text: 'Use platform process from partner',
+            detail: 'Faster, less customization',
+            cashEffect: -10, timeEffect: 0, riskBonus: 0.02,
+            result: 'Platform processes speed timeline but may not be optimal for your specific product.',
+            lesson: 'Platform approaches trade optimization for speed. Good enough early may limit options later.'
+          }
+        ]
+      }
+    ],
+    'cell-therapy': [
+      {
+        id: 'manufacturing_model',
+        title: 'What manufacturing model will you use?',
+        scenario: 'Cell therapy manufacturing is complex. Autologous (patient-specific) ensures compatibility but limits scale. Allogeneic (off-the-shelf) enables scale but faces rejection risk. Hybrid approaches are emerging.',
+        options: [
+          {
+            text: 'Autologous manufacturing',
+            detail: 'Patient-specific, no rejection, complex logistics',
+            cashEffect: -20, timeEffect: 0, riskBonus: 0.05, safetyEffect: -10,
+            result: 'Each patient gets their own cells. Manufacturing is complex but rejection risk is minimal.',
+            lesson: 'Autologous manufacturing ensures compatibility but vein-to-vein time and logistics are challenging.'
+          },
+          {
+            text: 'Allogeneic (off-the-shelf)',
+            detail: 'Scalable, but rejection/GvHD risks',
+            cashEffect: -30, timeEffect: 12, riskBonus: 0.02, safetyEffect: 15,
+            result: 'Universal donor cells enable manufacturing scale but require gene editing to prevent rejection.',
+            lesson: 'Allogeneic approaches solve logistics but introduce biological complexity around rejection.'
+          },
+          {
+            text: 'Decentralized point-of-care manufacturing',
+            detail: 'Novel approach, regulatory uncertainty',
+            cashEffect: -15, timeEffect: 9, riskBonus: -0.02,
+            result: 'Manufacturing at treatment centers reduces transport but standardization is challenging.',
+            lesson: 'Decentralized manufacturing is emerging but regulatory frameworks are still evolving.'
+          }
+        ]
+      }
+    ]
+  },
   phase1: [
     {
       id: 'dose_escalation',
@@ -1194,64 +1432,50 @@ const MODALITY_INDICATION_COMPATIBILITY = {
   'CNS': {
     'small-molecule': { penalty: 0, reason: 'Small molecules can cross BBB - good fit' },
     'biologic': { penalty: 25, reason: 'Large molecules cannot cross BBB - poor CNS penetration', riskType: 'efficacy' },
-    'gene-therapy': { penalty: 10, reason: 'Requires intrathecal delivery - adds complexity', riskType: 'design' },
-    'cell-therapy': { penalty: 30, reason: 'Cell delivery to CNS extremely challenging', riskType: 'efficacy' },
-    'sirna': { penalty: 25, reason: 'siRNA delivery to CNS not validated - liver only', riskType: 'efficacy' },
-    'gene-editing': { penalty: 15, reason: 'In vivo CNS editing very difficult', riskType: 'design' }
+    'genetic-medicine': { penalty: 20, reason: 'CNS delivery challenging - requires intrathecal or novel vectors', riskType: 'efficacy' },
+    'cell-therapy': { penalty: 30, reason: 'Cell delivery to CNS extremely challenging', riskType: 'efficacy' }
   },
   // Rare/Genetic diseases: curative modalities shine
   'Rare/Genetic': {
     'small-molecule': { penalty: 10, reason: 'May need lifelong dosing for genetic disease', riskType: 'design' },
     'biologic': { penalty: 5, reason: 'Protein replacement often effective', riskType: 'efficacy' },
-    'gene-therapy': { penalty: 0, reason: 'Ideal for monogenic diseases - curative potential' },
-    'cell-therapy': { penalty: 0, reason: 'Stem cell or gene-corrected cells excellent' },
-    'sirna': { penalty: 0, reason: 'Knockdown can address many genetic diseases' },
-    'gene-editing': { penalty: 0, reason: 'Curative editing for monogenic diseases - best fit' }
+    'genetic-medicine': { penalty: 0, reason: 'Ideal for monogenic diseases - curative potential' },
+    'cell-therapy': { penalty: 0, reason: 'Stem cell or gene-corrected cells excellent' }
   },
   // Metabolic diseases: liver targets, chronic dosing
   'Metabolic': {
     'small-molecule': { penalty: 0, reason: 'Oral dosing, liver targets - excellent fit' },
     'biologic': { penalty: 5, reason: 'Injectable but effective for metabolic targets', riskType: 'design' },
-    'gene-therapy': { penalty: 15, reason: 'Overkill for most metabolic diseases', riskType: 'design' },
-    'cell-therapy': { penalty: 25, reason: 'Manufacturing complexity not justified', riskType: 'design' },
-    'sirna': { penalty: 0, reason: 'GalNAc delivery to liver - ideal for metabolic' },
-    'gene-editing': { penalty: 10, reason: 'Permanent change risky for non-fatal conditions', riskType: 'safety' }
+    'genetic-medicine': { penalty: 0, reason: 'Liver-targeted siRNA/gene therapy excellent for metabolic' },
+    'cell-therapy': { penalty: 25, reason: 'Manufacturing complexity not justified', riskType: 'design' }
   },
   // Oncology (hematologic): cell therapy and biologics excel
   'Oncology (Hematologic)': {
     'small-molecule': { penalty: 10, reason: 'May face resistance mutations', riskType: 'efficacy' },
     'biologic': { penalty: 0, reason: 'ADCs, bispecifics highly effective' },
-    'gene-therapy': { penalty: 15, reason: 'Not standard approach for cancer', riskType: 'design' },
-    'cell-therapy': { penalty: 0, reason: 'CAR-T revolutionary for heme malignancies - best fit' },
-    'sirna': { penalty: 20, reason: 'Limited oncology applications', riskType: 'efficacy' },
-    'gene-editing': { penalty: 5, reason: 'Gene-edited cells emerging', riskType: 'design' }
+    'genetic-medicine': { penalty: 15, reason: 'Limited oncology applications for genetic medicine', riskType: 'design' },
+    'cell-therapy': { penalty: 0, reason: 'CAR-T revolutionary for heme malignancies - best fit' }
   },
   // Oncology (solid): harder than heme
   'Oncology (Solid Tumor)': {
     'small-molecule': { penalty: 0, reason: 'Oral TKIs, still backbone of therapy' },
     'biologic': { penalty: 10, reason: 'Tumor penetration challenging', riskType: 'efficacy' },
-    'gene-therapy': { penalty: 20, reason: 'Delivery to solid tumors very hard', riskType: 'efficacy' },
-    'cell-therapy': { penalty: 15, reason: 'TME is immunosuppressive - less effective than heme', riskType: 'efficacy' },
-    'sirna': { penalty: 25, reason: 'Delivery to solid tumors not validated', riskType: 'efficacy' },
-    'gene-editing': { penalty: 20, reason: 'In vivo tumor editing not feasible', riskType: 'efficacy' }
+    'genetic-medicine': { penalty: 20, reason: 'Delivery to solid tumors very hard', riskType: 'efficacy' },
+    'cell-therapy': { penalty: 15, reason: 'TME is immunosuppressive - less effective than heme', riskType: 'efficacy' }
   },
   // Autoimmune: biologics designed for this
   'Autoimmune': {
     'small-molecule': { penalty: 0, reason: 'JAK inhibitors, oral options' },
     'biologic': { penalty: 0, reason: 'TNF, IL-17, IL-23 - biologics dominate' },
-    'gene-therapy': { penalty: 20, reason: 'Chronic management not curative approach', riskType: 'design' },
-    'cell-therapy': { penalty: 10, reason: 'CAR-T for autoimmune emerging but early', riskType: 'design' },
-    'sirna': { penalty: 15, reason: 'Few validated liver targets for autoimmune', riskType: 'efficacy' },
-    'gene-editing': { penalty: 15, reason: 'Not standard for non-genetic chronic disease', riskType: 'design' }
+    'genetic-medicine': { penalty: 15, reason: 'Few validated genetic targets for autoimmune', riskType: 'efficacy' },
+    'cell-therapy': { penalty: 10, reason: 'CAR-T for autoimmune emerging but early', riskType: 'design' }
   },
   // Cardiovascular: small molecules and siRNA for liver-expressed targets
   'Cardiovascular': {
     'small-molecule': { penalty: 0, reason: 'Statins, ACE inhibitors - proven track record' },
     'biologic': { penalty: 5, reason: 'PCSK9 antibodies work but injectable', riskType: 'design' },
-    'gene-therapy': { penalty: 20, reason: 'Chronic disease, not curative approach', riskType: 'design' },
-    'cell-therapy': { penalty: 30, reason: 'Manufacturing overkill for CV', riskType: 'design' },
-    'sirna': { penalty: 0, reason: 'GalNAc-siRNA for liver CV targets - excellent' },
-    'gene-editing': { penalty: 10, reason: 'Emerging for genetic dyslipidemias', riskType: 'safety' }
+    'genetic-medicine': { penalty: 0, reason: 'GalNAc-siRNA for liver CV targets - excellent' },
+    'cell-therapy': { penalty: 30, reason: 'Manufacturing overkill for CV', riskType: 'design' }
   }
 };
 
@@ -1268,9 +1492,9 @@ const MODALITY_ACCESS_CHALLENGES = {
     question: {
       context: 'Your small molecule is approved, but insurers require patients to fail on 2-3 generic alternatives before covering yours. This "step therapy" delays your drug by 6-12 months per patient.',
       options: [
-        { text: 'Accept step therapy requirements', detail: 'Patients try generics first', marketBonus: 0.5, lesson: 'Step therapy protects payer budgets but delays access to newer, potentially better drugs. Patients who fail generics have already suffered longer.' },
-        { text: 'Prove differentiation with head-to-head data', detail: 'Expensive but removes barriers', cashEffect: -20, marketBonus: 0.85, lesson: 'Head-to-head trials against generics can exempt you from step therapy—but they\'re expensive and risky. If you lose, access gets even harder.' },
-        { text: 'Launch copay program + advocacy', detail: 'Work around the system', cashEffect: -10, marketBonus: 0.7, lesson: 'Copay programs help commercially insured patients, but Medicare and Medicaid patients still face barriers. Advocacy can change policies but takes years.' }
+        { text: 'Accept step therapy requirements', detail: 'Patients try generics first', marketBonus: 0.5, lesson: 'Step therapy protects payer budgets but delays access to newer, potentially better drugs.' },
+        { text: 'Prove differentiation with head-to-head data', detail: 'Expensive but removes barriers', cashEffect: -20, marketBonus: 0.85, lesson: 'Head-to-head trials against generics can exempt you from step therapy, but they are expensive and risky.' },
+        { text: 'Launch copay program + advocacy', detail: 'Work around the system', cashEffect: -10, marketBonus: 0.7, lesson: 'Copay programs help commercially insured patients, but Medicare and Medicaid patients still face barriers.' }
       ]
     }
   },
@@ -1282,27 +1506,27 @@ const MODALITY_ACCESS_CHALLENGES = {
     insuranceReality: 'Biologics require injection (subcutaneous at home) or infusion (IV at a facility). Many plans put biologics on specialty tiers with 20-30% coinsurance instead of flat copays.',
     uniqueIssue: 'Delivery format choice and biosimilar competition',
     question: {
-      context: 'Your biologic is approved. You must decide on delivery format: IV infusion requires healthcare facility visits, while subcutaneous allows home self-injection. Each has trade-offs for patient convenience, adherence, and your commercial model.',
+      context: 'Your biologic is approved. You must decide on delivery format: IV infusion requires healthcare facility visits, while subcutaneous allows home self-injection.',
       options: [
-        { text: 'Partner with infusion center networks', detail: 'Improve site access', cashEffect: -15, marketBonus: 0.8, lesson: 'Site-of-care matters. Home infusion or convenient centers improve adherence, but add complexity and cost to your distribution model.' },
-        { text: 'Develop subcutaneous formulation', detail: 'Enable self-injection at home', cashEffect: -30, timeEffect: 24, marketBonus: 1.2, lesson: 'Subcutaneous formulations let patients self-inject at home, dramatically improving convenience. But reformulation takes years and isn\'t always possible.' },
-        { text: 'Focus on specialty pharmacy partnerships', detail: 'Leverage existing infrastructure', marketBonus: 0.6, revenueEffect: -0.2, lesson: 'Specialty pharmacies handle complex logistics but take a large cut. They\'re often owned by PBMs, creating conflicts of interest.' }
+        { text: 'Partner with infusion center networks', detail: 'Improve site access', cashEffect: -15, marketBonus: 0.8, lesson: 'Site-of-care matters. Home infusion or convenient centers improve adherence.' },
+        { text: 'Develop subcutaneous formulation', detail: 'Enable self-injection at home', cashEffect: -30, timeEffect: 24, marketBonus: 1.2, lesson: 'Subcutaneous formulations let patients self-inject at home, dramatically improving convenience.' },
+        { text: 'Focus on specialty pharmacy partnerships', detail: 'Leverage existing infrastructure', marketBonus: 0.6, revenueEffect: -0.2, lesson: 'Specialty pharmacies handle complex logistics but take a large cut.' }
       ]
     }
   },
-  'gene-therapy': {
-    typicalPrice: '$1-3.5 million one-time',
+  'genetic-medicine': {
+    typicalPrice: '$500K-3M one-time or $20K-40K/year',
     coverageTier: 'No standard tier - individual coverage decisions',
-    patientCopay: 'Often $100,000+ without assistance',
-    accessChallenge: 'Unprecedented pricing, outcomes-based contracts, center capacity',
-    insuranceReality: 'One-time curative therapies at $2M+ break insurance models designed for monthly payments. Payers demand outcomes guarantees and phased payments. Only specialized centers can administer.',
-    uniqueIssue: 'Center of excellence capacity and outcomes contracts',
+    patientCopay: 'Highly variable - often $10,000+ without assistance',
+    accessChallenge: 'Novel pricing models, outcomes contracts, specialized centers',
+    insuranceReality: 'Genetic medicines range from periodic injections (siRNA) to one-time cures (gene therapy). Insurers struggle with pricing for transformative therapies. Specialized administration required.',
+    uniqueIssue: 'Outcomes-based contracts and center capacity',
     question: {
-      context: 'Your gene therapy is priced at $2.1 million for a one-time treatment. Insurers are refusing coverage, demanding proof of long-term durability. Only 15 centers nationwide can administer it. Patients are stuck waiting.',
+      context: 'Your genetic medicine is approved but insurers are uncertain how to price coverage. They want proof of long-term durability. Only specialized centers can administer it safely.',
       options: [
-        { text: 'Offer outcomes-based annuity payments', detail: 'Pay over 5 years, refund if it fails', cashEffect: -5, marketBonus: 0.75, revenueEffect: -0.15, lesson: 'Outcomes-based contracts align incentives: if the therapy works, everyone benefits. But they require years of follow-up data and complex contracts.' },
-        { text: 'Expand center of excellence network', detail: 'Train more sites to administer', cashEffect: -25, marketBonus: 0.9, lesson: 'Gene therapies require specialized centers for safe administration. Expanding access means training sites and ensuring quality—not just shipping drug.' },
-        { text: 'Work with state Medicaid on coverage', detail: 'Public payers often cover rare disease', cashEffect: -10, marketBonus: 0.6, lesson: 'Medicaid and state programs sometimes cover rare disease therapies when commercial insurers won\'t. But reimbursement rates are lower and approval is slow.' }
+        { text: 'Offer outcomes-based payment structure', detail: 'Pay over time, refund if it fails', cashEffect: -5, marketBonus: 0.75, revenueEffect: -0.15, lesson: 'Outcomes-based contracts align incentives. If the therapy works, everyone benefits.' },
+        { text: 'Expand center of excellence network', detail: 'Train more sites to administer', cashEffect: -25, marketBonus: 0.9, lesson: 'Genetic medicines require specialized centers. Expanding access means training sites and ensuring quality.' },
+        { text: 'Work with public payers on coverage', detail: 'Medicaid and state programs', cashEffect: -10, marketBonus: 0.6, lesson: 'Public payers sometimes cover breakthrough therapies when commercial insurers hesitate.' }
       ]
     }
   },
@@ -1311,50 +1535,19 @@ const MODALITY_ACCESS_CHALLENGES = {
     coverageTier: 'Hospital outpatient/inpatient, not pharmacy',
     patientCopay: '$50,000-100,000 potential hospital coinsurance',
     accessChallenge: 'Manufacturing slot availability, site-of-care complexity',
-    insuranceReality: 'Cell therapies are administered in hospitals, not pharmacies—different coverage rules apply. Manufacturing takes 3-4 weeks; patients may progress while waiting. Only certified transplant centers can treat.',
+    insuranceReality: 'Cell therapies are administered in hospitals, not pharmacies. Manufacturing takes 3-4 weeks; patients may progress while waiting. Only certified transplant centers can treat.',
     uniqueIssue: 'Manufacturing delays and hospital reimbursement',
     question: {
-      context: 'Your CAR-T therapy requires 3-week manufacturing per patient. 20% of patients progress while waiting and become ineligible. Hospitals lose money on each treatment due to ICU stays for CRS management not covered by the drug price.',
+      context: 'Your CAR-T therapy requires 3-week manufacturing per patient. 20% of patients progress while waiting. Hospitals lose money on each treatment due to ICU stays for CRS management.',
       options: [
-        { text: 'Invest in manufacturing speed', detail: 'Reduce vein-to-vein time', cashEffect: -40, marketBonus: 0.9, lesson: 'Faster manufacturing saves lives—patients with aggressive cancer can\'t wait a month. But speed requires massive investment in specialized facilities.' },
-        { text: 'Partner with hospitals on CRS management costs', detail: 'Cover ICU and supportive care', cashEffect: -20, revenueEffect: -0.1, marketBonus: 0.8, lesson: 'Hospitals often lose money on cell therapy patients due to ICU stays. Covering these costs improves hospital willingness to treat, expanding access.' },
-        { text: 'Focus on academic medical centers only', detail: 'Limited sites but experienced', marketBonus: 0.5, lesson: 'Academic centers have transplant expertise but limited capacity. Restricting to these sites ensures safety but limits access for patients far from major cities.' }
-      ]
-    }
-  },
-  'sirna': {
-    typicalPrice: '$10,000-30,000/year (quarterly dosing)',
-    coverageTier: 'Specialty Tier',
-    patientCopay: '$500-1,500/quarter',
-    accessChallenge: 'Specialty pharmacy and quarterly injection compliance',
-    insuranceReality: 'siRNA therapies typically require quarterly subcutaneous injections. Better than biologics for compliance, but still specialty tier with high cost-sharing. Liver-targeted design limits indications.',
-    uniqueIssue: 'Quarterly dosing adherence and specialty tier placement',
-    question: {
-      context: 'Your siRNA requires quarterly injections for a chronic condition. Patients must remember to schedule and attend appointments every 3 months. 30% of patients miss at least one dose per year, reducing efficacy.',
-      options: [
-        { text: 'Launch adherence support program', detail: 'Reminder calls, nurse support', cashEffect: -8, marketBonus: 0.85, lesson: 'Adherence programs improve outcomes by helping patients stay on therapy. The investment pays off through better real-world evidence and outcomes-based contracts.' },
-        { text: 'Pursue annual dosing formulation', detail: 'Reduce injection frequency', cashEffect: -35, timeEffect: 36, marketBonus: 1.3, lesson: 'Less frequent dosing dramatically improves adherence. Annual injections would be transformative—but extending siRNA durability is scientifically challenging.' },
-        { text: 'Partner with specialty pharmacy on patient services', detail: 'Leverage their patient programs', marketBonus: 0.7, revenueEffect: -0.15, lesson: 'Specialty pharmacies offer patient support services but take a cut of revenue. Their interests may not always align with optimal patient care.' }
-      ]
-    }
-  },
-  'gene-editing': {
-    typicalPrice: '$2-3 million one-time (no precedent yet)',
-    coverageTier: 'Undefined - first-in-class coverage battles',
-    patientCopay: 'TBD - likely outcomes-based',
-    accessChallenge: 'First-in-class coverage with no precedent, permanent change concerns',
-    insuranceReality: 'Gene editing for disease is unprecedented. Insurers have no framework. Concerns about long-term safety of permanent genomic changes create coverage hesitation. Only a few specialized centers can perform.',
-    uniqueIssue: 'Novel therapy with no insurance precedent',
-    question: {
-      context: 'Your gene editing therapy is the first of its kind approved. Insurers don\'t know how to categorize or price coverage. Some are waiting to see long-term safety data before covering. Patients are caught in limbo.',
-      options: [
-        { text: 'Negotiate individual coverage decisions with major payers', detail: 'One-by-one contract negotiations', cashEffect: -15, marketBonus: 0.6, lesson: 'First-in-class therapies require payer-by-payer negotiations. Each contract is unique, requiring significant market access resources.' },
-        { text: 'Offer long-term outcomes guarantee', detail: '10-year durability commitment', cashEffect: 0, revenueEffect: -0.2, marketBonus: 0.8, lesson: 'Guaranteeing long-term outcomes shifts risk from payers to you. If editing reverses or safety issues emerge, you bear the cost—but it unlocks coverage.' },
-        { text: 'Work with patient advocacy to pressure coverage', detail: 'Grassroots coverage campaign', cashEffect: -10, marketBonus: 0.7, lesson: 'Patient advocacy can pressure insurers to cover breakthrough therapies. Stories of patients denied access create public and political pressure for coverage.' }
+        { text: 'Invest in manufacturing speed', detail: 'Reduce vein-to-vein time', cashEffect: -40, marketBonus: 0.9, lesson: 'Faster manufacturing saves lives. But speed requires massive investment in specialized facilities.' },
+        { text: 'Partner with hospitals on CRS costs', detail: 'Cover ICU and supportive care', cashEffect: -20, revenueEffect: -0.1, marketBonus: 0.8, lesson: 'Hospitals often lose money on cell therapy patients. Covering these costs improves willingness to treat.' },
+        { text: 'Focus on academic medical centers only', detail: 'Limited sites but experienced', marketBonus: 0.5, lesson: 'Academic centers have transplant expertise but limited capacity.' }
       ]
     }
   }
 };
+
 
 // Drug name generator - modality aware
 const generateDrugName = () => {
@@ -1600,7 +1793,7 @@ export default function TheLongGame() {
 
   // Program configuration
   const [programType, setProgramType] = useState(null); // 'first-in-class', 'orphan', 'blockbuster'
-  const [modality, setModality] = useState(null); // 'small-molecule', 'biologic', 'gene-therapy', 'cell-therapy'
+  const [modality, setModality] = useState(null); // 'small-molecule', 'biologic', 'genetic-medicine', 'cell-therapy'
 
   const [currentQuestion, setCurrentQuestion] = useState(null);
   const [currentEvent, setCurrentEvent] = useState(null);
@@ -1899,7 +2092,17 @@ export default function TheLongGame() {
 
     if (phaseStep === 0) {
       // Phase intro -> Question (if available) or Event
-      let phaseQuestions = QUESTIONS[phase.id] || [];
+      let phaseQuestions = [];
+
+      // Handle modality-specific question pools for early phases
+      const questionsData = QUESTIONS[phase.id];
+      if (questionsData && typeof questionsData === 'object' && !Array.isArray(questionsData)) {
+        // It's a modality-specific object, get questions for current modality
+        phaseQuestions = questionsData[modality] || [];
+      } else if (Array.isArray(questionsData)) {
+        // It's a regular array of questions
+        phaseQuestions = questionsData;
+      }
 
       // For post_market phase, inject modality-specific access question first
       if (phase.id === 'post_market' && MODALITY_ACCESS_CHALLENGES[modality]) {
@@ -2442,25 +2645,25 @@ export default function TheLongGame() {
               </button>
 
               <button
-                onClick={() => selectModality('gene-therapy')}
+                onClick={() => selectModality('genetic-medicine')}
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-cyan-400">Gene Therapy</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400">8-14 YRS • $400M-$1.5B+</span>
+                  <h3 className="text-xl font-semibold text-cyan-400">Genetic Medicine</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400">6-14 YRS • $300M-$1.5B+</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  <span className="text-slate-400">Covers:</span> AAV vectors, lentivirus. One-time curative potential for monogenic diseases.
+                  <span className="text-slate-400">Covers:</span> Gene therapy (AAV), siRNA/RNAi, CRISPR gene editing. Sequence-based therapeutics with curative potential.
                 </p>
                 <div className="bg-slate-800/50 rounded p-3 mb-3">
                   <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
-                  <div className="text-cyan-400 text-sm font-medium">Immunity & durability</div>
-                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: Durable transgene expression</div>
+                  <div className="text-cyan-400 text-sm font-medium">Delivery & durability</div>
+                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: Sustained payload expression/knockdown in target tissue</div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ One-time dosing</span>
-                  <span className="text-amber-400">⚠ Pre-existing immunity</span>
-                  <span className="text-red-400">⚠ Expression that wanes clinically</span>
+                  <span className="text-emerald-400">✓ Platform technology</span>
+                  <span className="text-amber-400">⚠ Tissue delivery limits</span>
+                  <span className="text-red-400">⚠ Immunogenicity & durability</span>
                 </div>
               </button>
 
@@ -2484,52 +2687,6 @@ export default function TheLongGame() {
                   <span className="text-emerald-400">✓ Deep responses</span>
                   <span className="text-amber-400">⚠ CRS/ICANS toxicity</span>
                   <span className="text-red-400">⚠ Expansion without durability</span>
-                </div>
-              </button>
-
-              <button
-                onClick={() => selectModality('sirna')}
-                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-teal-500/50 rounded-lg p-6 transition-colors"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-teal-400">siRNA / RNAi</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-teal-500/20 text-teal-400">6-10 YRS • $150M-$600M</span>
-                </div>
-                <p className="text-slate-300 mb-3">
-                  <span className="text-slate-400">Covers:</span> siRNA, ASOs, RNAi. GalNAc or LNP delivery. Strong platform effect for liver targets.
-                </p>
-                <div className="bg-slate-800/50 rounded p-3 mb-3">
-                  <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
-                  <div className="text-teal-400 text-sm font-medium">Delivery to target tissue</div>
-                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: Target mRNA knockdown in tissue of interest</div>
-                </div>
-                <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ Platform chemistry</span>
-                  <span className="text-amber-400">⚠ Non-liver targets difficult</span>
-                  <span className="text-red-400">⚠ Durability mismatch with disease</span>
-                </div>
-              </button>
-
-              <button
-                onClick={() => selectModality('gene-editing')}
-                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-rose-500/50 rounded-lg p-6 transition-colors"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-rose-400">Gene Editing (CRISPR)</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-rose-500/20 text-rose-400">8-14+ YRS • $500M-$2B+</span>
-                </div>
-                <p className="text-slate-300 mb-3">
-                  <span className="text-slate-400">Covers:</span> CRISPR-Cas9, base editing, prime editing. Permanent genomic changes. Curative potential.
-                </p>
-                <div className="bg-slate-800/50 rounded p-3 mb-3">
-                  <div className="text-xs text-slate-500 mb-1">DOMINANT FAILURE MODE</div>
-                  <div className="text-rose-400 text-sm font-medium">Off-target edits & regulatory uncertainty</div>
-                  <div className="text-slate-500 text-xs mt-1">Go/No-Go: On-target editing with acceptable off-target profile</div>
-                </div>
-                <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ Curative potential</span>
-                  <span className="text-amber-400">⚠ Off-target edits</span>
-                  <span className="text-red-400">⚠ Permanent change requires long-term monitoring</span>
                 </div>
               </button>
             </div>
