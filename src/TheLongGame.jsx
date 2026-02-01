@@ -1672,7 +1672,7 @@ const POLICY_EVENTS = [
   {
     id: 'social_contract',
     title: 'The Biotech Social Contract',
-    description: 'A congressional hearing examines drug pricing. The biotech social contract: companies develop new medicines that will go generic without undue delay, while society provides insurance with low out-of-pocket costs so patients can afford what their doctors prescribe. But some argue the contract is being violated—from both sides. You are asked to testify.',
+    description: 'A congressional hearing examines drug pricing. The biotech social contract: companies develop new medicines that will go generic without undue delay, while society provides insurance with low out-of-pocket costs so patients can afford what their doctors prescribe. But some argue the contract is being violated, from both sides. You are asked to testify.',
     options: [
       { text: 'Call for price controls on all branded medicines', value: 'price_controls' },
       { text: 'Defend the status quo without acknowledging problems', value: 'defend' },
@@ -1683,12 +1683,12 @@ const POLICY_EVENTS = [
         title: 'Five Years Later',
         effects: [
           'Price controls reduced expected returns on the small fraction of drugs that succeed',
-          'Because ~93% of drugs fail, investors needed successful drugs to compensate for failures—but the upside was capped',
+          'Because ~93% of drugs fail, investors needed successful drugs to compensate for failures, but the upside was capped',
           'Venture capital investment in early-stage biotechnology declined 40%',
           'Your Series B financing failed as investors reallocated to sectors where risk-adjusted returns were achievable',
           'Drug prices fell 25%, but the pipeline of innovative therapies contracted significantly'
         ],
-        lesson: 'The result of capping the upside is not lower-priced innovation—it is less innovation. Capital is mobile. When returns become inadequate for the risks involved, investment doesn\'t persist heroically—it flows to sectors where risk-adjusted returns are achievable. The diseases that most need new treatments are often the hardest to develop for.',
+        lesson: 'The result of capping the upside is not lower-priced innovation, it is less innovation. Capital is mobile. When returns become inadequate for the risks involved, investment doesn\'t persist heroically, it flows to sectors where risk-adjusted returns are achievable. The diseases that most need new treatments are often the hardest to develop for.',
         marketEffect: -0.4
       },
       defend: {
@@ -1699,18 +1699,18 @@ const POLICY_EVENTS = [
           'The industry lost the political capital needed to preserve innovation incentives',
           'Your company faced reputational damage despite being a genuine innovator'
         ],
-        lesson: 'When some companies raise prices on old drugs or extend exclusivity through patent thickets rather than genuine innovation, they break the biotech social contract. Defending bad actors—the Landlords who seek rents rather than building new medicines—erodes the political capital that Builders need to maintain innovation incentives for everyone.',
+        lesson: 'When some companies raise prices on old drugs or extend exclusivity through patent thickets rather than genuine innovation, they break the biotech social contract. Defending bad actors, the Landlords who seek rents rather than building new medicines, erodes the political capital that Builders need to maintain innovation incentives for everyone.',
         marketEffect: -0.3
       },
       reform: {
         title: 'Three Years Later',
         effects: [
-          'Insurance reforms capped out-of-pocket costs—patients could afford prescribed medicines without paying twice',
+          'Insurance reforms capped out-of-pocket costs, patients could afford prescribed medicines without paying twice',
           'Price controls were applied only to old drugs that failed to go generic on schedule, ending rent-seeking',
           'Novel medicines retained market-based pricing during their exclusivity period, preserving R&D incentives',
           'Investment in innovation remained strong as the rules became clearer and fairer'
         ],
-        lesson: 'We don\'t have to choose between affordability and innovation. The biotech social contract works when both sides keep their end of the deal: (1) cap out-of-pocket costs—we already paid through premiums, no one should pay twice, (2) ensure drugs go generic on schedule—we should celebrate generics, they become part of our armory at affordable prices, (3) preserve market incentives for novel drugs during exclusivity—that\'s what funds the 93% that fail. Drugs go generic; hospitals don\'t. That\'s why inventing medicines is so valuable.',
+        lesson: 'We don\'t have to choose between affordability and innovation. The biotech social contract works when both sides keep their end of the deal: (1) cap out-of-pocket costs, we already paid through premiums, no one should pay twice, (2) ensure drugs go generic on schedule, we should celebrate generics, they become part of our armory at affordable prices, (3) preserve market incentives for novel drugs during exclusivity, that\'s what funds the 93% that fail. Drugs go generic; hospitals don\'t. That\'s why inventing medicines is so valuable.',
         marketEffect: 0.1
       }
     }
@@ -3025,7 +3025,7 @@ export default function TheLongGame() {
                 Your pitch was successful. A leading biotech seed fund has committed <span className="text-emerald-400 font-semibold">$5M</span> to validate your target. You'll need to raise additional rounds (Series A, B, C) as you hit milestones.
               </p>
               <p className="text-slate-500 text-sm">
-                "We're investing early because we believe in your science. ~93% of programs fail, so successful drugs must be priced to compensate for all the failures. Capital is mobile—we're betting your science is sound."
+                "We're investing early because we believe in your science. ~93% of programs fail, so successful drugs must be priced to compensate for all the failures. Capital is mobile, we're betting your science is sound."
               </p>
             </div>
 
@@ -4562,7 +4562,7 @@ export default function TheLongGame() {
                   <div className="text-3xl font-bold" style={{ color: failedPhase?.color }}>{phaseFailure.successRate}</div>
                   <div className="text-slate-400 text-sm">
                     of programs successfully complete {failedPhase?.name}.<br />
-                    <span className="text-red-400 font-medium">{100 - parseInt(phaseFailure.successRate)}%</span> fail at this stage—you are not alone.
+                    <span className="text-red-400 font-medium">{100 - parseInt(phaseFailure.successRate)}%</span> fail at this stage, you are not alone.
                   </div>
                 </div>
               )}
