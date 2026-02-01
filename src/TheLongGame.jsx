@@ -456,46 +456,168 @@ const PHASES = [
 
 // Strategic decisions by phase
 const QUESTIONS = {
-  basic_research: [
-    {
-      id: 'target_selection',
-      title: 'Target Selection Strategy',
-      scenario: 'Your research team has identified two potential drug targets. Target A is a well-characterized kinase with published genetic validation but active competitors. Target B is a novel protein with strong GWAS association data but limited understanding of its biology.',
-      options: [
-        {
-          text: 'Pursue the validated kinase (Target A)',
-          detail: 'Known biology, competitive landscape',
-          cashEffect: -1,
-          timeEffect: 0,
-          riskBonus: 0.05,
-          efficacyEffect: -15, // Validated target = lower efficacy risk
-          result: 'The established biology accelerates your program. However, you learn that three other companies are pursuing the same target.',
-          lesson: 'Validated targets reduce biological risk - you know the target is relevant to disease. But validation attracts competition, requiring differentiation on efficacy, safety, or convenience.'
-        },
-        {
-          text: 'Pursue the novel protein (Target B)',
-          detail: 'First-mover potential, biological uncertainty',
-          cashEffect: -2,
-          timeEffect: 6,
-          riskBonus: -0.08,
-          marketBonus: 1.5,
-          efficacyEffect: 20, // Novel target = higher efficacy risk (biology may be wrong)
-          result: 'You must build understanding of the target from scratch. Initial validation takes longer than expected, but you establish a proprietary position.',
-          lesson: 'Novel targets offer breakthrough potential but carry substantial risk that the underlying biology is wrong - the most common cause of drug failure.'
-        },
-        {
-          text: 'Validate both targets in parallel',
-          detail: 'Diversified risk, divided resources',
-          cashEffect: -3,
-          timeEffect: 3,
-          riskBonus: 0,
-          efficacyEffect: 5, // Divided focus = slightly higher risk
-          result: 'Neither program receives optimal focus. You generate data on both targets but lack the resources to deeply validate either.',
-          lesson: 'Early diversification sounds prudent but often leads to underfunding critical experiments. Focus typically outperforms hedging in resource-constrained discovery.'
-        }
-      ]
-    }
-  ],
+  // MODALITY-SPECIFIC BASIC RESEARCH QUESTIONS
+  basic_research: {
+    'small-molecule': [
+      {
+        id: 'target_selection_sm',
+        title: 'Target Selection Strategy',
+        scenario: 'Your research team has identified two potential drug targets. Target A is a well-characterized kinase with published genetic validation but active competitors. Target B is a novel protein with strong genome-wide association study data but limited understanding of its biology.',
+        options: [
+          {
+            text: 'Pursue the validated kinase (Target A)',
+            detail: 'Known biology, competitive landscape',
+            cashEffect: -1,
+            timeEffect: 0,
+            riskBonus: 0.05,
+            efficacyEffect: -15,
+            result: 'The established biology accelerates your program. However, you learn that three other companies are pursuing the same target.',
+            lesson: 'Validated targets reduce biological risk - you know the target is relevant to disease. But validation attracts competition, requiring differentiation on efficacy, safety, or convenience.'
+          },
+          {
+            text: 'Pursue the novel protein (Target B)',
+            detail: 'First-mover potential, biological uncertainty',
+            cashEffect: -2,
+            timeEffect: 6,
+            riskBonus: -0.08,
+            marketBonus: 1.5,
+            efficacyEffect: 20,
+            result: 'You must build understanding of the target from scratch. Initial validation takes longer than expected, but you establish a proprietary position.',
+            lesson: 'Novel targets offer breakthrough potential but carry substantial risk that the underlying biology is wrong - the most common cause of drug failure.'
+          },
+          {
+            text: 'Validate both targets in parallel',
+            detail: 'Diversified risk, divided resources',
+            cashEffect: -3,
+            timeEffect: 3,
+            riskBonus: 0,
+            efficacyEffect: 5,
+            result: 'Neither program receives optimal focus. You generate data on both targets but lack the resources to deeply validate either.',
+            lesson: 'Early diversification sounds prudent but often leads to underfunding critical experiments. Focus typically outperforms hedging in resource-constrained discovery.'
+          }
+        ]
+      }
+    ],
+    'biologic': [
+      {
+        id: 'target_selection_bio',
+        title: 'Antigen and Target Biology Strategy',
+        scenario: 'Your team is developing a therapeutic antibody. Target A is a validated cell-surface receptor with known biology but concerns about pathway redundancy. Target B is a secreted cytokine with clear disease association but potential for immunogenicity due to partial homology with endogenous proteins.',
+        options: [
+          {
+            text: 'Target the cell-surface receptor (Target A)',
+            detail: 'Accessible target, redundancy concerns',
+            cashEffect: -2,
+            timeEffect: 0,
+            riskBonus: 0.04,
+            efficacyEffect: -10,
+            result: 'Your antibody shows excellent binding affinity and target engagement. However, preclinical models suggest compensatory pathway activation may limit clinical efficacy.',
+            lesson: 'Biologics targeting cell-surface receptors have excellent drug properties but may face pathway redundancy. Biology can route around a blocked pathway, limiting clinical benefit despite perfect target engagement.'
+          },
+          {
+            text: 'Target the secreted cytokine (Target B)',
+            detail: 'Clear biology, immunogenicity risk',
+            cashEffect: -3,
+            timeEffect: 3,
+            riskBonus: -0.05,
+            efficacyEffect: 15,
+            result: 'Your anti-cytokine antibody shows strong preclinical efficacy. However, humanization proves challenging due to sequence constraints needed to avoid anti-drug antibody responses.',
+            lesson: 'Neutralizing secreted targets can have dramatic effects but immunogenicity risk increases when target sequences resemble self-proteins. Anti-drug antibodies remain a key clinical risk for biologics.'
+          },
+          {
+            text: 'Develop bispecific targeting both pathways',
+            detail: 'Innovation potential, manufacturing complexity',
+            cashEffect: -5,
+            timeEffect: 9,
+            riskBonus: -0.03,
+            marketBonus: 1.4,
+            result: 'Your bispecific approach addresses redundancy but introduces significant manufacturing complexity. Protein folding and stability require extensive optimization.',
+            lesson: 'Bispecific antibodies can address single-target limitations but add layers of development risk. Manufacturing complexity often exceeds expectations for multispecific formats.'
+          }
+        ]
+      }
+    ],
+    'genetic-medicine': [
+      {
+        id: 'target_selection_gene',
+        title: 'Genetic Target and Indication Selection',
+        scenario: 'Your genetic medicine platform can target different genes. Option A: a well-validated monogenic disease with clear loss-of-function genetics and small patient population (5,000 patients). Option B: a polygenic disease with larger population (500,000 patients) but uncertain genetic architecture.',
+        options: [
+          {
+            text: 'Pursue the monogenic rare disease (Option A)',
+            detail: 'Clear genetics, orphan designation potential',
+            cashEffect: -3,
+            timeEffect: 0,
+            riskBonus: 0.08,
+            efficacyEffect: -20,
+            result: 'The genetic validation is compelling - patients with this mutation uniformly develop disease. Regulatory pathway is clear with Orphan Drug Designation.',
+            lesson: 'Genetic medicines have highest success rates in monogenic diseases where restoring or silencing a single gene addresses root cause. Orphan indications provide accelerated pathways and market exclusivity despite smaller populations.'
+          },
+          {
+            text: 'Pursue the larger polygenic indication (Option B)',
+            detail: 'Larger market, less clear biology',
+            cashEffect: -4,
+            timeEffect: 6,
+            riskBonus: -0.1,
+            marketBonus: 2.0,
+            efficacyEffect: 25,
+            result: 'Your target gene shows association with disease risk, but effect sizes are modest. Predicting responders proves difficult without clear genetic stratification.',
+            lesson: 'Genetic medicines in polygenic diseases face the challenge that modifying one gene may not substantially change disease course. The genetic architecture that makes patient identification easier for genetic therapies is missing in common diseases.'
+          },
+          {
+            text: 'Use rare disease to validate, plan expansion',
+            detail: 'Sequential strategy, proves mechanism first',
+            cashEffect: -5,
+            timeEffect: 3,
+            riskBonus: 0.02,
+            efficacyEffect: 0,
+            result: 'You prioritize the rare disease for initial proof-of-concept while designing studies to understand the larger indication. This de-risks biology before major investment.',
+            lesson: 'Starting in rare monogenic diseases provides genetic proof-of-concept that can inform expansion. Many successful genetic medicine programs use this staged approach to validate mechanism before pursuing larger populations.'
+          }
+        ]
+      }
+    ],
+    'cell-therapy': [
+      {
+        id: 'target_selection_cell',
+        title: 'Cell Therapy Indication and Biology Strategy',
+        scenario: 'Your engineered cell platform can address different indications. Option A: hematologic malignancy with validated target antigen (Cluster of Differentiation 19) and established Chimeric Antigen Receptor T-cell precedent. Option B: solid tumor with tumor-associated antigen that lacks clean tumor-only expression.',
+        options: [
+          {
+            text: 'Pursue the hematologic malignancy (Option A)',
+            detail: 'Validated target, competitive but de-risked',
+            cashEffect: -5,
+            timeEffect: 0,
+            riskBonus: 0.06,
+            efficacyEffect: -15,
+            result: 'The biology is well-established and regulatory pathway is clear. However, multiple approved Chimeric Antigen Receptor T-cell products already address this indication, requiring differentiation.',
+            lesson: 'Hematologic malignancies validated Chimeric Antigen Receptor T-cell therapy but are now crowded markets. Clean target antigens like Cluster of Differentiation 19 enabled proof-of-concept. Differentiation now requires improved safety, persistence, or manufacturing.'
+          },
+          {
+            text: 'Pursue the solid tumor indication (Option B)',
+            detail: 'Unmet need, therapeutic window concerns',
+            cashEffect: -8,
+            timeEffect: 9,
+            riskBonus: -0.1,
+            marketBonus: 1.8,
+            efficacyEffect: 30,
+            result: 'Your target is expressed on tumor cells but also at lower levels on normal tissue. Balancing efficacy against on-target, off-tumor toxicity proves challenging.',
+            lesson: 'Solid tumors represent the frontier of cell therapy but lack ideal target antigens. Normal tissue expression creates therapeutic window concerns. Tumor microenvironment suppression and trafficking challenges add complexity beyond antigen selection.'
+          },
+          {
+            text: 'Develop armored cells with conditional activation',
+            detail: 'Safety switch, engineering complexity',
+            cashEffect: -10,
+            timeEffect: 12,
+            riskBonus: -0.02,
+            marketBonus: 1.3,
+            result: 'Your engineered safety features allow targeting less-specific antigens. Development takes longer but creates a platform applicable to multiple solid tumor indications.',
+            lesson: 'Next-generation cell therapies incorporate safety switches, logic gates, and conditional activation to expand target options. This engineering complexity extends development timelines but may be essential for solid tumor success.'
+          }
+        ]
+      }
+    ]
+  },
   // MODALITY-SPECIFIC DISCOVERY QUESTIONS
   drug_discovery: {
     'small-molecule': [
