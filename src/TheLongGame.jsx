@@ -2186,20 +2186,11 @@ export default function TheLongGame() {
     const selectedExit = EXIT_STRATEGIES[Math.floor(Math.random() * EXIT_STRATEGIES.length)];
     setExitStrategy(selectedExit);
 
-    // Now go to indication selection
-    setScreen('setup_indication');
-  };
-
-  // Step 2: Select indication (based on modality compatibility)
-  const selectIndication = (indicationObj) => {
-    setIndicationData(indicationObj);
-    setIndication(indicationObj.name);
-
     // Now go to program type selection
     setScreen('setup_type');
   };
 
-  // Step 3: Select program type (after modality and indication are chosen)
+  // Step 2: Select program type (after modality is chosen)
   const selectProgramType = (type) => {
     setProgramType(type);
 
@@ -2222,8 +2213,17 @@ export default function TheLongGame() {
       setVcInvestment(120); // $120M Series A - large trials needed
     }
 
+    // Now go to indication selection
+    setScreen('setup_indication');
+  };
+
+  // Step 3: Select indication (after modality and program type are chosen)
+  const selectIndication = (indicationObj) => {
+    setIndicationData(indicationObj);
+    setIndication(indicationObj.name);
+
     // Initialize game state
-    initializeGame(type, modality, indicationData);
+    initializeGame(programType, modality, indicationObj);
   };
 
   // Initialize game after both modality and program type are selected
@@ -2882,36 +2882,30 @@ export default function TheLongGame() {
     );
   }
 
-  // Program Type Selection
+  // Program Type Selection (Step 2)
   if (screen === 'setup_type') {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 3 OF 3</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 3</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Program Type</h1>
-              <p className="text-slate-400">This decision shapes your entire development strategy</p>
+              <p className="text-slate-400">This decision shapes which diseases you can target</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
-              <div className="flex justify-between items-start">
-                <div>
-                  <div className="text-slate-500 text-xs mb-1">MODALITY</div>
-                  <div className="font-semibold" style={{
-                    color: modality === 'small-molecule' ? '#fbbf24' :
-                      modality === 'biologic' ? '#34d399' :
-                        modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
-                  }}>
-                    {MODALITY_DATA[modality]?.displayName || modality}
-                  </div>
-                </div>
-                <div className="text-right">
-                  <div className="text-slate-500 text-xs mb-1">INDICATION</div>
-                  <div className="font-semibold text-emerald-400">{indication}</div>
-                  <div className="text-slate-600 text-xs">{indicationData?.area}</div>
-                </div>
+              <div className="text-slate-500 text-xs mb-1">MODALITY SELECTED</div>
+              <div className="font-semibold" style={{
+                color: modality === 'small-molecule' ? '#fbbf24' :
+                  modality === 'biologic' ? '#34d399' :
+                    modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+              }}>
+                {MODALITY_DATA[modality]?.displayName || modality}
               </div>
+              <p className="text-slate-500 text-xs mt-1">
+                {MODALITY_DATA[modality]?.description || 'Drug modality platform'}
+              </p>
             </div>
 
             <div className="space-y-4">
@@ -2974,7 +2968,7 @@ export default function TheLongGame() {
     );
   }
 
-  // Indication Selection (Step 2)
+  // Indication Selection (Step 3)
   if (screen === 'setup_indication') {
     // Get compatibility info for current modality
     const getIndicationFit = (area) => {
@@ -2987,29 +2981,44 @@ export default function TheLongGame() {
       return { fit: 'poor', ...modalityCompat };
     };
 
+    // Filter indications by program type
+    const filteredIndications = INDICATIONS_BY_TYPE[programType] || INDICATIONS;
+
+    // Get program type display name
+    const programTypeDisplay = programType === 'first-in-class' ? 'First-in-Class' :
+      programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster';
+
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-3xl w-full">
             <div className="text-center mb-6">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 3</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 3 OF 3</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Indication</h1>
               <p className="text-slate-400">Select the disease area your platform will target</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
-              <div className="text-slate-500 text-xs mb-1">MODALITY SELECTED</div>
-              <div className="font-semibold" style={{
-                color: modality === 'small-molecule' ? '#fbbf24' :
-                  modality === 'biologic' ? '#34d399' :
-                    modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
-              }}>
-                {MODALITY_DATA[modality]?.displayName || modality}
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="text-slate-500 text-xs mb-1">MODALITY</div>
+                  <div className="font-semibold" style={{
+                    color: modality === 'small-molecule' ? '#fbbf24' :
+                      modality === 'biologic' ? '#34d399' :
+                        modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+                  }}>
+                    {MODALITY_DATA[modality]?.displayName || modality}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-slate-500 text-xs mb-1">PROGRAM TYPE</div>
+                  <div className="font-semibold text-emerald-400">{programTypeDisplay}</div>
+                </div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 gap-3 max-h-[60vh] overflow-y-auto pr-2">
-              {INDICATIONS.map((ind, idx) => {
+              {filteredIndications.map((ind, idx) => {
                 const fit = getIndicationFit(ind.area);
                 const fitColor = fit.fit === 'good' ? 'emerald' : fit.fit === 'poor' ? 'amber' : 'slate';
                 const borderHover = fit.fit === 'good' ? 'hover:border-emerald-500/50' :
