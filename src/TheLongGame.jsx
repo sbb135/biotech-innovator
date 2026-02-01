@@ -4354,7 +4354,7 @@ export default function TheLongGame() {
               <h1 className="text-4xl font-bold mb-2">{drugName}</h1>
               <p className="text-slate-400 text-lg">indicated for the treatment of {indication}</p>
               <p className="text-slate-500 text-sm mt-2">
-                {programType === 'first-in-class' ? 'First-in-Class' : programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster'} • {modality === 'biologic' ? 'Biologic' : 'Small Molecule'}
+                {MARKET_SIZE_DATA[marketSize]?.displayName || (programType === 'orphan' ? 'Orphan Drug' : programType === 'first-in-class' ? 'First-in-Class' : 'Blockbuster')} • {INNOVATION_DATA[innovation]?.displayName || 'Novel Approach'} • {MODALITY_DATA[modality]?.displayName || 'Small Molecule'}
               </p>
             </div>
 
@@ -4422,6 +4422,41 @@ export default function TheLongGame() {
                 <p className="text-purple-300 text-sm mt-2">
                   Your program succeeded despite this biological constraint, demonstrating that careful development can overcome delivery challenges.
                 </p>
+              </div>
+            )}
+
+            {/* Your Strategic Decisions */}
+            {decisionsLog.length > 0 && (
+              <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
+                <h3 className="text-lg font-semibold text-cyan-400 mb-4">Your Strategic Decisions</h3>
+                <p className="text-slate-400 text-sm mb-4">
+                  Key choices that shaped your program's trajectory:
+                </p>
+                <div className="space-y-3">
+                  {decisionsLog.slice(0, 6).map((decision, idx) => (
+                    <div key={idx} className="bg-slate-800/50 p-3 rounded-lg border border-slate-700">
+                      <div className="flex items-start gap-3">
+                        <div className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${decision.impact === 'positive' || decision.impact === 'safe' ? 'bg-emerald-400' :
+                          decision.impact === 'negative' || decision.impact === 'risky' ? 'bg-amber-400' :
+                            'bg-slate-400'
+                          }`}></div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-slate-500 text-xs">{decision.phase}</span>
+                            <span className="text-slate-600 text-xs">•</span>
+                            <span className="text-slate-400 text-xs truncate">{decision.question}</span>
+                          </div>
+                          <p className="text-slate-200 text-sm font-medium">{decision.decision}</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                {decisionsLog.length > 6 && (
+                  <p className="text-slate-500 text-xs mt-3 text-center">
+                    + {decisionsLog.length - 6} more strategic decisions
+                  </p>
+                )}
               </div>
             )}
 
