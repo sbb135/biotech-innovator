@@ -2186,19 +2186,22 @@ export default function TheLongGame() {
     const selectedExit = EXIT_STRATEGIES[Math.floor(Math.random() * EXIT_STRATEGIES.length)];
     setExitStrategy(selectedExit);
 
+    // Now go to indication selection
+    setScreen('setup_indication');
+  };
+
+  // Step 2: Select indication (based on modality compatibility)
+  const selectIndication = (indicationObj) => {
+    setIndicationData(indicationObj);
+    setIndication(indicationObj.name);
+
     // Now go to program type selection
     setScreen('setup_type');
   };
 
-  // Step 2: Select program type (after modality is chosen)
+  // Step 3: Select program type (after modality and indication are chosen)
   const selectProgramType = (type) => {
     setProgramType(type);
-
-    // Select indication from the appropriate pool based on program type
-    const indicationPool = INDICATIONS_BY_TYPE[type] || INDICATIONS_BY_TYPE['first-in-class'];
-    const selectedIndication = indicationPool[Math.floor(Math.random() * indicationPool.length)];
-    setIndicationData(selectedIndication);
-    setIndication(selectedIndication.name);
 
     // Apply modifiers based on program type
     // VC investment amounts based on RA Capital framework:
@@ -2886,23 +2889,29 @@ export default function TheLongGame() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 2</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 3 OF 3</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Program Type</h1>
               <p className="text-slate-400">This decision shapes your entire development strategy</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
-              <div className="text-slate-500 text-xs mb-1">MODALITY SELECTED</div>
-              <div className="text-lg font-semibold" style={{
-                color: modality === 'small-molecule' ? '#fbbf24' :
-                  modality === 'biologic' ? '#34d399' :
-                    modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
-              }}>
-                {MODALITY_DATA[modality]?.displayName || modality}
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="text-slate-500 text-xs mb-1">MODALITY</div>
+                  <div className="font-semibold" style={{
+                    color: modality === 'small-molecule' ? '#fbbf24' :
+                      modality === 'biologic' ? '#34d399' :
+                        modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+                  }}>
+                    {MODALITY_DATA[modality]?.displayName || modality}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-slate-500 text-xs mb-1">INDICATION</div>
+                  <div className="font-semibold text-emerald-400">{indication}</div>
+                  <div className="text-slate-600 text-xs">{indicationData?.area}</div>
+                </div>
               </div>
-              <p className="text-slate-500 text-xs mt-2">
-                {MODALITY_DATA[modality]?.description || 'Drug modality platform'}
-              </p>
             </div>
 
             <div className="space-y-4">
@@ -2965,6 +2974,92 @@ export default function TheLongGame() {
     );
   }
 
+  // Indication Selection (Step 2)
+  if (screen === 'setup_indication') {
+    // Get compatibility info for current modality
+    const getIndicationFit = (area) => {
+      const compat = MODALITY_INDICATION_COMPATIBILITY[area];
+      if (!compat) return { fit: 'neutral', penalty: 0, reason: 'Standard fit for this modality' };
+      const modalityCompat = compat[modality];
+      if (!modalityCompat) return { fit: 'neutral', penalty: 0, reason: 'Standard fit for this modality' };
+      if (modalityCompat.penalty === 0) return { fit: 'good', ...modalityCompat };
+      if (modalityCompat.penalty <= 10) return { fit: 'moderate', ...modalityCompat };
+      return { fit: 'poor', ...modalityCompat };
+    };
+
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-3xl w-full">
+            <div className="text-center mb-6">
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 3</p>
+              <h1 className="text-3xl font-bold mb-2">Choose Your Indication</h1>
+              <p className="text-slate-400">Select the disease area your platform will target</p>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
+              <div className="text-slate-500 text-xs mb-1">MODALITY SELECTED</div>
+              <div className="font-semibold" style={{
+                color: modality === 'small-molecule' ? '#fbbf24' :
+                  modality === 'biologic' ? '#34d399' :
+                    modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+              }}>
+                {MODALITY_DATA[modality]?.displayName || modality}
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 max-h-[60vh] overflow-y-auto pr-2">
+              {INDICATIONS.map((ind, idx) => {
+                const fit = getIndicationFit(ind.area);
+                const fitColor = fit.fit === 'good' ? 'emerald' : fit.fit === 'poor' ? 'amber' : 'slate';
+                const borderHover = fit.fit === 'good' ? 'hover:border-emerald-500/50' :
+                  fit.fit === 'poor' ? 'hover:border-amber-500/50' : 'hover:border-slate-600';
+
+                return (
+                  <button
+                    key={idx}
+                    onClick={() => selectIndication(ind)}
+                    className={`w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 ${borderHover} rounded-lg p-4 transition-colors`}
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <h3 className="font-semibold text-slate-100">{ind.name}</h3>
+                        <span className="text-xs text-slate-500">{ind.area} • {ind.usPrevalence} patients</span>
+                      </div>
+                      {fit.fit === 'good' && (
+                        <span className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                          ✓ Good Fit
+                        </span>
+                      )}
+                      {fit.fit === 'poor' && (
+                        <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
+                          ⚠ +{fit.penalty}% Risk
+                        </span>
+                      )}
+                    </div>
+                    {fit.fit === 'poor' && (
+                      <p className="text-xs text-amber-400/80 mb-2">{fit.reason}</p>
+                    )}
+                    {fit.fit === 'good' && fit.reason && (
+                      <p className="text-xs text-emerald-400/80 mb-2">{fit.reason}</p>
+                    )}
+                    <div className="flex flex-wrap gap-1">
+                      {ind.challenges.slice(0, 3).map((c, i) => (
+                        <span key={i} className="text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-400">
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Modality Selection
   if (screen === 'setup_modality') {
     return (
@@ -2972,7 +3067,7 @@ export default function TheLongGame() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 2</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 3</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Modality</h1>
               <p className="text-slate-400">The type of molecule determines your development path</p>
             </div>
