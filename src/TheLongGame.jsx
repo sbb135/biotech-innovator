@@ -3393,6 +3393,29 @@ export default function TheLongGame() {
                     </div>
                   )}
 
+                  {/* Show modality-program fit warnings at the start of Basic Research */}
+                  {currentPhase.id === 'basic_research' && programEvents.some(e => e.type === 'warning') && (
+                    <div className="bg-amber-900/30 border border-amber-700/50 rounded-lg p-4 mt-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <svg className="w-5 h-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <span className="text-amber-400 font-semibold text-sm">Strategic Challenge</span>
+                      </div>
+                      {programEvents.filter(e => e.type === 'warning').map((event, idx) => (
+                        <div key={idx} className="mb-2 last:mb-0">
+                          <p className="text-amber-200 text-sm">{event.message}</p>
+                          {event.detail && (
+                            <p className="text-amber-400/70 text-xs mt-1">{event.detail}</p>
+                          )}
+                        </div>
+                      ))}
+                      <p className="text-slate-400 text-xs mt-3 italic">
+                        Success is still possible but requires excellent execution to overcome these challenges.
+                      </p>
+                    </div>
+                  )}
+
                   <div className="grid grid-cols-3 gap-6 text-center">
                     <div>
                       <div className="text-slate-500 text-sm">Typical Duration</div>
