@@ -3087,11 +3087,7 @@ export default function TheLongGame() {
                 <div className="text-slate-500 text-xs font-medium tracking-wide">
                   {programType === 'first-in-class' ? 'FIRST-IN-CLASS' :
                     programType === 'orphan' ? 'ORPHAN DRUG' : 'BLOCKBUSTER'} • {
-                    modality === 'biologic' ? 'BIOLOGIC' :
-                      modality === 'gene-therapy' ? 'GENE THERAPY' :
-                        modality === 'cell-therapy' ? 'CELL THERAPY' :
-                          modality === 'sirna' ? 'siRNA/RNAi' :
-                            modality === 'gene-editing' ? 'GENE EDITING' : 'SMALL MOLECULE'}
+                    MODALITY_DATA[modality]?.displayName?.toUpperCase() || modality?.toUpperCase() || 'MODALITY'}
                 </div>
                 <div className="text-lg font-semibold">{drugName}</div>
                 <div className="text-slate-400 text-sm">{indication}</div>
