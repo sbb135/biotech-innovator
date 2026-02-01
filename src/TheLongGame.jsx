@@ -2223,7 +2223,7 @@ export default function TheLongGame() {
     }
 
     // Initialize game state
-    initializeGame(type, modality, selectedIndication);
+    initializeGame(type, modality, indicationData);
   };
 
   // Initialize game after both modality and program type are selected
