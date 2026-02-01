@@ -1736,55 +1736,91 @@ const GATE_SUCCESS = {
 // Modality-Indication Compatibility Matrix
 // Applies risk penalties for poor modality-indication fit
 // Based on real-world delivery and biology constraints
+// Enhanced with BCG New Drug Modalities Report 2024-2025 insights
 const MODALITY_INDICATION_COMPATIBILITY = {
   // CNS diseases: which modalities can cross blood-brain barrier?
   'CNS': {
-    'small-molecule': { penalty: 0, reason: 'Small molecules can cross BBB - good fit' },
-    'biologic': { penalty: 25, reason: 'Large molecules cannot cross BBB - poor CNS penetration', riskType: 'efficacy' },
+    'small-molecule': { penalty: 0, reason: 'Small molecules can cross blood-brain barrier - good fit' },
+    'biologic': { penalty: 25, reason: 'Large molecules cannot cross blood-brain barrier - poor CNS penetration', riskType: 'efficacy' },
     'genetic-medicine': { penalty: 20, reason: 'CNS delivery challenging - requires intrathecal or novel vectors', riskType: 'efficacy' },
     'cell-therapy': { penalty: 30, reason: 'Cell delivery to CNS extremely challenging', riskType: 'efficacy' }
   },
   // Rare/Genetic diseases: curative modalities shine
+  // BCG 2025: mAbs have largest rare-disease pipeline; gene therapies first approved for rare genetic diseases
   'Rare/Genetic': {
     'small-molecule': { penalty: 10, reason: 'May need lifelong dosing for genetic disease', riskType: 'design' },
-    'biologic': { penalty: 5, reason: 'Protein replacement often effective', riskType: 'efficacy' },
-    'genetic-medicine': { penalty: 0, reason: 'Ideal for monogenic diseases - curative potential' },
-    'cell-therapy': { penalty: 0, reason: 'Stem cell or gene-corrected cells excellent' }
+    'biologic': { penalty: 0, reason: 'Monoclonal antibodies have largest rare disease pipeline (BCG 2025) - protein replacement often curative' },
+    'genetic-medicine': { penalty: 0, reason: 'Ideal for monogenic diseases - curative potential, first approvals were rare genetic diseases' },
+    'cell-therapy': { penalty: 0, reason: 'Stem cell or gene-corrected cells excellent for rare diseases' }
   },
   // Metabolic diseases: liver targets, chronic dosing
+  // BCG 2025: GLP-1 peptides dominate blockbuster markets
   'Metabolic': {
     'small-molecule': { penalty: 0, reason: 'Oral dosing, liver targets - excellent fit' },
-    'biologic': { penalty: 5, reason: 'Injectable but effective for metabolic targets', riskType: 'design' },
+    'biologic': { penalty: 0, reason: 'GLP-1 peptides dominate metabolic blockbusters (BCG 2025) - Mounjaro, Wegovy, Zepbound' },
     'genetic-medicine': { penalty: 0, reason: 'Liver-targeted siRNA/gene therapy excellent for metabolic' },
-    'cell-therapy': { penalty: 25, reason: 'Manufacturing complexity not justified', riskType: 'design' }
+    'cell-therapy': { penalty: 25, reason: 'Manufacturing complexity not justified for chronic metabolic diseases', riskType: 'design' }
   },
   // Oncology (hematologic): cell therapy and biologics excel
+  // BCG 2023: CAR-T first-in-class success validated cell therapy for heme malignancies
   'Oncology (Hematologic)': {
     'small-molecule': { penalty: 10, reason: 'May face resistance mutations', riskType: 'efficacy' },
-    'biologic': { penalty: 0, reason: 'ADCs, bispecifics highly effective' },
+    'biologic': { penalty: 0, reason: 'Antibody-drug conjugates (ADCs), bispecifics highly effective - BCG highlights ADC growth' },
     'genetic-medicine': { penalty: 15, reason: 'Limited oncology applications for genetic medicine', riskType: 'design' },
-    'cell-therapy': { penalty: 0, reason: 'CAR-T revolutionary for heme malignancies - best fit' }
+    'cell-therapy': { penalty: 0, reason: 'CAR-T first-in-class for heme malignancies (BCG 2023) - revolutionary success' }
   },
-  // Oncology (solid): harder than heme
+  // Oncology (solid): harder than heme - ADCs emerging
+  // BCG 2024: ADCs showing significant growth in solid tumor pipeline
   'Oncology (Solid Tumor)': {
-    'small-molecule': { penalty: 0, reason: 'Oral TKIs, still backbone of therapy' },
-    'biologic': { penalty: 10, reason: 'Tumor penetration challenging', riskType: 'efficacy' },
+    'small-molecule': { penalty: 0, reason: 'Oral tyrosine kinase inhibitors still backbone of therapy' },
+    'biologic': { penalty: 5, reason: 'ADCs gaining traction in solid tumors (BCG 2024) - tumor penetration still challenging', riskType: 'efficacy' },
     'genetic-medicine': { penalty: 20, reason: 'Delivery to solid tumors very hard', riskType: 'efficacy' },
-    'cell-therapy': { penalty: 15, reason: 'TME is immunosuppressive - less effective than heme', riskType: 'efficacy' }
+    'cell-therapy': { penalty: 15, reason: 'Tumor microenvironment is immunosuppressive - less effective than heme', riskType: 'efficacy' }
   },
-  // Autoimmune: biologics designed for this
+  // Autoimmune: biologics designed for this, CAR-T emerging
+  // BCG 2025: CAR-T for autoimmune showing early promise
   'Autoimmune': {
-    'small-molecule': { penalty: 0, reason: 'JAK inhibitors, oral options' },
-    'biologic': { penalty: 0, reason: 'TNF, IL-17, IL-23 - biologics dominate' },
+    'small-molecule': { penalty: 0, reason: 'JAK inhibitors, oral options - convenience advantage' },
+    'biologic': { penalty: 0, reason: 'TNF, IL-17, IL-23 antibodies dominate - proven track record' },
     'genetic-medicine': { penalty: 15, reason: 'Few validated genetic targets for autoimmune', riskType: 'efficacy' },
-    'cell-therapy': { penalty: 10, reason: 'CAR-T for autoimmune emerging but early', riskType: 'design' }
+    'cell-therapy': { penalty: 5, reason: 'CAR-T for autoimmune emerging as next frontier (BCG 2025) - early but promising', riskType: 'design' }
   },
   // Cardiovascular: small molecules and siRNA for liver-expressed targets
   'Cardiovascular': {
     'small-molecule': { penalty: 0, reason: 'Statins, ACE inhibitors - proven track record' },
     'biologic': { penalty: 5, reason: 'PCSK9 antibodies work but injectable', riskType: 'design' },
-    'genetic-medicine': { penalty: 0, reason: 'GalNAc-siRNA for liver CV targets - excellent' },
-    'cell-therapy': { penalty: 30, reason: 'Manufacturing overkill for CV', riskType: 'design' }
+    'genetic-medicine': { penalty: 0, reason: 'N-acetylgalactosamine-siRNA for liver cardiovascular targets - excellent (Inclisiran precedent)' },
+    'cell-therapy': { penalty: 30, reason: 'Manufacturing complexity not justified for cardiovascular', riskType: 'design' }
+  },
+  // CNS/Oncology combined (e.g., glioblastoma)
+  'CNS/Oncology': {
+    'small-molecule': { penalty: 5, reason: 'Can cross blood-brain barrier but resistance common', riskType: 'efficacy' },
+    'biologic': { penalty: 20, reason: 'Blood-brain barrier limits penetration', riskType: 'efficacy' },
+    'genetic-medicine': { penalty: 25, reason: 'CNS delivery plus tumor targeting - compounded difficulty', riskType: 'efficacy' },
+    'cell-therapy': { penalty: 20, reason: 'CAR-T showing early signals in glioblastoma but delivery challenging', riskType: 'efficacy' }
+  }
+};
+
+// Program Type Modifiers (Orphan vs First-in-Class vs Blockbuster)
+// Based on BCG insights: modalities have different fit with program strategies
+const MODALITY_PROGRAM_FIT = {
+  'orphan': {
+    'small-molecule': { modifier: 0, note: 'Neutral - can work but may not be optimal' },
+    'biologic': { modifier: -5, note: 'BCG 2025: mAbs have largest rare disease pipeline - good fit' },
+    'genetic-medicine': { modifier: -10, note: 'Ideal - gene therapies first approved in rare genetic diseases' },
+    'cell-therapy': { modifier: -5, note: 'Good fit - high price justified by curative potential' }
+  },
+  'first-in-class': {
+    'small-molecule': { modifier: 0, note: 'Neutral - requires novel target validation' },
+    'biologic': { modifier: 0, note: 'Neutral - bispecifics and ADCs offer differentiation' },
+    'genetic-medicine': { modifier: -5, note: 'Novel mechanisms - genetic medicines inherently first-in-class' },
+    'cell-therapy': { modifier: -5, note: 'CAR-T was first-in-class for heme malignancies (BCG 2023)' }
+  },
+  'blockbuster': {
+    'small-molecule': { modifier: -5, note: 'Oral convenience drives blockbuster adoption' },
+    'biologic': { modifier: -10, note: 'BCG 2025: GLP-1 peptides dominate blockbusters - 8 of top 10 drugs are new modalities' },
+    'genetic-medicine': { modifier: 10, note: 'Manufacturing scale limits blockbuster economics', riskType: 'design' },
+    'cell-therapy': { modifier: 15, note: 'Autologous manufacturing incompatible with blockbuster volumes', riskType: 'design' }
   }
 };
 
@@ -2265,6 +2301,42 @@ export default function TheLongGame() {
             type: 'warning',
             message: `⚠️ ${compat.reason}`,
             detail: `+${compat.penalty}% ${compat.riskType || 'design'} risk applied`
+          }]);
+        }
+      }
+    }
+
+    // Apply modality-program type fit modifiers (BCG insights)
+    // Orphan, first-in-class, and blockbuster programs have different modality affinities
+    if (programType && MODALITY_PROGRAM_FIT[programType]) {
+      const programFit = MODALITY_PROGRAM_FIT[programType][mod];
+      if (programFit && programFit.modifier !== 0) {
+        const absModifier = Math.abs(programFit.modifier);
+        const riskType = programFit.riskType || 'design';
+
+        if (programFit.modifier > 0) {
+          // Penalty for poor fit
+          if (riskType === 'efficacy') {
+            setEfficacyRisk(prev => Math.min(100, prev + absModifier));
+          } else if (riskType === 'safety') {
+            setSafetyRisk(prev => Math.min(100, prev + absModifier));
+          } else {
+            setDesignRisk(prev => Math.min(100, prev + absModifier));
+          }
+          setProgramEvents(prev => [...prev, {
+            phase: 'Program Strategy',
+            type: 'warning',
+            message: `⚠️ ${MODALITY_DATA[mod]?.displayName || mod} challenging for ${programType} programs`,
+            detail: programFit.note
+          }]);
+        } else {
+          // Bonus for good fit
+          setDesignRisk(prev => Math.max(5, prev - absModifier));
+          setProgramEvents(prev => [...prev, {
+            phase: 'Program Strategy',
+            type: 'positive',
+            message: `✓ ${MODALITY_DATA[mod]?.displayName || mod} well-suited for ${programType} programs`,
+            detail: programFit.note
           }]);
         }
       }
