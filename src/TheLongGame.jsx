@@ -1209,42 +1209,152 @@ const QUESTIONS = {
       ]
     }
   ],
-  fda_review: [
-    {
-      id: 'pricing',
-      title: 'Pricing and Access Strategy',
-      scenario: 'FDA approval is imminent. Health economic analyses support value-based pricing of $150,000/year, reflecting the clinical benefit. But drug pricing scrutiny is intense.',
-      options: [
-        {
-          text: 'Value-based pricing ($150,000/year)',
-          detail: 'Reflects clinical benefit, public scrutiny risk',
-          cashEffect: 0,
-          timeEffect: 0,
-          marketBonus: 1.0,
-          result: 'Your pricing is economically justified but generates media attention. Congressional staffers request a briefing on your pricing rationale.',
-          lesson: 'Value-based pricing reflects genuine clinical benefit and R&D investment. But the industry has not yet earned the public trust for this approach to be politically sustainable.'
-        },
-        {
-          text: 'Market-competitive pricing ($80,000/year)',
-          detail: 'Below value, sustainable positioning',
-          cashEffect: 0,
-          timeEffect: 0,
-          marketBonus: 0.55,
-          result: 'Lower pricing is well-received publicly, but investors question your ability to fund future R&D. Your stock drops 15%.',
-          lesson: 'Pricing below value may feel responsible but creates tension: returns from successful drugs fund the ~90% that fail. Underpricing undermines future innovation.'
-        },
-        {
-          text: 'Outcomes-based contracts',
-          detail: 'Performance-linked pricing, implementation complexity',
-          cashEffect: -10,
-          timeEffect: 6,
-          marketBonus: 0.8,
-          result: 'You offer payers pricing that depends on real-world outcomes. Implementation is complex, but alignment between price and value builds trust.',
-          lesson: 'Outcomes-based contracts align price with the value patients actually receive. This requires robust real-world evidence infrastructure.'
-        }
-      ]
-    }
-  ],
+  fda_review: {
+    'small-molecule': [
+      {
+        id: 'pricing_sm',
+        title: 'Pricing and Access Strategy',
+        scenario: 'FDA approval is imminent. Health economic analyses support value-based pricing of $150,000/year for your oral therapy, reflecting the clinical benefit. But drug pricing scrutiny is intense.',
+        options: [
+          {
+            text: 'Value-based pricing ($150,000/year)',
+            detail: 'Reflects clinical benefit, public scrutiny risk',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 1.0,
+            result: 'Your pricing is economically justified but generates media attention. Congressional staffers request a briefing on your pricing rationale.',
+            lesson: 'Value-based pricing reflects genuine clinical benefit and R&D investment. But the industry has not yet earned the public trust for this approach to be politically sustainable.'
+          },
+          {
+            text: 'Market-competitive pricing ($80,000/year)',
+            detail: 'Below value, sustainable positioning',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 0.55,
+            result: 'Lower pricing is well-received publicly, but investors question your ability to fund future R&D. Your stock drops 15%.',
+            lesson: 'Pricing below value may feel responsible but creates tension: returns from successful drugs fund the ~90% that fail. Underpricing undermines future innovation.'
+          },
+          {
+            text: 'Outcomes-based contracts',
+            detail: 'Performance-linked pricing, implementation complexity',
+            cashEffect: -10,
+            timeEffect: 6,
+            marketBonus: 0.8,
+            result: 'You offer payers pricing that depends on real-world outcomes. Implementation is complex, but alignment between price and value builds trust.',
+            lesson: 'Outcomes-based contracts align price with the value patients actually receive. This requires robust real-world evidence infrastructure.'
+          }
+        ]
+      }
+    ],
+    'biologic': [
+      {
+        id: 'pricing_bio',
+        title: 'Pricing and Access Strategy',
+        scenario: 'FDA approval is imminent for your injectable biologic. Health economic analyses support value-based pricing of $50,000-80,000/year. But biosimilar competition is a future concern.',
+        options: [
+          {
+            text: 'Premium pricing ($80,000/year)',
+            detail: 'Reflects innovation, build reserves before biosimilars',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 1.0,
+            result: 'Your premium pricing maximizes returns during exclusivity. You begin building reserves for future R&D before biosimilar entry.',
+            lesson: 'Biologics command premium pricing during exclusivity, but biosimilar entry (typically 50-80% discount) is inevitable. Building R&D reserves during exclusivity funds future innovation.'
+          },
+          {
+            text: 'Sustainable pricing ($50,000/year)',
+            detail: 'Broader access, may delay biosimilar entry',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 0.65,
+            result: 'Moderate pricing expands access. Some analysts suggest this may reduce biosimilar attractiveness, extending your market position.',
+            lesson: 'Lower pricing can expand the treated patient population and may reduce biosimilar commercial incentives.'
+          },
+          {
+            text: 'Outcomes-based contracts',
+            detail: 'Performance-linked pricing, implementation complexity',
+            cashEffect: -10,
+            timeEffect: 6,
+            marketBonus: 0.8,
+            result: 'You offer payers pricing that depends on real-world outcomes. Implementation is complex, but alignment between price and value builds trust.',
+            lesson: 'Outcomes-based contracts align price with the value patients actually receive. This requires robust real-world evidence infrastructure.'
+          }
+        ]
+      }
+    ],
+    'genetic-medicine': [
+      {
+        id: 'pricing_gene',
+        title: 'One-Time Curative Pricing Strategy',
+        scenario: 'FDA approval is imminent for your genetic therapy. Health economic analyses support one-time pricing of $2-3 million, reflecting lifetime value and potential cure. But upfront cost creates payer challenges.',
+        options: [
+          {
+            text: 'Full value pricing ($2.5 million one-time)',
+            detail: 'Reflects curative potential, requires innovative payment models',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 1.0,
+            result: 'Your pricing reflects lifetime value, but many payers cannot absorb $2.5M upfront. Access is limited to patients at specialized centers.',
+            lesson: 'One-time curative therapies create a timing mismatch: all costs upfront, all savings over decades. Traditional insurance was designed for chronic, not curative, therapies.'
+          },
+          {
+            text: 'Annuity-based pricing ($300,000/year for 10 years)',
+            detail: 'Spreads cost, aligns with payer budgets',
+            cashEffect: -5,
+            timeEffect: 0,
+            marketBonus: 0.85,
+            result: 'Spreading payments over time aligns with payer budgets. However, patient churn between insurers creates orphan payment risk.',
+            lesson: 'Annuity models solve upfront cost barriers but create "orphan payment" problems when patients switch insurers. Who pays in year 5 if the patient has new coverage?'
+          },
+          {
+            text: 'Outcomes-based subscription model',
+            detail: 'Pay only if cure maintained, requires long-term monitoring',
+            cashEffect: -15,
+            timeEffect: 12,
+            marketBonus: 0.9,
+            result: 'Your payment-for-durability model requires extensive real-world evidence infrastructure. Payers appreciate the risk sharing.',
+            lesson: 'Outcomes-based payment for curative therapies requires robust long-term monitoring. Demonstrating durability enables continued payments and refund provisions if effect wanes.'
+          }
+        ]
+      }
+    ],
+    'cell-therapy': [
+      {
+        id: 'pricing_cell',
+        title: 'One-Time Curative Pricing Strategy',
+        scenario: 'FDA approval is imminent for your cell therapy. Manufacturing costs are $500K+ per patient. Health economic analyses support pricing of $400,000-500,000, reflecting clinical benefit in patients with limited options.',
+        options: [
+          {
+            text: 'Cost-plus pricing ($450,000 one-time)',
+            detail: 'Covers manufacturing plus modest margin',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 0.7,
+            result: 'Your pricing barely covers manufacturing costs and development investment. Margins are thin, but access is maximized.',
+            lesson: 'Cell therapy manufacturing is inherently expensive: patient-specific production, complex logistics, specialized facilities. Cost-plus pricing may be necessary to achieve any margin.'
+          },
+          {
+            text: 'Value-based premium ($500,000 one-time)',
+            detail: 'Reflects clinical value for refractory patients',
+            cashEffect: 0,
+            timeEffect: 0,
+            marketBonus: 1.0,
+            result: 'Premium pricing reflects the transformative benefit for patients who have failed all other options. Some payers balk at the cost.',
+            lesson: 'Cell therapies often treat patients who have exhausted all alternatives. Value-based pricing reflects the absence of other options, not comparator pricing.'
+          },
+          {
+            text: 'Outcomes-based warranty model',
+            detail: 'Refund if response not durable, requires follow-up',
+            cashEffect: -10,
+            timeEffect: 6,
+            marketBonus: 0.9,
+            result: 'You offer partial refunds if patients do not achieve durable response. This requires robust tracking of outcomes post-infusion.',
+            lesson: 'Outcomes-based warranties for cell therapy align payment with response. This requires defining durable response criteria and tracking patients long-term.'
+          }
+        ]
+      }
+    ]
+  },
   post_market: [
     {
       phase: 'post_market',
@@ -1548,7 +1658,8 @@ const EVENTS = {
   phase1: [
     { title: 'Favorable Human PK', description: 'Human pharmacokinetics exceed predictions - longer half-life enables once-daily dosing.', cashEffect: 0, timeEffect: -3, riskBonus: 0.06, positive: true },
     { title: 'Clinical Hold', description: 'An adverse event triggers FDA clinical hold. Dosing suspended pending investigation.', cashEffect: -5, timeEffect: 9, positive: false },
-    { title: 'Target Engagement Confirmed', description: 'Biomarker studies confirm robust target engagement at achievable doses.', cashEffect: 0, timeEffect: 0, riskBonus: 0.04, positive: true }
+    { title: 'Clean Safety Profile', description: 'Maximum tolerated dose established with mild, manageable side effects. No dose-limiting toxicities observed.', cashEffect: 0, timeEffect: 0, riskBonus: 0.05, positive: true },
+    { title: 'MTD Established', description: 'Phase I successfully establishes the recommended Phase II dose with acceptable tolerability.', cashEffect: 0, timeEffect: -2, riskBonus: 0.04, positive: true }
   ],
   phase2: [
     { title: 'Enrollment Challenges', description: 'Competing trials and restrictive eligibility slow recruitment. Additional sites required.', cashEffect: -10, timeEffect: 9, positive: false },
