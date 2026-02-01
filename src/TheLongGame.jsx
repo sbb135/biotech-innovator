@@ -505,13 +505,13 @@ const QUESTIONS = {
         scenario: 'You need compounds that modulate your validated target. Traditional high-throughput screening tests large compound libraries. Computational methods design molecules in silico. Fragment-based approaches identify small building blocks.',
         options: [
           {
-            text: 'High-throughput screening (HTS)',
+            text: 'High-Throughput Screening',
             detail: 'Screen compound library for hits',
             cashEffect: -5,
             timeEffect: 0,
             riskBonus: 0.03,
-            result: 'HTS identifies several hit series with confirmed activity. The diversity of chemotypes gives you options for lead optimization.',
-            lesson: 'HTS remains the workhorse of small molecule discovery. Small molecules (under 900 Da) can be orally bioavailable: a massive advantage for chronic conditions. The quality of your compound library determines the quality of your hits.'
+            result: 'High-Throughput Screening identifies several hit series with confirmed activity. The diversity of chemotypes gives you options for lead optimization.',
+            lesson: 'High-Throughput Screening remains the workhorse of small molecule discovery. Small molecules (under 900 daltons) can be orally bioavailable: a massive advantage for chronic conditions. The quality of your compound library determines the quality of your hits.'
           },
           {
             text: 'In silico design and modeling',
@@ -574,34 +574,34 @@ const QUESTIONS = {
       {
         id: 'delivery_platform',
         title: 'What delivery platform will you use?',
-        scenario: 'Genetic medicines require delivery to target tissues. AAV vectors offer broad tropism but face pre-existing immunity. LNP delivery works well for liver. GalNAc conjugation is elegant for hepatocytes.',
+        scenario: 'Genetic medicines require delivery to target tissues. Adeno-Associated Virus (AAV) vectors offer broad tropism but face pre-existing immunity. Lipid nanoparticle delivery works well for liver. N-acetylgalactosamine conjugation is elegant for hepatocytes.',
         options: [
           {
-            text: 'AAV vector platform',
+            text: 'Adeno-Associated Virus vector platform',
             detail: 'Broad tissue access, immunity challenges',
             cashEffect: -10,
             timeEffect: 6,
             riskBonus: 0.04,
-            result: 'AAV provides good tissue transduction but 30-60% of patients have pre-existing antibodies that exclude them from treatment.',
-            lesson: 'AAV vectors can reach many tissues but pre-existing immunity from natural AAV exposure excludes 30-60% of patients. Novel capsids and immunosuppression protocols are being developed to expand eligible populations.'
+            result: 'Adeno-Associated Virus provides good tissue transduction but 30-60% of patients have pre-existing antibodies that exclude them from treatment.',
+            lesson: 'Adeno-Associated Virus vectors can reach many tissues but pre-existing immunity from natural virus exposure excludes 30-60% of patients. Novel capsids and immunosuppression protocols are being developed to expand eligible populations.'
           },
           {
-            text: 'Lipid nanoparticle (LNP) delivery',
+            text: 'Lipid nanoparticle delivery',
             detail: 'Excellent for liver, limited elsewhere',
             cashEffect: -6,
             timeEffect: 0,
             riskBonus: 0.05,
-            result: 'LNP delivery achieves excellent liver targeting. The platform is well-characterized with established manufacturing.',
-            lesson: 'LNP is the gold standard for liver delivery. The limitation is that non-liver tissues remain difficult to reach.'
+            result: 'Lipid nanoparticle delivery achieves excellent liver targeting. The platform is well-characterized with established manufacturing.',
+            lesson: 'Lipid nanoparticle is the gold standard for liver delivery. The limitation is that non-liver tissues remain difficult to reach.'
           },
           {
-            text: 'GalNAc conjugation',
+            text: 'N-acetylgalactosamine conjugation',
             detail: 'Hepatocyte-specific, elegant chemistry',
             cashEffect: -4,
             timeEffect: -3,
             riskBonus: 0.06,
-            result: 'GalNAc elegantly delivers payload directly to hepatocytes via ASGPR receptor. Manufacturing is straightforward.',
-            lesson: 'GalNAc conjugation exemplifies platform power: once validated, new targets can advance rapidly with known delivery.'
+            result: 'N-acetylgalactosamine elegantly delivers payload directly to hepatocytes via asialoglycoprotein receptor. Manufacturing is straightforward.',
+            lesson: 'N-acetylgalactosamine conjugation exemplifies platform power: once validated, new targets can advance rapidly with known delivery.'
           }
         ]
       }
@@ -610,7 +610,7 @@ const QUESTIONS = {
       {
         id: 'cell_source_strategy',
         title: 'What cell source strategy will you pursue?',
-        scenario: 'Cell therapy manufacturing begins with sourcing cells. Autologous approaches use each patient\'s own cells collected via leukapheresis. Allogeneic approaches use universal donor cells that require gene editing to prevent rejection. iPSC-derived cells offer manufacturing scale but require longer development.',
+        scenario: 'Cell therapy manufacturing begins with sourcing cells. Autologous approaches use each patient\'s own cells collected via leukapheresis. Allogeneic approaches use universal donor cells that require gene editing to prevent rejection. Induced pluripotent stem cell (iPSC)-derived cells offer manufacturing scale but require longer development.',
         options: [
           {
             text: 'Autologous patient-derived T cells',
@@ -624,22 +624,22 @@ const QUESTIONS = {
           },
           {
             text: 'Allogeneic universal donor cells',
-            detail: 'Off-the-shelf, requires gene editing to avoid GvHD',
+            detail: 'Off-the-shelf, requires gene editing to avoid graft-versus-host disease',
             cashEffect: -25,
             timeEffect: 12,
             riskBonus: 0.02,
             safetyEffect: 15,
-            result: 'Gene editing knocks out TCR and HLA to create universal donor cells. Manufacturing is scalable but rejection and GvHD risks require monitoring.',
-            lesson: 'Allogeneic approaches solve logistics but introduce new biology. TCR knockout prevents GvHD; HLA knockout prevents rejection. Both add development complexity.'
+            result: 'Gene editing knocks out T-cell receptor (TCR) and human leukocyte antigen (HLA) to create universal donor cells. Manufacturing is scalable but rejection and graft-versus-host disease risks require monitoring.',
+            lesson: 'Allogeneic approaches solve logistics but introduce new biology. T-cell receptor knockout prevents graft-versus-host disease; human leukocyte antigen knockout prevents rejection. Both add development complexity.'
           },
           {
-            text: 'iPSC-derived engineered cells',
+            text: 'Induced pluripotent stem cell-derived engineered cells',
             detail: 'Unlimited source, longer development timeline',
             cashEffect: -35,
             timeEffect: 18,
             riskBonus: -0.02,
-            result: 'iPSC differentiation provides unlimited cell source. Development timeline is longer but manufacturing economics improve at scale.',
-            lesson: 'iPSC-derived cells represent the future of cell therapy manufacturing. The challenge is achieving consistent differentiation and demonstrating safety of pluripotent-derived products.'
+            result: 'Induced pluripotent stem cell differentiation provides unlimited cell source. Development timeline is longer but manufacturing economics improve at scale.',
+            lesson: 'Induced pluripotent stem cell-derived cells represent the future of cell therapy manufacturing. The challenge is achieving consistent differentiation and demonstrating safety of pluripotent-derived products.'
           }
         ]
       }
@@ -863,29 +863,29 @@ const QUESTIONS = {
     'cell-therapy': [
       {
         id: 'gmp_validation_strategy',
-        title: 'How will you establish GMP manufacturing and release testing?',
-        scenario: 'Cell therapy INDs require detailed Chemistry, Manufacturing, and Controls (CMC) documentation. You must establish GMP-compliant manufacturing with validated release testing, potency assays, and stability studies. FDA\'s CBER Office of Tissues and Advanced Therapies (OTAT) reviews all cell therapy applications.',
+        title: 'How will you establish Good Manufacturing Practice (GMP) manufacturing and release testing?',
+        scenario: 'Cell therapy Investigational New Drug applications require detailed Chemistry, Manufacturing, and Controls (CMC) documentation. You must establish Good Manufacturing Practice-compliant manufacturing with validated release testing, potency assays, and stability studies. The Food and Drug Administration\'s Center for Biologics Evaluation and Research Office of Tissues and Advanced Therapies reviews all cell therapy applications.',
         options: [
           {
-            text: 'Build internal GMP facility with full validation',
-            detail: 'High upfront cost, complete control, FACT accreditation path',
+            text: 'Build internal Good Manufacturing Practice facility with full validation',
+            detail: 'High upfront cost, complete control, Foundation for Accreditation of Cellular Therapy accreditation path',
             cashEffect: -45, timeEffect: 18, riskBonus: 0.08, safetyEffect: -15,
-            result: 'Your facility achieves FACT accreditation and GMP compliance. Release testing, potency assays, and stability protocols are fully validated. FDA accepts your CMC package without questions.',
+            result: 'Your facility achieves Foundation for Accreditation of Cellular Therapy accreditation and Good Manufacturing Practice compliance. Release testing, potency assays, and stability protocols are fully validated. The Food and Drug Administration accepts your Chemistry, Manufacturing, and Controls package without questions.',
             lesson: 'Internal manufacturing provides control over quality systems, SOPs, and capacity. FACT accreditation (Foundation for Accreditation of Cellular Therapy) is the gold standard for cell therapy facilities.'
           },
           {
-            text: 'Partner with FACT-accredited CMO',
+            text: 'Partner with Foundation for Accreditation of Cellular Therapy-accredited contract manufacturing organization',
             detail: 'External expertise, capacity constraints, cross-reference facility master file',
             cashEffect: -20, timeEffect: 6, riskBonus: 0.04,
-            result: 'CMO provides regulatory expertise and cross-references their Facility Master File in your IND. Slot availability for commercial scale may become a bottleneck.',
-            lesson: 'CMOs with FDA Type V Facility Master Files on file simplify IND submission. Early engagement is critical: cell therapy manufacturing capacity is constrained industry-wide.'
+            result: 'The contract manufacturing organization provides regulatory expertise and cross-references their Facility Master File in your Investigational New Drug application. Slot availability for commercial scale may become a bottleneck.',
+            lesson: 'Contract manufacturing organizations with Food and Drug Administration Type V Facility Master Files on file simplify Investigational New Drug submission. Early engagement is critical: cell therapy manufacturing capacity is constrained industry-wide.'
           },
           {
             text: 'Accelerated platform approach with minimal validation',
             detail: 'Faster to clinic, may require repeat for commercial',
             cashEffect: -12, timeEffect: 0, riskBonus: -0.04, safetyEffect: 10,
-            result: 'You reach clinic faster but FDA requests additional CMC information. Validation studies must be repeated for commercial manufacturing.',
-            lesson: 'Minimal CMC packages can delay approval. FDA expects detailed release testing, potency assays, and stability data for cell therapy products. Pre-IND meetings are essential to align expectations.'
+            result: 'You reach clinic faster but the Food and Drug Administration requests additional Chemistry, Manufacturing, and Controls information. Validation studies must be repeated for commercial manufacturing.',
+            lesson: 'Minimal Chemistry, Manufacturing, and Controls packages can delay approval. The Food and Drug Administration expects detailed release testing, potency assays, and stability data for cell therapy products. Pre-Investigational New Drug meetings are essential to align expectations.'
           }
         ]
       }
@@ -896,29 +896,29 @@ const QUESTIONS = {
     'cell-therapy': [
       {
         id: 'crs_management_strategy',
-        title: 'How will you manage cytokine release syndrome (CRS) risk?',
-        scenario: 'CRS and immune effector cell-associated neurotoxicity syndrome (ICANS) are the most serious complications of CAR-T therapy. Your Phase I protocol must include a Risk Evaluation and Mitigation Strategy (REMS). Tocilizumab (IL-6 receptor blocker) is FDA-approved for CRS management. Your dose escalation and monitoring strategy will determine the safety profile.',
+        title: 'How will you manage Cytokine Release Syndrome risk?',
+        scenario: 'Cytokine Release Syndrome and Immune Effector Cell-Associated Neurotoxicity Syndrome are the most serious complications of Chimeric Antigen Receptor T-cell therapy. Your Phase I protocol must include a Risk Evaluation and Mitigation Strategy. Tocilizumab (Interleukin-6 receptor blocker) is Food and Drug Administration-approved for Cytokine Release Syndrome management. Your dose escalation and monitoring strategy will determine the safety profile.',
         options: [
           {
             text: 'Conservative dosing with prophylactic tocilizumab',
-            detail: 'Pre-emptive CRS management, may reduce efficacy signal',
+            detail: 'Pre-emptive Cytokine Release Syndrome management, may reduce efficacy signal',
             cashEffect: -8, timeEffect: 6, riskBonus: 0.08, safetyEffect: -25,
-            result: 'No severe CRS events occur. However, your efficacy signal is modest. Did prophylactic tocilizumab blunt the CAR-T expansion?',
-            lesson: 'Prophylactic CRS management prioritizes safety but may confound efficacy assessment. The IL-6 pathway plays a role in CAR-T expansion, so blocking it pre-emptively creates uncertainty about optimal dosing.'
+            result: 'No severe Cytokine Release Syndrome events occur. However, your efficacy signal is modest. Did prophylactic tocilizumab blunt the Chimeric Antigen Receptor T-cell expansion?',
+            lesson: 'Prophylactic Cytokine Release Syndrome management prioritizes safety but may confound efficacy assessment. The Interleukin-6 pathway plays a role in Chimeric Antigen Receptor T-cell expansion, so blocking it pre-emptively creates uncertainty about optimal dosing.'
           },
           {
             text: 'Standard dosing with reactive CRS management',
-            detail: 'Tocilizumab at Grade 2+ CRS, clearer efficacy signal',
+            detail: 'Tocilizumab at Grade 2+ Cytokine Release Syndrome, clearer efficacy signal',
             cashEffect: -5, timeEffect: 0, riskBonus: 0.02, safetyEffect: 10,
-            result: 'Two patients experience Grade 3 CRS requiring ICU admission and tocilizumab. Both recover fully. Your efficacy signal is strong.',
-            lesson: 'Reactive CRS management accepts higher acute toxicity for clearer efficacy signals. CAR-T infusion centers must have ICU access, neurology consultation, and tocilizumab immediately available per REMS requirements.'
+            result: 'Two patients experience Grade 3 Cytokine Release Syndrome requiring intensive care unit admission and tocilizumab. Both recover fully. Your efficacy signal is strong.',
+            lesson: 'Reactive Cytokine Release Syndrome management accepts higher acute toxicity for clearer efficacy signals. Chimeric Antigen Receptor T-cell infusion centers must have intensive care unit access, neurology consultation, and tocilizumab immediately available per Risk Evaluation and Mitigation Strategy requirements.'
           },
           {
             text: 'Split dosing schedule with fractionated infusion',
-            detail: 'Lower peak expansion, reduced CRS, complex protocol',
+            detail: 'Lower peak expansion, reduced Cytokine Release Syndrome, complex protocol',
             cashEffect: -10, timeEffect: 9, riskBonus: 0.04, safetyEffect: -10,
-            result: 'Fractionated dosing reduces peak cytokine levels. CRS is manageable. The protocol complexity increases manufacturing and logistics burden.',
-            lesson: 'Dose fractionation can reduce CRS severity by slowing CAR-T expansion kinetics. The trade-off is increased protocol complexity and potentially reduced peak efficacy.'
+            result: 'Fractionated dosing reduces peak cytokine levels. Cytokine Release Syndrome is manageable. The protocol complexity increases manufacturing and logistics burden.',
+            lesson: 'Dose fractionation can reduce Cytokine Release Syndrome severity by slowing Chimeric Antigen Receptor T-cell expansion kinetics. The trade-off is increased protocol complexity and potentially reduced peak efficacy.'
           }
         ]
       }
