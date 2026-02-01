@@ -135,6 +135,14 @@ const MODALITY_PHASE_CONTEXT = {
     drug_discovery: {
       context: 'Hit identification uses high-throughput screening of compound libraries or computational design. Lead optimization balances potency, selectivity, metabolic stability, and oral bioavailability. Small molecules under 500 daltons can often achieve oral dosing - a major convenience advantage.',
       activities: ['High-throughput screening', 'Medicinal chemistry optimization', 'ADMET profiling', 'Oral bioavailability testing', 'Candidate selection']
+    },
+    lead_optimization: {
+      context: 'Lead optimization refines drug-like properties through medicinal chemistry. ADME (absorption, distribution, metabolism, excretion) studies guide chemical modifications. The goal is a development candidate with optimal potency, selectivity, metabolic stability, and safety margin.',
+      activities: ['Medicinal chemistry optimization', 'ADME profiling', 'Metabolic stability studies', 'Formulation development', 'Candidate nomination']
+    },
+    ind_enabling: {
+      context: 'IND-enabling studies establish safety in two animal species and develop scalable manufacturing processes. GLP toxicology, safety pharmacology, and CMC documentation prepare for FDA submission.',
+      activities: ['GLP toxicology studies', 'Safety pharmacology', 'CMC development', 'IND package preparation', 'First-in-human dose selection']
     }
   },
   'biologic': {
@@ -145,6 +153,14 @@ const MODALITY_PHASE_CONTEXT = {
     drug_discovery: {
       context: 'Antibody discovery uses phage display, transgenic mice, or single B-cell cloning. Lead optimization focuses on binding affinity, specificity, stability, and manufacturability. Unlike small molecules, biologics require injection or infusion - they cannot survive oral administration.',
       activities: ['Antibody discovery campaign', 'Affinity maturation', 'Humanization', 'Stability engineering', 'Cell line development']
+    },
+    lead_optimization: {
+      context: 'Antibody engineering optimizes binding affinity, Fc effector function, and half-life. Cell line development establishes stable production clones. Formulation studies ensure protein stability during storage and delivery.',
+      activities: ['Fc engineering', 'Half-life extension', 'Cell line selection', 'Upstream/downstream process development', 'Formulation stability studies']
+    },
+    ind_enabling: {
+      context: 'Biologic IND-enabling includes GLP toxicology in relevant species (often non-human primates for humanized antibodies), immunogenicity assessment, and process validation. Manufacturing at clinical scale requires significant investment.',
+      activities: ['GLP toxicology in primates', 'Immunogenicity studies', 'Clinical manufacturing', 'Comparability studies', 'IND submission']
     }
   },
   'genetic-medicine': {
@@ -155,6 +171,14 @@ const MODALITY_PHASE_CONTEXT = {
     drug_discovery: {
       context: 'Genetic medicine optimization involves payload design (gene, antisense, siRNA, or editing construct), delivery vehicle engineering, and tissue targeting. Durability of expression and potential for re-dosing are key considerations. Pre-existing immunity to viral vectors can limit patient eligibility.',
       activities: ['Payload optimization', 'Vector or delivery engineering', 'Tropism and targeting', 'Expression durability studies', 'Immunogenicity assessment']
+    },
+    lead_optimization: {
+      context: 'Genetic medicine optimization focuses on sequence engineering, delivery vehicle refinement, and manufacturing scalability. For siRNA/ASO, this includes chemical modifications for stability and targeting (e.g., GalNAc conjugation). For gene therapy, vector optimization improves transduction efficiency and reduces immunogenicity.',
+      activities: ['Sequence optimization', 'Delivery vehicle engineering', 'Chemical modifications (siRNA/ASO)', 'Manufacturing process development', 'Potency assay development']
+    },
+    ind_enabling: {
+      context: 'Genetic medicine IND-enabling requires biodistribution studies, vector shedding analysis (for gene therapy), and long-term expression/safety monitoring. Manufacturing of GMP-grade material is complex and specialized.',
+      activities: ['Biodistribution studies', 'Vector shedding analysis', 'Long-term safety monitoring', 'GMP manufacturing', 'IND package preparation']
     }
   },
   'cell-therapy': {
@@ -165,9 +189,18 @@ const MODALITY_PHASE_CONTEXT = {
     drug_discovery: {
       context: 'Cell engineering optimizes receptor design, signaling domains, and additional modifications. Manufacturing process development is critical - cell therapies are living products requiring specialized Good Manufacturing Practice facilities. Autologous products face patient-specific variability.',
       activities: ['Receptor/construct design', 'Co-stimulatory optimization', 'Manufacturing process development', 'Potency assay development', 'Release testing strategy']
+    },
+    lead_optimization: {
+      context: 'Cell therapy optimization refines the manufacturing process to ensure consistent product quality across patient materials. This includes optimizing transduction efficiency, expansion protocols, and cryopreservation. Potency assays must correlate with clinical activity.',
+      activities: ['Manufacturing process optimization', 'Transduction efficiency improvement', 'Expansion protocol refinement', 'Cryopreservation development', 'Potency assay validation']
+    },
+    ind_enabling: {
+      context: 'Cell therapy IND-enabling focuses on demonstrating manufacturing consistency and product characterization. GLP toxicology is challenging for autologous products. Safety features (e.g., suicide genes) may be required.',
+      activities: ['Manufacturing consistency', 'Product characterization', 'GLP toxicology (as feasible)', 'Safety feature validation', 'IND submission']
     }
   }
 };
+
 
 
 // Financing rounds - biotech capital progression
