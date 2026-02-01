@@ -1824,6 +1824,106 @@ const MODALITY_PROGRAM_FIT = {
   }
 };
 
+// === TWO-DIMENSIONAL STRATEGY SYSTEM ===
+// Dimension 1: Market Size (commercial outcome)
+// Dimension 2: Innovation Position (scientific/competitive status)
+
+const MARKET_SIZE_DATA = {
+  'orphan': {
+    displayName: 'Orphan Drug',
+    subtitle: '<200K US patients',
+    description: 'Rare disease with regulatory advantages and premium pricing',
+    riskBonus: 0.05,         // Easier trials, FDA support
+    marketMultiplier: 0.4,    // Smaller market
+    trialSize: 'small',
+    vcInvestment: 50,         // $50M - smaller trials
+    highlights: [
+      { text: '+5% success rate', type: 'positive', detail: 'smaller trials' },
+      { text: '-60% market size', type: 'neutral', detail: 'rare disease' },
+      { text: 'Exempt from IRA', type: 'positive', detail: 'negotiation' }
+    ],
+
+    note: '7-year exclusivity, 50% tax credit, priority review'
+  },
+  'specialty': {
+    displayName: 'Specialty Market',
+    subtitle: '200K - 1M patients',
+    description: 'Focused population with balanced risk/reward profile',
+    riskBonus: 0,
+    marketMultiplier: 0.7,
+    trialSize: 'medium',
+    vcInvestment: 80,         // $80M - medium trials
+    highlights: [
+      { text: 'Standard success rates', type: 'neutral', detail: '' },
+      { text: 'Moderate competition', type: 'neutral', detail: '' },
+      { text: '$50k-150k/patient/year', type: 'positive', detail: 'typical' }
+    ],
+
+    note: 'Sweet spot for biotech - manageable trials, good economics'
+  },
+  'blockbuster': {
+    displayName: 'Blockbuster',
+    subtitle: '>1M patients',
+    description: 'Large market with fierce competition and massive opportunity',
+    riskBonus: -0.05,         // Harder large trials
+    marketMultiplier: 1.0,
+    trialSize: 'large',
+    vcInvestment: 120,        // $120M - large trials
+    highlights: [
+      { text: '-5% success rate', type: 'negative', detail: 'large trials harder' },
+      { text: 'Large market opportunity', type: 'positive', detail: '' },
+      { text: 'Subject to IRA', type: 'warning', detail: 'price negotiation' }
+    ],
+
+    note: 'Home run potential but requires significant capital and differentiation'
+  }
+};
+
+const INNOVATION_DATA = {
+  'first-in-class': {
+    displayName: 'First-in-Class',
+    subtitle: 'Pioneer / Novel Mechanism',
+    description: 'No approved drugs target this pathway. You\'re pioneering new biology.',
+    riskBonus: -0.08,         // Novel biology risk
+    marketMultiplier: 1.5,    // Premium if successful
+    highlights: [
+      { text: '-8% success rate', type: 'negative', detail: 'novel biology risk' },
+      { text: '+50% market premium', type: 'positive', detail: 'pricing power' },
+      { text: 'Set the standard', type: 'positive', detail: '' }
+    ],
+
+    note: 'Highest risk, highest reward. You define the treatment paradigm.'
+  },
+  'best-in-class': {
+    displayName: 'Best-in-Class',
+    subtitle: 'Validated / Improve',
+    description: 'Proven mechanism exists. You\'re building something better.',
+    riskBonus: 0,
+    marketMultiplier: 1.2,    // Can capture share
+    highlights: [
+      { text: 'Standard success rate', type: 'neutral', detail: 'de-risked' },
+      { text: '+20% market share', type: 'positive', detail: 'if differentiated' },
+      { text: 'Must show superiority', type: 'warning', detail: '' }
+    ],
+
+    note: 'Validated mechanism, but you need clear differentiation to win.'
+  },
+  'fast-follower': {
+    displayName: 'Fast-Follower',
+    subtitle: 'De-risked / Execute',
+    description: 'Copy a proven approach. Compete on execution, price, or access.',
+    riskBonus: 0.05,          // De-risked
+    marketMultiplier: 0.7,    // Lower share
+    highlights: [
+      { text: '+5% success rate', type: 'positive', detail: 'de-risked biology' },
+      { text: '-30% market share', type: 'negative', detail: 'late to market' },
+      { text: 'Faster development', type: 'positive', detail: '' }
+    ],
+
+    note: 'Lowest risk, but must compete on price, convenience, or access.'
+  }
+};
+
 // Modality-Specific Access & Affordability Challenges
 // Each modality faces different insurance/coverage realities
 const MODALITY_ACCESS_CHALLENGES = {
@@ -1993,6 +2093,50 @@ const INDICATIONS_BY_TYPE = {
       note: 'Standard of care unchanged for decades - first-in-class desperately needed.'
     }
   ],
+  specialty: [
+    {
+      name: 'Multiple Sclerosis',
+      area: 'CNS/Immunology',
+      usPrevalence: '~1 million',
+      challenges: ['Differentiation from Ocrevus', 'Long-term safety', 'Remyelination'],
+      note: 'Specialty market - high-value patients, specialty pharmacy distribution.'
+    },
+    {
+      name: 'Psoriatic Arthritis',
+      area: 'Immunology',
+      usPrevalence: '~500,000',
+      challenges: ['IL-17/IL-23 competition', 'Skin and joint endpoints', 'Differentiation'],
+      note: 'Growing specialty market with established biologic pathways.'
+    },
+    {
+      name: 'Ulcerative Colitis',
+      area: 'GI/Immunology',
+      usPrevalence: '~900,000',
+      challenges: ['Biologic competition', 'Mucosal healing endpoints', 'Safety'],
+      note: 'Specialty IBD market with multiple mechanisms available.'
+    },
+    {
+      name: 'Systemic Lupus Erythematosus',
+      area: 'Immunology',
+      usPrevalence: '~300,000',
+      challenges: ['Disease heterogeneity', 'Flare prevention', 'Organ involvement'],
+      note: 'Underserved specialty market with few effective therapies.'
+    },
+    {
+      name: 'Idiopathic Pulmonary Fibrosis',
+      area: 'Pulmonary',
+      usPrevalence: '~200,000',
+      challenges: ['Progressive disease', 'Functional endpoints', 'Combination approaches'],
+      note: 'Specialty market at the orphan/specialty boundary. Nintedanib and pirfenidone approved.'
+    },
+    {
+      name: 'Migraine Prevention',
+      area: 'CNS',
+      usPrevalence: '~4 million (chronic)',
+      challenges: ['CGRP competition', 'Oral vs injectable', 'Payer access'],
+      note: 'Large specialty market dominated by CGRP antibodies and gepants.'
+    }
+  ],
   blockbuster: [
     {
       name: 'Type 2 Diabetes',
@@ -2042,6 +2186,7 @@ const INDICATIONS_BY_TYPE = {
 // Legacy array for backward compatibility - combine all indications
 const INDICATIONS = [
   ...INDICATIONS_BY_TYPE.orphan,
+  ...INDICATIONS_BY_TYPE.specialty,
   ...INDICATIONS_BY_TYPE['first-in-class'],
   ...INDICATIONS_BY_TYPE.blockbuster
 ];
@@ -2136,8 +2281,10 @@ export default function TheLongGame() {
   const [showAlternativeFinancing, setShowAlternativeFinancing] = useState(false); // Show alternative options
   const [revenueMultiplier, setRevenueMultiplier] = useState(1.0); // Impact of financing deals on revenue
 
-  // Program configuration
-  const [programType, setProgramType] = useState(null); // 'first-in-class', 'orphan', 'blockbuster'
+  // Program configuration - Two-dimensional strategy
+  const [marketSize, setMarketSize] = useState(null); // 'orphan', 'specialty', 'blockbuster'
+  const [innovation, setInnovation] = useState(null); // 'first-in-class', 'best-in-class', 'fast-follower'
+  const [programType, setProgramType] = useState(null); // Legacy - derived from marketSize for compatibility
   const [modality, setModality] = useState(null); // 'small-molecule', 'biologic', 'genetic-medicine', 'cell-therapy'
 
   const [currentQuestion, setCurrentQuestion] = useState(null);
@@ -2167,6 +2314,8 @@ export default function TheLongGame() {
     setIndicationData(null);
     setIndication('');
     setModality(null);
+    setMarketSize(null);
+    setInnovation(null);
     setProgramType(null);
     // Start with modality selection (platform-first approach)
     setScreen('setup_modality');
@@ -2186,44 +2335,56 @@ export default function TheLongGame() {
     const selectedExit = EXIT_STRATEGIES[Math.floor(Math.random() * EXIT_STRATEGIES.length)];
     setExitStrategy(selectedExit);
 
-    // Now go to program type selection
-    setScreen('setup_type');
+    // Now go to market size selection (Step 2)
+    setScreen('setup_market_size');
   };
 
-  // Step 2: Select program type (after modality is chosen)
-  const selectProgramType = (type) => {
-    setProgramType(type);
+  // Step 2: Select market size (Orphan / Specialty / Blockbuster)
+  const selectMarketSize = (size) => {
+    setMarketSize(size);
+    // Set legacy programType for compatibility (indication filtering uses this)
+    setProgramType(size);
 
-    // Apply modifiers based on program type
-    // VC investment amounts based on RA Capital framework:
-    // - First-in-class: Higher capital needs, novel biology requires longer runway
-    // - Orphan: Smaller trials, faster path to approval, less capital needed
-    // - Blockbuster: Large markets require large trials, significant capital
-    if (type === 'first-in-class') {
-      setRiskBonus(-0.08); // Higher risk, novel biology
-      setMarketMultiplier(1.5); // Higher reward if successful
-      setVcInvestment(100); // $100M Series A - higher risk requires more runway
-    } else if (type === 'orphan') {
-      setRiskBonus(0.05); // Smaller trials, regulatory support
-      setMarketMultiplier(0.4); // Smaller market
-      setVcInvestment(50); // $50M Series A - smaller trials, faster path
-    } else if (type === 'blockbuster') {
-      setRiskBonus(0); // Standard risk
-      setMarketMultiplier(1.0); // Large market, competitive
-      setVcInvestment(120); // $120M Series A - large trials needed
-    }
+    // Now go to innovation position selection (Step 3)
+    setScreen('setup_innovation');
+  };
 
-    // Now go to indication selection
+  // Step 3: Select innovation position (First-in-Class / Best-in-Class / Fast-Follower)
+  const selectInnovation = (innov) => {
+    setInnovation(innov);
+
+    // Apply combined modifiers from both dimensions
+    const marketData = MARKET_SIZE_DATA[marketSize];
+    const innovData = INNOVATION_DATA[innov];
+
+    // Combine risk bonuses from both dimensions
+    const combinedRiskBonus = (marketData?.riskBonus || 0) + (innovData?.riskBonus || 0);
+    setRiskBonus(combinedRiskBonus);
+
+    // Combine market multipliers (multiply together)
+    const combinedMarketMultiplier = (marketData?.marketMultiplier || 1) * (innovData?.marketMultiplier || 1);
+    setMarketMultiplier(combinedMarketMultiplier);
+
+    // VC investment based on market size
+    setVcInvestment(marketData?.vcInvestment || 80);
+
+    // Now go to indication selection (Step 4)
     setScreen('setup_indication');
   };
 
-  // Step 3: Select indication (after modality and program type are chosen)
+  // Legacy: Select program type (for backward compatibility)
+  const selectProgramType = (type) => {
+    setProgramType(type);
+    setScreen('setup_indication');
+  };
+
+  // Step 4: Select indication (after modality, market size, and innovation are chosen)
   const selectIndication = (indicationObj) => {
     setIndicationData(indicationObj);
     setIndication(indicationObj.name);
 
     // Initialize game state
-    initializeGame(programType, modality, indicationObj);
+    initializeGame(marketSize, modality, indicationObj);
   };
 
   // Initialize game after both modality and program type are selected
@@ -2882,16 +3043,16 @@ export default function TheLongGame() {
     );
   }
 
-  // Program Type Selection (Step 2)
-  if (screen === 'setup_type') {
+  // Market Size Selection (Step 2 of 4)
+  if (screen === 'setup_market_size') {
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 3</p>
-              <h1 className="text-3xl font-bold mb-2">Choose Your Program Type</h1>
-              <p className="text-slate-400">This decision shapes which diseases you can target</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 2 OF 4</p>
+              <h1 className="text-3xl font-bold mb-2">Choose Market Size</h1>
+              <p className="text-slate-400">This determines your patient population and regulatory path</p>
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
@@ -2903,62 +3064,66 @@ export default function TheLongGame() {
               }}>
                 {MODALITY_DATA[modality]?.displayName || modality}
               </div>
-              <p className="text-slate-500 text-xs mt-1">
-                {MODALITY_DATA[modality]?.description || 'Drug modality platform'}
-              </p>
             </div>
 
             <div className="space-y-4">
               <button
-                onClick={() => selectProgramType('first-in-class')}
-                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 rounded-lg p-6 transition-colors"
-              >
-                <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-emerald-400">First-in-Class</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-400">HIGH RISK / HIGH REWARD</span>
-                </div>
-                <p className="text-slate-300 mb-3">
-                  Novel mechanism of action with no approved drugs targeting this pathway. You're pioneering new biology.
-                </p>
-                <div className="flex gap-4 text-sm">
-                  <span className="text-red-400">-8% success rate (novel biology risk)</span>
-                  <span className="text-emerald-400">+50% market potential</span>
-                </div>
-              </button>
-
-              <button
-                onClick={() => selectProgramType('orphan')}
+                onClick={() => selectMarketSize('orphan')}
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-purple-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
                   <h3 className="text-xl font-semibold text-purple-400">Orphan Drug</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-purple-500/20 text-purple-400">REGULATORY ADVANTAGES</span>
+                  <span className="text-xs px-2 py-1 rounded bg-purple-500/20 text-purple-400">{'<'}200K PATIENTS</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Rare disease affecting fewer than 200,000 patients. Smaller trials, FDA incentives, 7-year market exclusivity.
+                  {MARKET_SIZE_DATA.orphan.description}
                 </p>
-                <div className="flex gap-4 text-sm">
-                  <span className="text-emerald-400">+5% success rate (smaller trials)</span>
-                  <span className="text-amber-400">-60% market size (rare disease)</span>
-                  <span className="text-purple-400">Exempt from IRA negotiation</span>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {MARKET_SIZE_DATA.orphan.highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
                 </div>
               </button>
 
               <button
-                onClick={() => selectProgramType('blockbuster')}
+                onClick={() => selectMarketSize('specialty')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-cyan-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-cyan-400">Specialty Market</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-cyan-500/20 text-cyan-400">200K - 1M PATIENTS</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  {MARKET_SIZE_DATA.specialty.description}
+                </p>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {MARKET_SIZE_DATA.specialty.highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
+                </div>
+              </button>
+
+              <button
+                onClick={() => selectMarketSize('blockbuster')}
                 className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-blue-500/50 rounded-lg p-6 transition-colors"
               >
                 <div className="flex justify-between items-start mb-2">
-                  <h3 className="text-xl font-semibold text-blue-400">Blockbuster Potential</h3>
-                  <span className="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">LARGE MARKET</span>
+                  <h3 className="text-xl font-semibold text-blue-400">Blockbuster</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-blue-500/20 text-blue-400">{'>'}1M PATIENTS</span>
                 </div>
                 <p className="text-slate-300 mb-3">
-                  Common disease with large patient population. Best-in-class or differentiated approach in competitive market.
+                  {MARKET_SIZE_DATA.blockbuster.description}
                 </p>
-                <div className="flex gap-4 text-sm">
-                  <span className="text-slate-400">Standard success rates</span>
-                  <span className="text-blue-400">Large market opportunity</span>
-                  <span className="text-amber-400">Subject to IRA price negotiation</span>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {MARKET_SIZE_DATA.blockbuster.highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : h.type === 'warning' ? 'text-amber-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
                 </div>
               </button>
             </div>
@@ -2968,7 +3133,106 @@ export default function TheLongGame() {
     );
   }
 
-  // Indication Selection (Step 3)
+  // Innovation Position Selection (Step 3 of 4)
+  if (screen === 'setup_innovation') {
+    const marketData = MARKET_SIZE_DATA[marketSize];
+    return (
+      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
+        <div className="flex-1 flex items-center justify-center p-8">
+          <div className="max-w-2xl w-full">
+            <div className="text-center mb-8">
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 3 OF 4</p>
+              <h1 className="text-3xl font-bold mb-2">Choose Innovation Position</h1>
+              <p className="text-slate-400">This determines your competitive and risk profile</p>
+            </div>
+
+            <div className="bg-slate-900 border border-slate-800 rounded-lg p-4 mb-6">
+              <div className="flex justify-between items-start">
+                <div>
+                  <div className="text-slate-500 text-xs mb-1">MODALITY</div>
+                  <div className="font-semibold" style={{
+                    color: modality === 'small-molecule' ? '#fbbf24' :
+                      modality === 'biologic' ? '#34d399' :
+                        modality === 'genetic-medicine' ? '#a78bfa' : '#f472b6'
+                  }}>
+                    {MODALITY_DATA[modality]?.displayName || modality}
+                  </div>
+                </div>
+                <div className="text-right">
+                  <div className="text-slate-500 text-xs mb-1">MARKET SIZE</div>
+                  <div className="font-semibold text-purple-400">{marketData?.displayName || marketSize}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-4">
+              <button
+                onClick={() => selectInnovation('first-in-class')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-emerald-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-emerald-400">First-in-Class</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-400">PIONEER</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  {INNOVATION_DATA['first-in-class'].description}
+                </p>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {INNOVATION_DATA['first-in-class'].highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
+                </div>
+              </button>
+
+              <button
+                onClick={() => selectInnovation('best-in-class')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-amber-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-amber-400">Best-in-Class</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400">IMPROVE</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  {INNOVATION_DATA['best-in-class'].description}
+                </p>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {INNOVATION_DATA['best-in-class'].highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : h.type === 'warning' ? 'text-amber-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
+                </div>
+              </button>
+
+              <button
+                onClick={() => selectInnovation('fast-follower')}
+                className="w-full text-left bg-slate-900 hover:bg-slate-800 border border-slate-700 hover:border-slate-500/50 rounded-lg p-6 transition-colors"
+              >
+                <div className="flex justify-between items-start mb-2">
+                  <h3 className="text-xl font-semibold text-slate-300">Fast-Follower</h3>
+                  <span className="text-xs px-2 py-1 rounded bg-slate-500/20 text-slate-400">DE-RISKED</span>
+                </div>
+                <p className="text-slate-300 mb-3">
+                  {INNOVATION_DATA['fast-follower'].description}
+                </p>
+                <div className="flex flex-wrap gap-3 text-sm">
+                  {INNOVATION_DATA['fast-follower'].highlights.map((h, i) => (
+                    <span key={i} className={h.type === 'positive' ? 'text-emerald-400' : h.type === 'negative' ? 'text-red-400' : 'text-slate-400'}>
+                      {h.text}
+                    </span>
+                  ))}
+                </div>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Indication Selection (Step 4 of 4)
   if (screen === 'setup_indication') {
     // Get compatibility info for current modality
     const getIndicationFit = (area) => {
@@ -2981,19 +3245,19 @@ export default function TheLongGame() {
       return { fit: 'poor', ...modalityCompat };
     };
 
-    // Filter indications by program type
+    // Filter indications by market size (using programType which is set to marketSize for compatibility)
     const filteredIndications = INDICATIONS_BY_TYPE[programType] || INDICATIONS;
 
-    // Get program type display name
-    const programTypeDisplay = programType === 'first-in-class' ? 'First-in-Class' :
-      programType === 'orphan' ? 'Orphan Drug' : 'Blockbuster';
+    // Get display names
+    const marketSizeDisplay = MARKET_SIZE_DATA[marketSize]?.displayName || marketSize;
+    const innovationDisplay = INNOVATION_DATA[innovation]?.displayName || innovation;
 
     return (
       <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col">
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-3xl w-full">
             <div className="text-center mb-6">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 3 OF 3</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 4 OF 4</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Indication</h1>
               <p className="text-slate-400">Select the disease area your platform will target</p>
             </div>
@@ -3010,9 +3274,13 @@ export default function TheLongGame() {
                     {MODALITY_DATA[modality]?.displayName || modality}
                   </div>
                 </div>
+                <div className="text-center">
+                  <div className="text-slate-500 text-xs mb-1">MARKET</div>
+                  <div className="font-semibold text-purple-400">{marketSizeDisplay}</div>
+                </div>
                 <div className="text-right">
-                  <div className="text-slate-500 text-xs mb-1">PROGRAM TYPE</div>
-                  <div className="font-semibold text-emerald-400">{programTypeDisplay}</div>
+                  <div className="text-slate-500 text-xs mb-1">INNOVATION</div>
+                  <div className="font-semibold text-emerald-400">{innovationDisplay}</div>
                 </div>
               </div>
             </div>
@@ -3189,15 +3457,15 @@ export default function TheLongGame() {
             <div className="flex items-center justify-between">
               <div>
                 <div className="text-slate-500 text-xs font-medium tracking-wide">
-                  {programType === 'first-in-class' ? 'FIRST-IN-CLASS' :
-                    programType === 'orphan' ? 'ORPHAN DRUG' : 'BLOCKBUSTER'} • {
+                  {MARKET_SIZE_DATA[marketSize]?.displayName?.toUpperCase() || marketSize?.toUpperCase() || 'MARKET'} • {
+                    INNOVATION_DATA[innovation]?.displayName?.toUpperCase() || innovation?.toUpperCase() || 'INNOVATION'} • {
                     MODALITY_DATA[modality]?.displayName?.toUpperCase() || modality?.toUpperCase() || 'MODALITY'}
                 </div>
                 <div className="text-lg font-semibold">{drugName}</div>
                 <div className="text-slate-400 text-sm">{indication}</div>
                 {exitStrategy && (
                   <div className="text-emerald-500 text-xs mt-1">
-                    {programType === 'orphan' ? 'Orphan Drug' : programType === 'first-in-class' ? 'First-in-Class' : 'Blockbuster Potential'} • {exitStrategy?.name || 'Exit TBD'}
+                    {exitStrategy?.name || 'Exit TBD'}
                   </div>
                 )}
               </div>
