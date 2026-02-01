@@ -124,6 +124,51 @@ const MODALITY_DATA = {
   }
 };
 
+// Modality-specific phase context overlay
+// Provides tailored descriptions and activities for early phases
+const MODALITY_PHASE_CONTEXT = {
+  'small-molecule': {
+    basic_research: {
+      context: 'Small molecule discovery begins with understanding disease biology and identifying druggable targets - typically enzymes, receptors, or ion channels with well-defined binding pockets. Target validation uses genetic knockdown/knockout studies, biochemical assays, and animal models to confirm that modulating the target affects disease.',
+      activities: ['Target druggability assessment', 'Binding pocket analysis', 'Genetic validation studies', 'Biochemical assay development', 'Hit-finding strategy']
+    },
+    drug_discovery: {
+      context: 'Hit identification uses high-throughput screening of compound libraries or computational design. Lead optimization balances potency, selectivity, metabolic stability, and oral bioavailability. Small molecules under 500 daltons can often achieve oral dosing - a major convenience advantage.',
+      activities: ['High-throughput screening', 'Medicinal chemistry optimization', 'ADMET profiling', 'Oral bioavailability testing', 'Candidate selection']
+    }
+  },
+  'biologic': {
+    basic_research: {
+      context: 'Biologic development begins with identifying extracellular or cell-surface targets accessible to large molecules. Target validation focuses on understanding pathway biology and potential redundancy - where blocking one pathway may be compensated by another. Antibody developability assessment is critical early.',
+      activities: ['Target pathway mapping', 'Redundancy assessment', 'Epitope identification', 'Developability screening', 'Format selection']
+    },
+    drug_discovery: {
+      context: 'Antibody discovery uses phage display, transgenic mice, or single B-cell cloning. Lead optimization focuses on binding affinity, specificity, stability, and manufacturability. Unlike small molecules, biologics require injection or infusion - they cannot survive oral administration.',
+      activities: ['Antibody discovery campaign', 'Affinity maturation', 'Humanization', 'Stability engineering', 'Cell line development']
+    }
+  },
+  'genetic-medicine': {
+    basic_research: {
+      context: 'Genetic medicine development requires strong genetic validation linking gene modulation to disease. Human genetic evidence - natural loss-of-function or gain-of-function variants - provides the strongest validation. Delivery strategy and tissue targeting are critical early considerations.',
+      activities: ['Human genetic evidence review', 'Target gene validation', 'Delivery platform selection', 'Tissue targeting strategy', 'Sequence design']
+    },
+    drug_discovery: {
+      context: 'Genetic medicine optimization involves payload design (gene, antisense, siRNA, or editing construct), delivery vehicle engineering, and tissue targeting. Durability of expression and potential for re-dosing are key considerations. Pre-existing immunity to viral vectors can limit patient eligibility.',
+      activities: ['Payload optimization', 'Vector or delivery engineering', 'Tropism and targeting', 'Expression durability studies', 'Immunogenicity assessment']
+    }
+  },
+  'cell-therapy': {
+    basic_research: {
+      context: 'Cell therapy development begins with understanding target biology and defining the therapeutic mechanism - cytotoxicity, immune modulation, or tissue repair. Cell source strategy (autologous vs allogeneic) and engineering approach are foundational decisions that affect manufacturing complexity.',
+      activities: ['Target antigen validation', 'Cell source evaluation', 'Engineering strategy', 'Safety feature design', 'Persistence optimization']
+    },
+    drug_discovery: {
+      context: 'Cell engineering optimizes receptor design, signaling domains, and additional modifications. Manufacturing process development is critical - cell therapies are living products requiring specialized Good Manufacturing Practice facilities. Autologous products face patient-specific variability.',
+      activities: ['Receptor/construct design', 'Co-stimulatory optimization', 'Manufacturing process development', 'Potency assay development', 'Release testing strategy']
+    }
+  }
+};
+
 
 // Financing rounds - biotech capital progression
 // Standard biotech financing ranges (source: industry data)
@@ -457,22 +502,24 @@ const PHASES = [
 // Strategic decisions by phase
 const QUESTIONS = {
   // MODALITY-SPECIFIC BASIC RESEARCH QUESTIONS
+  // Questions focus on target validation strategies relevant to each modality
+  // Without assuming specific indications (user has already selected their disease)
   basic_research: {
     'small-molecule': [
       {
         id: 'target_selection_sm',
         title: 'Target Selection Strategy',
-        scenario: 'Your research team has identified two potential drug targets. Target A is a well-characterized kinase with published genetic validation but active competitors. Target B is a novel protein with strong genome-wide association study data but limited understanding of its biology.',
+        scenario: 'Your research team has identified two potential drug targets for your indication. Target A is a well-characterized enzyme with published genetic validation but several competitors in development. Target B is a novel protein with strong genome-wide association study data but limited understanding of its biology.',
         options: [
           {
-            text: 'Pursue the validated kinase (Target A)',
+            text: 'Pursue the validated target (Target A)',
             detail: 'Known biology, competitive landscape',
             cashEffect: -1,
             timeEffect: 0,
             riskBonus: 0.05,
             efficacyEffect: -15,
-            result: 'The established biology accelerates your program. However, you learn that three other companies are pursuing the same target.',
-            lesson: 'Validated targets reduce biological risk - you know the target is relevant to disease. But validation attracts competition, requiring differentiation on efficacy, safety, or convenience.'
+            result: 'The established biology accelerates your program. However, you learn that three other companies are pursuing the same target for similar indications.',
+            lesson: 'Validated targets reduce biological risk - you know the target is relevant to disease. But validation attracts competition, requiring differentiation on efficacy, safety, or convenience. Small molecules can often achieve oral bioavailability, a major advantage for chronic dosing.'
           },
           {
             text: 'Pursue the novel protein (Target B)',
@@ -483,7 +530,7 @@ const QUESTIONS = {
             marketBonus: 1.5,
             efficacyEffect: 20,
             result: 'You must build understanding of the target from scratch. Initial validation takes longer than expected, but you establish a proprietary position.',
-            lesson: 'Novel targets offer breakthrough potential but carry substantial risk that the underlying biology is wrong - the most common cause of drug failure.'
+            lesson: 'Novel targets offer breakthrough potential but carry substantial risk that the underlying biology is wrong - the most common cause of drug failure. Small molecule advantages include well-understood manufacturing and distribution.'
           },
           {
             text: 'Validate both targets in parallel',
@@ -501,38 +548,38 @@ const QUESTIONS = {
     'biologic': [
       {
         id: 'target_selection_bio',
-        title: 'Antigen and Target Biology Strategy',
-        scenario: 'Your team is developing a therapeutic antibody. Target A is a validated cell-surface receptor with known biology but concerns about pathway redundancy. Target B is a secreted cytokine with clear disease association but potential for immunogenicity due to partial homology with endogenous proteins.',
+        title: 'Antibody Target and Format Strategy',
+        scenario: 'Your team is developing a therapeutic antibody for your indication. You must decide on format and target. Option A is a standard monoclonal antibody against a validated target. Option B is a bispecific format that could address mechanism redundancy but adds manufacturing complexity.',
         options: [
           {
-            text: 'Target the cell-surface receptor (Target A)',
-            detail: 'Accessible target, redundancy concerns',
+            text: 'Standard monoclonal antibody format',
+            detail: 'Well-understood manufacturing, proven regulatory path',
             cashEffect: -2,
             timeEffect: 0,
             riskBonus: 0.04,
             efficacyEffect: -10,
-            result: 'Your antibody shows excellent binding affinity and target engagement. However, preclinical models suggest compensatory pathway activation may limit clinical efficacy.',
-            lesson: 'Biologics targeting cell-surface receptors have excellent drug properties but may face pathway redundancy. Biology can route around a blocked pathway, limiting clinical benefit despite perfect target engagement.'
+            result: 'Your antibody shows excellent binding and target engagement. Manufacturing proceeds smoothly with established cell line development.',
+            lesson: 'Monoclonal antibodies have mature manufacturing and regulatory pathways. Biologics require injection or infusion since large proteins cannot survive oral administration. Immunogenicity (anti-drug antibodies) remains a key clinical risk even with fully human sequences.'
           },
           {
-            text: 'Target the secreted cytokine (Target B)',
-            detail: 'Clear biology, immunogenicity risk',
-            cashEffect: -3,
-            timeEffect: 3,
-            riskBonus: -0.05,
-            efficacyEffect: 15,
-            result: 'Your anti-cytokine antibody shows strong preclinical efficacy. However, humanization proves challenging due to sequence constraints needed to avoid anti-drug antibody responses.',
-            lesson: 'Neutralizing secreted targets can have dramatic effects but immunogenicity risk increases when target sequences resemble self-proteins. Anti-drug antibodies remain a key clinical risk for biologics.'
-          },
-          {
-            text: 'Develop bispecific targeting both pathways',
+            text: 'Bispecific antibody targeting two pathways',
             detail: 'Innovation potential, manufacturing complexity',
             cashEffect: -5,
             timeEffect: 9,
             riskBonus: -0.03,
             marketBonus: 1.4,
-            result: 'Your bispecific approach addresses redundancy but introduces significant manufacturing complexity. Protein folding and stability require extensive optimization.',
-            lesson: 'Bispecific antibodies can address single-target limitations but add layers of development risk. Manufacturing complexity often exceeds expectations for multispecific formats.'
+            result: 'Your bispecific approach addresses potential mechanism redundancy but introduces significant manufacturing complexity. Protein folding and stability require extensive optimization.',
+            lesson: 'Bispecific antibodies can address single-target limitations but add layers of development risk. Manufacturing complexity often exceeds expectations for multispecific formats. However, differentiation potential may justify the investment.'
+          },
+          {
+            text: 'Antibody-drug conjugate (ADC) approach',
+            detail: 'Combines targeting with cytotoxic payload',
+            cashEffect: -4,
+            timeEffect: 6,
+            riskBonus: -0.02,
+            efficacyEffect: 5,
+            result: 'Your ADC combines antibody specificity with potent payload. Linker chemistry and payload selection prove critical for therapeutic window.',
+            lesson: 'ADCs leverage antibody targeting to deliver payloads to specific cells. Success requires optimizing antibody, linker, and payload together. Therapeutic window depends on specific vs off-target delivery ratio.'
           }
         ]
       }
@@ -540,39 +587,39 @@ const QUESTIONS = {
     'genetic-medicine': [
       {
         id: 'target_selection_gene',
-        title: 'Genetic Target and Indication Selection',
-        scenario: 'Your genetic medicine platform can target different genes. Option A: a well-validated monogenic disease with clear loss-of-function genetics and small patient population (5,000 patients). Option B: a polygenic disease with larger population (500,000 patients) but uncertain genetic architecture.',
+        title: 'Genetic Target Validation Strategy',
+        scenario: 'Your genetic medicine platform can modulate gene expression through different mechanisms. You must validate your therapeutic hypothesis for this indication. What level of genetic validation will you require before committing resources?',
         options: [
           {
-            text: 'Pursue the monogenic rare disease (Option A)',
-            detail: 'Clear genetics, orphan designation potential',
+            text: 'Require human genetic evidence (loss-of-function or gain-of-function)',
+            detail: 'High bar, strongest validation',
             cashEffect: -3,
-            timeEffect: 0,
+            timeEffect: 6,
             riskBonus: 0.08,
             efficacyEffect: -20,
-            result: 'The genetic validation is compelling - patients with this mutation uniformly develop disease. Regulatory pathway is clear with Orphan Drug Designation.',
-            lesson: 'Genetic medicines have highest success rates in monogenic diseases where restoring or silencing a single gene addresses root cause. Orphan indications provide accelerated pathways and market exclusivity despite smaller populations.'
+            result: 'You wait for human genetic evidence linking your target to disease. When found, the validation is compelling - patients with natural variants have the phenotype you want to create or prevent.',
+            lesson: 'Genetic medicines have highest success rates when human genetics validates the target. Natural loss-of-function or gain-of-function variants provide the strongest evidence that modulating the gene will affect disease. This is why genetic medicines excel in monogenic diseases.'
           },
           {
-            text: 'Pursue the larger polygenic indication (Option B)',
-            detail: 'Larger market, less clear biology',
-            cashEffect: -4,
-            timeEffect: 6,
+            text: 'Proceed with preclinical validation only',
+            detail: 'Faster timeline, higher biological risk',
+            cashEffect: -2,
+            timeEffect: 0,
             riskBonus: -0.1,
-            marketBonus: 2.0,
+            marketBonus: 1.3,
             efficacyEffect: 25,
-            result: 'Your target gene shows association with disease risk, but effect sizes are modest. Predicting responders proves difficult without clear genetic stratification.',
-            lesson: 'Genetic medicines in polygenic diseases face the challenge that modifying one gene may not substantially change disease course. The genetic architecture that makes patient identification easier for genetic therapies is missing in common diseases.'
+            result: 'Animal models show compelling effects, but the translation gap to humans remains uncertain. You move faster but accept higher risk that the biology does not translate.',
+            lesson: 'Preclinical validation in animal models can be misleading - biology often differs between species. Without human genetic evidence, the risk that target modulation will not produce clinical benefit increases substantially.'
           },
           {
-            text: 'Use rare disease to validate, plan expansion',
-            detail: 'Sequential strategy, proves mechanism first',
+            text: 'Invest in biomarker development alongside target validation',
+            detail: 'Enable patient selection and proof of mechanism',
             cashEffect: -5,
             timeEffect: 3,
             riskBonus: 0.02,
             efficacyEffect: 0,
-            result: 'You prioritize the rare disease for initial proof-of-concept while designing studies to understand the larger indication. This de-risks biology before major investment.',
-            lesson: 'Starting in rare monogenic diseases provides genetic proof-of-concept that can inform expansion. Many successful genetic medicine programs use this staged approach to validate mechanism before pursuing larger populations.'
+            result: 'You develop biomarkers that will enable target engagement measurement and potentially patient selection. This investment pays off in clinical trials where you can demonstrate mechanism.',
+            lesson: 'Biomarkers that demonstrate target modulation and predict response are particularly valuable for genetic medicines. They enable patient selection and provide proof of mechanism even if clinical endpoints take years to mature.'
           }
         ]
       }
@@ -580,39 +627,39 @@ const QUESTIONS = {
     'cell-therapy': [
       {
         id: 'target_selection_cell',
-        title: 'Cell Therapy Indication and Biology Strategy',
-        scenario: 'Your engineered cell platform can address different indications. Option A: hematologic malignancy with validated target antigen (Cluster of Differentiation 19) and established Chimeric Antigen Receptor T-cell precedent. Option B: solid tumor with tumor-associated antigen that lacks clean tumor-only expression.',
+        title: 'Cellular Engineering Strategy',
+        scenario: 'Your engineered cell platform must be designed for your target indication. The key strategic question is how extensively to engineer the cells - more engineering adds complexity but may improve efficacy and safety.',
         options: [
           {
-            text: 'Pursue the hematologic malignancy (Option A)',
-            detail: 'Validated target, competitive but de-risked',
+            text: 'Minimal engineering - focus on core mechanism',
+            detail: 'Simpler manufacturing, established biology',
             cashEffect: -5,
             timeEffect: 0,
             riskBonus: 0.06,
             efficacyEffect: -15,
-            result: 'The biology is well-established and regulatory pathway is clear. However, multiple approved Chimeric Antigen Receptor T-cell products already address this indication, requiring differentiation.',
-            lesson: 'Hematologic malignancies validated Chimeric Antigen Receptor T-cell therapy but are now crowded markets. Clean target antigens like Cluster of Differentiation 19 enabled proof-of-concept. Differentiation now requires improved safety, persistence, or manufacturing.'
+            result: 'Your straightforward approach enables faster development and simpler manufacturing. Regulatory path is clearer with established precedents.',
+            lesson: 'Simpler cell products have manufacturing advantages and clearer regulatory paths. First-generation Chimeric Antigen Receptor T-cell products validated the approach. Trade-off is potentially limited efficacy or persistence compared to more engineered products.'
           },
           {
-            text: 'Pursue the solid tumor indication (Option B)',
-            detail: 'Unmet need, therapeutic window concerns',
-            cashEffect: -8,
-            timeEffect: 9,
-            riskBonus: -0.1,
-            marketBonus: 1.8,
-            efficacyEffect: 30,
-            result: 'Your target is expressed on tumor cells but also at lower levels on normal tissue. Balancing efficacy against on-target, off-tumor toxicity proves challenging.',
-            lesson: 'Solid tumors represent the frontier of cell therapy but lack ideal target antigens. Normal tissue expression creates therapeutic window concerns. Tumor microenvironment suppression and trafficking challenges add complexity beyond antigen selection.'
-          },
-          {
-            text: 'Develop armored cells with conditional activation',
-            detail: 'Safety switch, engineering complexity',
+            text: 'Extensive engineering with multiple modifications',
+            detail: 'Innovation potential, manufacturing complexity',
             cashEffect: -10,
             timeEffect: 12,
-            riskBonus: -0.02,
+            riskBonus: -0.05,
+            marketBonus: 1.5,
+            efficacyEffect: 10,
+            result: 'Your heavily engineered cells incorporate multiple modifications for enhanced function. Manufacturing proves more complex and characterization requirements increase substantially.',
+            lesson: 'Next-generation cell therapies incorporate safety switches, armoring against immunosuppression, and optimized signaling domains. Each modification adds regulatory complexity but may provide meaningful clinical advantages. The trade-off between sophistication and manufacturability is central to cell therapy development.'
+          },
+          {
+            text: 'Allogeneic platform for off-the-shelf availability',
+            detail: 'Scalable manufacturing, requires immune evasion',
+            cashEffect: -8,
+            timeEffect: 9,
+            riskBonus: -0.03,
             marketBonus: 1.3,
-            result: 'Your engineered safety features allow targeting less-specific antigens. Development takes longer but creates a platform applicable to multiple solid tumor indications.',
-            lesson: 'Next-generation cell therapies incorporate safety switches, logic gates, and conditional activation to expand target options. This engineering complexity extends development timelines but may be essential for solid tumor success.'
+            result: 'Your gene editing knocks out T-cell receptor and human leukocyte antigen to create universal donor cells. Manufacturing is scalable but rejection and persistence risks require monitoring.',
+            lesson: 'Allogeneic approaches solve logistics but introduce new biology. T-cell receptor knockout prevents graft-versus-host disease; human leukocyte antigen knockout prevents rejection. Long-term persistence data is still accumulating for allogeneic approaches.'
           }
         ]
       }
@@ -3255,13 +3302,17 @@ export default function TheLongGame() {
                 <p className="text-slate-400 mb-6">{currentPhase.description}</p>
 
                 <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-                  <p className="text-slate-300 text-sm mb-4">{currentPhase.context}</p>
+                  <p className="text-slate-300 text-sm mb-4">
+                    {/* Use modality-specific context if available, otherwise fall back to generic */}
+                    {MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.context || currentPhase.context}
+                  </p>
 
-                  {currentPhase.activities && (
+                  {/* Use modality-specific activities if available, otherwise fall back to generic */}
+                  {(MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.activities || currentPhase.activities) && (
                     <div className="mb-4 pb-4 border-b border-slate-700">
                       <div className="text-slate-500 text-xs mb-2">KEY ACTIVITIES</div>
                       <div className="flex flex-wrap gap-2">
-                        {currentPhase.activities.map((activity, i) => (
+                        {(MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.activities || currentPhase.activities).map((activity, i) => (
                           <span key={i} className="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400">
                             {activity}
                           </span>
