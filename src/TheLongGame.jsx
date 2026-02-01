@@ -2163,12 +2163,34 @@ export default function TheLongGame() {
   const currentPhase = PHASES[currentPhaseIndex];
 
   const startGame = () => {
-    // Clear any previous indication - will be set when program type is selected
+    // Clear any previous state
     setIndicationData(null);
     setIndication('');
+    setModality(null);
+    setProgramType(null);
+    // Start with modality selection (platform-first approach)
+    setScreen('setup_modality');
+  };
+
+  // Step 1: Select modality (platform-first approach)
+  const selectModality = (mod) => {
+    setModality(mod);
+    setDrugName(generateDrugName());
+
+    // Pick a random platform based on modality - investors fund platforms, not just single assets
+    const modalityPlatforms = PLATFORMS[mod] || PLATFORMS['small-molecule'];
+    const selectedPlatform = modalityPlatforms[Math.floor(Math.random() * modalityPlatforms.length)];
+    setPlatform(selectedPlatform);
+
+    // Pick a random exit strategy
+    const selectedExit = EXIT_STRATEGIES[Math.floor(Math.random() * EXIT_STRATEGIES.length)];
+    setExitStrategy(selectedExit);
+
+    // Now go to program type selection
     setScreen('setup_type');
   };
 
+  // Step 2: Select program type (after modality is chosen)
   const selectProgramType = (type) => {
     setProgramType(type);
 
@@ -2196,21 +2218,14 @@ export default function TheLongGame() {
       setMarketMultiplier(1.0); // Large market, competitive
       setVcInvestment(120); // $120M Series A - large trials needed
     }
-    setScreen('setup_modality');
+
+    // Initialize game state
+    initializeGame(type, modality, selectedIndication);
   };
 
-  const selectModality = (mod) => {
-    setModality(mod);
-    setDrugName(generateDrugName());
+  // Initialize game after both modality and program type are selected
+  const initializeGame = (type, mod, indicationData) => {
 
-    // Pick a random platform based on modality - investors fund platforms, not just single assets
-    const modalityPlatforms = PLATFORMS[mod] || PLATFORMS['small-molecule'];
-    const selectedPlatform = modalityPlatforms[Math.floor(Math.random() * modalityPlatforms.length)];
-    setPlatform(selectedPlatform);
-
-    // Pick a random exit strategy
-    const selectedExit = EXIT_STRATEGIES[Math.floor(Math.random() * EXIT_STRATEGIES.length)];
-    setExitStrategy(selectedExit);
 
     // Start with SEED funding - not the full Series A
     // Seed round: $25M to validate target and establish proof-of-concept
