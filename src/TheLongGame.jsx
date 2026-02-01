@@ -2817,10 +2817,10 @@ export default function TheLongGame() {
                 You are the CEO of a biotechnology company. Your mission: develop a medicine that will improve patients' lives-and eventually become an affordable generic that serves humanity in perpetuity.
               </p>
               <p className="text-slate-500 text-sm">
-                Navigate from target discovery through FDA approval. At each phase, you will face the strategic decisions that drug developers confront every day. Your choices will determine whether your drug reaches patients-and what you learn about why this industry works the way it does.
+                Navigate target discovery through FDA approval, making the strategic decisions that define biotech innovation. Your choices determine patient access and reveal the industry's underlying dynamics.
               </p>
               <p className="text-slate-600 text-xs italic mt-3">
-                This game models selected aspects of biotech development using simplified assumptions. It's designed to explore system dynamics, not to replicate real-world decision-making.
+                This model simulates selected aspects of biotech development using simplified assumptions for illustrative purposes only.
               </p>
             </div>
 
