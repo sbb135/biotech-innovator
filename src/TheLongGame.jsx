@@ -1471,7 +1471,7 @@ The Reality: PBMs act as gatekeepers between you and patients. Patient cost-shar
           marketBonus: 0.85,
           revenueEffect: -0.35,
           result: 'You secure broad access but net revenue per prescription is much lower than list price. PBMs capture a large share of your value.',
-          lesson: 'The gap between list price and net price reveals who captures value. For specialty drugs, PBM rebates and fees can exceed 40% of list price. FDA approval means you CAN sell; formulary placement determines if you WILL sell.'
+          lesson: 'The gross-to-net gap reveals who captures value. According to Drug Channels analysis (2025), rebates and discounts reduce brand-name drug prices to approximately 50% of list price on average. Net drug prices have actually declined for 8 consecutive years when adjusted for inflation. FDA approval means you CAN sell; formulary placement determines if you WILL sell.'
         },
         {
           text: 'Limited formulary with patient assistance programs',
