@@ -3344,7 +3344,7 @@ export default function TheLongGame() {
         <div className="flex-1 flex items-center justify-center p-8">
           <div className="max-w-2xl w-full">
             <div className="text-center mb-8">
-              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 3</p>
+              <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">STEP 1 OF 4</p>
               <h1 className="text-3xl font-bold mb-2">Choose Your Modality</h1>
               <p className="text-slate-400">The type of molecule determines your development path</p>
             </div>
