@@ -1247,10 +1247,10 @@ const QUESTIONS = {
       {
         id: 'pricing_sm',
         title: 'Pricing and Access Strategy',
-        scenario: 'FDA approval is imminent. Health economic analyses support value-based pricing of $150,000/year for your oral therapy, reflecting the clinical benefit. But drug pricing scrutiny is intense.',
+        scenario: 'FDA approval is imminent. Your health economics team projects value-based pricing: specialty oncology drugs typically command $100,000-200,000/year, while chronic disease therapies (diabetes, CV) are more typically $10,000-50,000/year due to larger patient populations. Drug pricing scrutiny is intense across all categories.',
         options: [
           {
-            text: 'Value-based pricing ($150,000/year)',
+            text: 'Value-based pricing (above market average)',
             detail: 'Reflects clinical benefit, public scrutiny risk',
             cashEffect: 0,
             timeEffect: 0,
@@ -1259,8 +1259,8 @@ const QUESTIONS = {
             lesson: 'Value-based pricing reflects genuine clinical benefit and R&D investment. But the industry has not yet earned the public trust for this approach to be politically sustainable.'
           },
           {
-            text: 'Market-competitive pricing ($80,000/year)',
-            detail: 'Below value, sustainable positioning',
+            text: 'Market-competitive pricing (below clinical value)',
+            detail: 'Sustainable positioning, easier payer negotiations',
             cashEffect: 0,
             timeEffect: 0,
             marketBonus: 0.55,
