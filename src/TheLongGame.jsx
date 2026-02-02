@@ -1710,7 +1710,7 @@ const EVENTS = {
   lead_optimization: [
     { title: 'SAR Breakthrough', description: 'A key structure-activity relationship insight unlocks dramatic improvements in potency and selectivity.', cashEffect: 0, timeEffect: -6, riskBonus: 0.05, positive: true },
     { title: 'Metabolite Liability', description: 'Studies reveal your lead generates a reactive metabolite. Chemistry must redesign the scaffold.', cashEffect: -5, timeEffect: 9, positive: false },
-    { title: 'Off-Target Activity', description: 'Selectivity screening reveals activity against hERG channel - a cardiac liability that must be designed out.', cashEffect: -3, timeEffect: 6, positive: false }
+    { title: 'Selectivity Challenge', description: 'Screening reveals unintended activity that must be addressed before advancing.', cashEffect: -3, timeEffect: 6, positive: false }
   ],
   ind_enabling: [
     { title: 'Unexpected Toxicity', description: 'GLP toxicology reveals unexpected hepatotoxicity at high doses. Additional mechanistic studies required.', cashEffect: -8, timeEffect: 9, positive: false },
@@ -2651,7 +2651,7 @@ export default function TheLongGame() {
           setProgramEvents([{
             phase: 'Modality Selection',
             type: 'warning',
-            message: `⚠️ ${compat.reason}`,
+            message: `${compat.reason}`,
             detail: `+${compat.penalty}% ${compat.riskType || 'design'} risk applied`
           }]);
         }
@@ -2678,7 +2678,7 @@ export default function TheLongGame() {
           setProgramEvents(prev => [...prev, {
             phase: 'Program Strategy',
             type: 'warning',
-            message: `⚠️ ${MODALITY_DATA[mod]?.displayName || mod} challenging for ${programType} programs`,
+            message: `${MODALITY_DATA[mod]?.displayName || mod} challenging for ${programType} programs`,
             detail: programFit.note
           }]);
         } else {
@@ -2687,7 +2687,7 @@ export default function TheLongGame() {
           setProgramEvents(prev => [...prev, {
             phase: 'Program Strategy',
             type: 'positive',
-            message: `✓ ${MODALITY_DATA[mod]?.displayName || mod} well-suited for ${programType} programs`,
+            message: `${MODALITY_DATA[mod]?.displayName || mod} well-suited for ${programType} programs`,
             detail: programFit.note
           }]);
         }
@@ -3481,12 +3481,12 @@ export default function TheLongGame() {
                       </div>
                       {fit.fit === 'good' && (
                         <span className="text-xs px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                          ✓ Good Fit
+                          Good Fit
                         </span>
                       )}
                       {fit.fit === 'poor' && (
                         <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400 border border-amber-500/30">
-                          ⚠ +{fit.penalty}% Risk
+                          +{fit.penalty}% Risk
                         </span>
                       )}
                     </div>
@@ -3543,9 +3543,9 @@ export default function TheLongGame() {
                   <div className="text-slate-500 text-xs mt-1">Go/No-Go: Target occupancy + pathway PD shift</div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ Lower CMC costs</span>
-                  <span className="text-blue-400">✓ Oral bioavailability</span>
-                  <span className="text-red-400">⚠ Clean PK but no PD shift → target not causal</span>
+                  <span className="text-emerald-400">Lower CMC costs</span>
+                  <span className="text-blue-400">Oral bioavailability</span>
+                  <span className="text-red-400">Clean PK but no PD shift = target not causal</span>
                 </div>
               </button>
 
@@ -3566,9 +3566,9 @@ export default function TheLongGame() {
                   <div className="text-slate-500 text-xs mt-1">Go/No-Go: Sustained ligand suppression</div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ High target specificity</span>
-                  <span className="text-amber-400">⚠ ADA risk</span>
-                  <span className="text-red-400">⚠ Complete neutralization with no clinical benefit</span>
+                  <span className="text-emerald-400">High target specificity</span>
+                  <span className="text-amber-400">ADA risk</span>
+                  <span className="text-red-400">Complete neutralization with no clinical benefit</span>
                 </div>
               </button>
 
@@ -3589,9 +3589,9 @@ export default function TheLongGame() {
                   <div className="text-slate-500 text-xs mt-1">Go/No-Go: Sustained payload expression/knockdown in target tissue</div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ Platform technology</span>
-                  <span className="text-amber-400">⚠ Tissue delivery limits</span>
-                  <span className="text-red-400">⚠ Immunogenicity & durability</span>
+                  <span className="text-emerald-400">Platform technology</span>
+                  <span className="text-amber-400">Tissue delivery limits</span>
+                  <span className="text-red-400">Immunogenicity and durability</span>
                 </div>
               </button>
 
@@ -3612,9 +3612,9 @@ export default function TheLongGame() {
                   <div className="text-slate-500 text-xs mt-1">Go/No-Go: Expansion correlates with response</div>
                 </div>
                 <div className="flex flex-wrap gap-2 text-xs">
-                  <span className="text-emerald-400">✓ Deep responses</span>
-                  <span className="text-amber-400">⚠ CRS/ICANS toxicity</span>
-                  <span className="text-red-400">⚠ Expansion without durability</span>
+                  <span className="text-emerald-400">Deep responses</span>
+                  <span className="text-amber-400">CRS/ICANS toxicity</span>
+                  <span className="text-red-400">Expansion without durability</span>
                 </div>
               </button>
             </div>
@@ -3870,7 +3870,7 @@ export default function TheLongGame() {
                     <p className="text-slate-300 text-sm mb-2">{alt.description}</p>
                     <div className="flex items-center gap-2 mb-2">
                       <span className="text-xs px-2 py-1 rounded bg-amber-500/20 text-amber-400">
-                        ⚠️ {alt.tradeoff}
+                        {alt.tradeoff}
                       </span>
                     </div>
                     <p className="text-slate-500 text-xs">{alt.lesson}</p>
@@ -4446,7 +4446,7 @@ export default function TheLongGame() {
                   <div key={phase.id} className="flex items-center gap-3">
                     <div className="w-2 h-2 rounded-full" style={{ backgroundColor: phase.color }}></div>
                     <div className="flex-1 text-slate-400 text-sm">{phase.name}</div>
-                    <div className="text-emerald-400 font-medium text-sm">✓ {phase.realSuccessRate}%</div>
+                    <div className="text-emerald-400 font-medium text-sm">{phase.realSuccessRate}%</div>
                   </div>
                 ))}
               </div>
@@ -4478,7 +4478,7 @@ export default function TheLongGame() {
               <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-5 mb-6">
                 <h3 className="text-lg font-semibold text-purple-400 mb-3">Scientific Challenge Overcome</h3>
                 <p className="text-slate-300 text-sm">
-                  {programEvents.find(e => e.type === 'warning' && e.phase === 'Modality Selection')?.message?.replace('⚠️ ', '')}
+                  {programEvents.find(e => e.type === 'warning' && e.phase === 'Modality Selection')?.message}
                 </p>
                 <p className="text-purple-300 text-sm mt-2">
                   Your program succeeded despite this biological constraint, demonstrating that careful development can overcome delivery challenges.
@@ -4539,7 +4539,7 @@ export default function TheLongGame() {
                     <div className="flex gap-4 bg-emerald-900/30 p-3 rounded-lg border border-emerald-700/50">
                       <div className="w-24 text-emerald-400 flex-shrink-0 font-medium">IRA Status</div>
                       <div className="text-emerald-300">
-                        <span className="font-medium">✓ Exempt from Medicare Negotiation</span> <span className="text-emerald-400/80">(while treating only rare diseases)</span>
+                        <span className="font-medium">Exempt from Medicare Negotiation</span> <span className="text-emerald-400/80">(while treating only rare diseases)</span>
                         <p className="text-slate-400 text-xs mt-2">
                           Under the IRA, orphan drugs remain exempt as long as all approved indications are for rare diseases. Under the July 2025 "One Big Beautiful Bill Act" updates, this protection extends even to multiple orphan indications. However, if later approved for a non-orphan (common) disease, negotiation eligibility begins {modality === 'small-molecule' ? '9' : '13'} years after that non-orphan approval.
                         </p>
@@ -4754,7 +4754,7 @@ export default function TheLongGame() {
             {/* Alternative financing used */}
             {alternativeFinancingUsed.length > 0 && (
               <div className="bg-purple-900/20 border border-purple-700/50 rounded-lg p-4 mb-6">
-                <h4 className="text-purple-400 font-semibold mb-2">💰 Alternative Financing Pursued</h4>
+                <h4 className="text-purple-400 font-semibold mb-2">Alternative Financing Pursued</h4>
                 <div className="text-slate-300 text-sm">
                   {alternativeFinancingUsed.map(id => {
                     const alt = ALTERNATIVE_FINANCING.find(a => a.id === id);
