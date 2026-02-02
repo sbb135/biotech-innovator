@@ -147,54 +147,66 @@ const MODALITY_PHASE_CONTEXT = {
   },
   'biologic': {
     basic_research: {
+      description: 'Understanding disease biology and identifying antibody-accessible targets',
       context: 'Biologic development begins with identifying extracellular or cell-surface targets accessible to large molecules. Target validation focuses on understanding pathway biology and potential redundancy - where blocking one pathway may be compensated by another. Antibody developability assessment is critical early.',
       activities: ['Target pathway mapping', 'Redundancy assessment', 'Epitope identification', 'Developability screening', 'Format selection']
     },
     drug_discovery: {
+      description: 'Finding and engineering antibodies or proteins that interact with the target',
       context: 'Antibody discovery uses phage display, transgenic mice, or single B-cell cloning. Lead optimization focuses on binding affinity, specificity, stability, and manufacturability. Unlike small molecules, biologics require injection or infusion - they cannot survive oral administration.',
       activities: ['Antibody discovery campaign', 'Affinity maturation', 'Humanization', 'Stability engineering', 'Cell line development']
     },
     lead_optimization: {
+      description: 'Antibody engineering, PK optimization, formulation development',
       context: 'Antibody engineering optimizes binding affinity, Fc effector function, and half-life. Cell line development establishes stable production clones. Formulation studies ensure protein stability during storage and delivery.',
       activities: ['Fc engineering', 'Half-life extension', 'Cell line selection', 'Upstream/downstream process development', 'Formulation stability studies']
     },
     ind_enabling: {
+      description: 'Final safety testing, immunogenicity assessment, manufacturing scale-up',
       context: 'Biologic IND-enabling includes GLP toxicology in relevant species (often non-human primates for humanized antibodies), immunogenicity assessment, and process validation. Manufacturing at clinical scale requires significant investment.',
       activities: ['GLP toxicology in primates', 'Immunogenicity studies', 'Clinical manufacturing', 'Comparability studies', 'IND submission']
     }
   },
   'genetic-medicine': {
     basic_research: {
+      description: 'Understanding genetic basis of disease and validating therapeutic targets',
       context: 'Genetic medicine development requires strong genetic validation linking gene modulation to disease. Human genetic evidence - natural loss-of-function or gain-of-function variants - provides the strongest validation. Delivery strategy and tissue targeting are critical early considerations.',
       activities: ['Human genetic evidence review', 'Target gene validation', 'Delivery platform selection', 'Tissue targeting strategy', 'Sequence design']
     },
     drug_discovery: {
+      description: 'Designing genetic constructs and selecting optimal delivery vectors',
       context: 'Genetic medicine optimization involves payload design (gene, antisense, siRNA, or editing construct), delivery vehicle engineering, and tissue targeting. Durability of expression and potential for re-dosing are key considerations. Pre-existing immunity to viral vectors can limit patient eligibility.',
       activities: ['Payload optimization', 'Vector or delivery engineering', 'Tropism and targeting', 'Expression durability studies', 'Immunogenicity assessment']
     },
     lead_optimization: {
+      description: 'Vector engineering, biodistribution studies, expression optimization',
       context: 'Genetic medicine optimization focuses on sequence engineering, delivery vehicle refinement, and manufacturing scalability. For siRNA/ASO, this includes chemical modifications for stability and targeting (e.g., GalNAc conjugation). For gene therapy, vector optimization improves transduction efficiency and reduces immunogenicity.',
       activities: ['Sequence optimization', 'Delivery vehicle engineering', 'Chemical modifications (siRNA/ASO)', 'Manufacturing process development', 'Potency assay development']
     },
     ind_enabling: {
+      description: 'Biodistribution, vector shedding studies, GMP manufacturing',
       context: 'Genetic medicine IND-enabling requires biodistribution studies, vector shedding analysis (for gene therapy), and long-term expression/safety monitoring. Manufacturing of GMP-grade material is complex and specialized.',
       activities: ['Biodistribution studies', 'Vector shedding analysis', 'Long-term safety monitoring', 'GMP manufacturing', 'IND package preparation']
     }
   },
   'cell-therapy': {
     basic_research: {
+      description: 'Understanding target biology and defining therapeutic cell mechanism',
       context: 'Cell therapy development begins with understanding target biology and defining the therapeutic mechanism - cytotoxicity, immune modulation, or tissue repair. Cell source strategy (autologous vs allogeneic) and engineering approach are foundational decisions that affect manufacturing complexity.',
       activities: ['Target antigen validation', 'Cell source evaluation', 'Engineering strategy', 'Safety feature design', 'Persistence optimization']
     },
     drug_discovery: {
+      description: 'Designing cell engineering strategies and optimizing manufacturing protocols',
       context: 'Cell engineering optimizes receptor design, signaling domains, and additional modifications. Manufacturing process development is critical - cell therapies are living products requiring specialized Good Manufacturing Practice facilities. Autologous products face patient-specific variability.',
       activities: ['Receptor/construct design', 'Co-stimulatory optimization', 'Manufacturing process development', 'Potency assay development', 'Release testing strategy']
     },
     lead_optimization: {
+      description: 'Manufacturing scale-up, potency assays, cell characterization',
       context: 'Cell therapy optimization refines the manufacturing process to ensure consistent product quality across patient materials. This includes optimizing transduction efficiency, expansion protocols, and cryopreservation. Potency assays must correlate with clinical activity.',
       activities: ['Manufacturing process optimization', 'Transduction efficiency improvement', 'Expansion protocol refinement', 'Cryopreservation development', 'Potency assay validation']
     },
     ind_enabling: {
+      description: 'Manufacturing consistency, product characterization, safety validation',
       context: 'Cell therapy IND-enabling focuses on demonstrating manufacturing consistency and product characterization. GLP toxicology is challenging for autologous products. Safety features (e.g., suicide genes) may be required.',
       activities: ['Manufacturing consistency', 'Product characterization', 'GLP toxicology (as feasible)', 'Safety feature validation', 'IND submission']
     }
@@ -531,50 +543,6 @@ const PHASES = [
     activities: ['PBM formulary negotiations', 'Payer coverage discussions', 'Copay assistance programs', 'Patient support services', 'Specialty pharmacy setup', 'Policy engagement']
   }
 ];
-
-// Modality-specific phase descriptions, contexts, and activities
-// Overrides default PHASES content where terminology differs by drug archetype
-const MODALITY_PHASE_CONTEXT = {
-  'small-molecule': {
-    // Uses defaults from PHASES - no overrides needed
-  },
-  'biologic': {
-    drug_discovery: {
-      description: 'Finding and engineering antibodies or proteins that interact with the target',
-      context: 'Focus shifts to antibody discovery and protein engineering. Researchers use phage display, hybridoma technology, or computational design to identify therapeutic antibody candidates. Promising binders undergo affinity maturation and humanization.',
-      activities: ['Antibody discovery', 'Phage display', 'Hybridoma screening', 'Affinity maturation', 'Candidate selection']
-    },
-    lead_optimization: {
-      description: 'Antibody engineering, PK optimization, formulation development',
-      context: 'Optimize antibody properties through Fc engineering for half-life extension, humanization to reduce immunogenicity, and developability assessment. Formulation scientists develop stable liquid or lyophilized presentations for large molecule delivery.',
-      activities: ['Affinity maturation', 'Fc engineering', 'Humanization', 'Formulation optimization', 'Stability testing', 'Bioanalytics']
-    }
-  },
-  'gene-therapy': {
-    drug_discovery: {
-      description: 'Designing genetic constructs and selecting optimal delivery vectors',
-      context: 'Focus shifts to transgene design and vector selection. Scientists optimize promoter/enhancer elements, codon usage, and select optimal AAV serotypes or LNP formulations for tissue-specific delivery. For gene editing approaches, guide RNA design and specificity testing are critical.',
-      activities: ['Transgene design', 'Vector selection', 'Codon optimization', 'Promoter engineering', 'Candidate nomination']
-    },
-    lead_optimization: {
-      description: 'Vector engineering, biodistribution studies, expression optimization',
-      context: 'Optimize vector properties through capsid engineering to enhance tissue targeting, improve transduction efficiency, and reduce immunogenicity. Biodistribution and expression durability studies in relevant animal models inform dose selection.',
-      activities: ['Capsid engineering', 'Biodistribution studies', 'Expression profiling', 'Immunogenicity assessment', 'Manufacturing process development', 'Potency assay development']
-    }
-  },
-  'cell-therapy': {
-    drug_discovery: {
-      description: 'Designing cell engineering strategies and optimizing manufacturing protocols',
-      context: 'Focus shifts to cell source selection (autologous vs. allogeneic) and genetic modification strategy. Scientists design CAR or TCR constructs, optimize transduction or transfection protocols, and establish robust expansion methods that preserve cell fitness.',
-      activities: ['CAR/TCR construct design', 'Cell source selection', 'Transduction optimization', 'Expansion protocol development', 'Candidate selection']
-    },
-    lead_optimization: {
-      description: 'Manufacturing scale-up, potency assays, cell characterization',
-      context: 'Optimize manufacturing for scale, consistency, and cost. Develop potency assays that predict clinical activity. Characterize cell phenotype, persistence markers, and exhaustion profiles. Reduce vein-to-vein time to improve patient outcomes.',
-      activities: ['GMP process development', 'Potency assay validation', 'Release testing development', 'Cell characterization', 'Cryopreservation optimization', 'Vein-to-vein timeline reduction']
-    }
-  }
-};
 
 // Helper function to get modality-specific phase content
 const getPhaseContent = (phase, modality) => {
