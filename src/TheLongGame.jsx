@@ -1128,21 +1128,21 @@ const QUESTIONS = {
       {
         id: 'crs_management_strategy',
         title: 'How will you manage Cytokine Release Syndrome risk?',
-        scenario: 'Cytokine Release Syndrome and Immune Effector Cell-Associated Neurotoxicity Syndrome are the most serious complications of Chimeric Antigen Receptor T-cell therapy. Your Phase I protocol must include a Risk Evaluation and Mitigation Strategy. Tocilizumab (Interleukin-6 receptor blocker) is Food and Drug Administration-approved for Cytokine Release Syndrome management. Your dose escalation and monitoring strategy will determine the safety profile.',
+        scenario: 'Cytokine Release Syndrome and Immune Effector Cell-Associated Neurotoxicity Syndrome are the most serious complications of Chimeric Antigen Receptor T-cell therapy. Your Phase I protocol must include a Risk Evaluation and Mitigation Strategy. Citokinemab (Interleukin-6 receptor blocker) is Food and Drug Administration-approved for Cytokine Release Syndrome management. Your dose escalation and monitoring strategy will determine the safety profile.',
         options: [
           {
-            text: 'Conservative dosing with prophylactic tocilizumab',
+            text: 'Conservative dosing with prophylactic citokinemab',
             detail: 'Pre-emptive Cytokine Release Syndrome management, may reduce efficacy signal',
             cashEffect: -8, timeEffect: 6, riskBonus: 0.08, safetyEffect: -25,
-            result: 'No severe Cytokine Release Syndrome events occur. However, your efficacy signal is modest. Did prophylactic tocilizumab blunt the Chimeric Antigen Receptor T-cell expansion?',
+            result: 'No severe Cytokine Release Syndrome events occur. However, your efficacy signal is modest. Did prophylactic citokinemab blunt the Chimeric Antigen Receptor T-cell expansion?',
             lesson: 'Prophylactic Cytokine Release Syndrome management prioritizes safety but may confound efficacy assessment. The Interleukin-6 pathway plays a role in Chimeric Antigen Receptor T-cell expansion, so blocking it pre-emptively creates uncertainty about optimal dosing.'
           },
           {
             text: 'Standard dosing with reactive CRS management',
-            detail: 'Tocilizumab at Grade 2+ Cytokine Release Syndrome, clearer efficacy signal',
+            detail: 'Citokinemab at Grade 2+ Cytokine Release Syndrome, clearer efficacy signal',
             cashEffect: -5, timeEffect: 0, riskBonus: 0.02, safetyEffect: 10,
-            result: 'Two patients experience Grade 3 Cytokine Release Syndrome requiring intensive care unit admission and tocilizumab. Both recover fully. Your efficacy signal is strong.',
-            lesson: 'Reactive Cytokine Release Syndrome management accepts higher acute toxicity for clearer efficacy signals. Chimeric Antigen Receptor T-cell infusion centers must have intensive care unit access, neurology consultation, and tocilizumab immediately available per Risk Evaluation and Mitigation Strategy requirements.'
+            result: 'Two patients experience Grade 3 Cytokine Release Syndrome requiring intensive care unit admission and citokinemab. Both recover fully. Your efficacy signal is strong.',
+            lesson: 'Reactive Cytokine Release Syndrome management accepts higher acute toxicity for clearer efficacy signals. Chimeric Antigen Receptor T-cell infusion centers must have intensive care unit access, neurology consultation, and citokinemab immediately available per Risk Evaluation and Mitigation Strategy requirements.'
           },
           {
             text: 'Split dosing schedule with fractionated infusion',
@@ -3160,7 +3160,7 @@ export default function TheLongGame() {
                 Navigate target discovery through FDA approval, making the strategic decisions that define biotech innovation. Your choices determine patient access and reveal the industry's underlying dynamics.
               </p>
               <p className="text-slate-600 text-xs italic mt-3">
-                This model simulates selected aspects of biotech development using simplified assumptions for illustrative purposes only.
+                This model simulates selected aspects of biotech development using simplified assumptions for illustrative purposes only. All drug names used in scenarios are fictional.
               </p>
             </div>
 
