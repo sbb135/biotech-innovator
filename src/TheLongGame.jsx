@@ -3159,9 +3159,7 @@ export default function TheLongGame() {
               <p className="text-slate-500 text-sm">
                 Navigate target discovery through FDA approval, making the strategic decisions that define biotech innovation. Your choices determine patient access and reveal the industry's underlying dynamics.
               </p>
-              <p className="text-slate-600 text-xs italic mt-3">
-                This model simulates selected aspects of biotech development using simplified assumptions for illustrative purposes only. All drug names used in scenarios are fictional.
-              </p>
+
             </div>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
@@ -3202,6 +3200,12 @@ export default function TheLongGame() {
               </p>
               <p className="text-slate-500 text-sm">
                 "We're investing early because we believe in your science. ~93% of programs fail, so successful drugs must be priced to compensate for all the failures. Capital is mobile, we're betting your science is sound."
+              </p>
+            </div>
+
+            <div className="bg-slate-900/50 border border-slate-700 rounded-lg p-4 mb-6">
+              <p className="text-slate-500 text-xs leading-relaxed">
+                This application is a fictional, educational simulation intended solely for illustrative purposes. It relies on simplified assumptions and does not reflect, model, or predict real-world drug development, regulatory outcomes (including FDA approval), clinical results, market behavior, or patient outcomes. No content should be interpreted as medical, regulatory, legal, or investment advice. All drug names, entities, and scenarios are fictional and any resemblance to real products or companies is coincidental.
               </p>
             </div>
 
