@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 // ═══════════════════════════════════════════════════════════════════════════════
-// THE LONG GAME - Drug Development Simulation
+// THE LONG JOURNEY - Drug Development Simulation
 // Language and concepts inspired by the Biotech Social Contract framework
 // ═══════════════════════════════════════════════════════════════════════════════
 
@@ -3147,9 +3147,9 @@ export default function TheLongGame() {
             <header className="text-center mb-10">
               <p className="text-emerald-400 text-sm font-medium tracking-widest mb-3">A DRUG DEVELOPMENT SIMULATION</p>
               <h1 className="text-5xl font-bold tracking-tight mb-4">
-                THE LONG <span className="text-emerald-400">GAME</span>
+                THE LONG <span className="text-emerald-400">JOURNEY</span>
               </h1>
-              <p className="text-slate-400 text-lg">Experience the tradeoffs that define pharmaceutical innovation</p>
+              <p className="text-slate-400 text-lg">Experience pharmaceutical innovation</p>
             </header>
 
             <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
