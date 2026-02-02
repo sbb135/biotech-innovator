@@ -532,6 +532,67 @@ const PHASES = [
   }
 ];
 
+// Modality-specific phase descriptions, contexts, and activities
+// Overrides default PHASES content where terminology differs by drug archetype
+const MODALITY_PHASE_CONTEXT = {
+  'small-molecule': {
+    // Uses defaults from PHASES - no overrides needed
+  },
+  'biologic': {
+    drug_discovery: {
+      description: 'Finding and engineering antibodies or proteins that interact with the target',
+      context: 'Focus shifts to antibody discovery and protein engineering. Researchers use phage display, hybridoma technology, or computational design to identify therapeutic antibody candidates. Promising binders undergo affinity maturation and humanization.',
+      activities: ['Antibody discovery', 'Phage display', 'Hybridoma screening', 'Affinity maturation', 'Candidate selection']
+    },
+    lead_optimization: {
+      description: 'Antibody engineering, PK optimization, formulation development',
+      context: 'Optimize antibody properties through Fc engineering for half-life extension, humanization to reduce immunogenicity, and developability assessment. Formulation scientists develop stable liquid or lyophilized presentations for large molecule delivery.',
+      activities: ['Affinity maturation', 'Fc engineering', 'Humanization', 'Formulation optimization', 'Stability testing', 'Bioanalytics']
+    }
+  },
+  'gene-therapy': {
+    drug_discovery: {
+      description: 'Designing genetic constructs and selecting optimal delivery vectors',
+      context: 'Focus shifts to transgene design and vector selection. Scientists optimize promoter/enhancer elements, codon usage, and select optimal AAV serotypes or LNP formulations for tissue-specific delivery. For gene editing approaches, guide RNA design and specificity testing are critical.',
+      activities: ['Transgene design', 'Vector selection', 'Codon optimization', 'Promoter engineering', 'Candidate nomination']
+    },
+    lead_optimization: {
+      description: 'Vector engineering, biodistribution studies, expression optimization',
+      context: 'Optimize vector properties through capsid engineering to enhance tissue targeting, improve transduction efficiency, and reduce immunogenicity. Biodistribution and expression durability studies in relevant animal models inform dose selection.',
+      activities: ['Capsid engineering', 'Biodistribution studies', 'Expression profiling', 'Immunogenicity assessment', 'Manufacturing process development', 'Potency assay development']
+    }
+  },
+  'cell-therapy': {
+    drug_discovery: {
+      description: 'Designing cell engineering strategies and optimizing manufacturing protocols',
+      context: 'Focus shifts to cell source selection (autologous vs. allogeneic) and genetic modification strategy. Scientists design CAR or TCR constructs, optimize transduction or transfection protocols, and establish robust expansion methods that preserve cell fitness.',
+      activities: ['CAR/TCR construct design', 'Cell source selection', 'Transduction optimization', 'Expansion protocol development', 'Candidate selection']
+    },
+    lead_optimization: {
+      description: 'Manufacturing scale-up, potency assays, cell characterization',
+      context: 'Optimize manufacturing for scale, consistency, and cost. Develop potency assays that predict clinical activity. Characterize cell phenotype, persistence markers, and exhaustion profiles. Reduce vein-to-vein time to improve patient outcomes.',
+      activities: ['GMP process development', 'Potency assay validation', 'Release testing development', 'Cell characterization', 'Cryopreservation optimization', 'Vein-to-vein timeline reduction']
+    }
+  }
+};
+
+// Helper function to get modality-specific phase content
+const getPhaseContent = (phase, modality) => {
+  const modalityContext = MODALITY_PHASE_CONTEXT[modality];
+  if (modalityContext && modalityContext[phase.id]) {
+    return {
+      description: modalityContext[phase.id].description || phase.description,
+      context: modalityContext[phase.id].context || phase.context,
+      activities: modalityContext[phase.id].activities || phase.activities
+    };
+  }
+  return {
+    description: phase.description,
+    context: phase.context,
+    activities: phase.activities
+  };
+};
+
 // Strategic decisions by phase
 const QUESTIONS = {
   // MODALITY-SPECIFIC BASIC RESEARCH QUESTIONS
@@ -3878,20 +3939,16 @@ export default function TheLongGame() {
                   Stage {currentPhaseIndex + 1} of {PHASES.length}
                 </div>
                 <h2 className="text-3xl font-bold mb-2">{currentPhase.name}</h2>
-                <p className="text-slate-400 mb-6">{currentPhase.description}</p>
+                <p className="text-slate-400 mb-6">{getPhaseContent(currentPhase, modality).description}</p>
 
                 <div className="bg-slate-900 border border-slate-800 rounded-lg p-6 mb-6">
-                  <p className="text-slate-300 text-sm mb-4">
-                    {/* Use modality-specific context if available, otherwise fall back to generic */}
-                    {MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.context || currentPhase.context}
-                  </p>
+                  <p className="text-slate-300 text-sm mb-4">{getPhaseContent(currentPhase, modality).context}</p>
 
-                  {/* Use modality-specific activities if available, otherwise fall back to generic */}
-                  {(MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.activities || currentPhase.activities) && (
+                  {getPhaseContent(currentPhase, modality).activities && (
                     <div className="mb-4 pb-4 border-b border-slate-700">
                       <div className="text-slate-500 text-xs mb-2">KEY ACTIVITIES</div>
                       <div className="flex flex-wrap gap-2">
-                        {(MODALITY_PHASE_CONTEXT[modality]?.[currentPhase.id]?.activities || currentPhase.activities).map((activity, i) => (
+                        {getPhaseContent(currentPhase, modality).activities.map((activity, i) => (
                           <span key={i} className="text-xs px-2 py-1 rounded bg-slate-800 text-slate-400">
                             {activity}
                           </span>
