@@ -3216,7 +3216,7 @@ export default function TheLongGame() {
               Begin Development
             </button>
 
-            <p className="text-center text-slate-600 text-sm mt-6">Approximately 20 minutes to complete</p>
+            <p className="text-center text-slate-600 text-sm mt-6">Approximately 10 minutes to complete</p>
             <p className="text-center text-slate-700 text-xs mt-4">
               Created by{' '}
               <a
